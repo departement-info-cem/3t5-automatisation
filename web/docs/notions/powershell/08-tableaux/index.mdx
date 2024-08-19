@@ -1,0 +1,101 @@
+---
+title: "Les tableaux (arrays)"
+---
+
+Les commandes PowerShell retournent souvent non pas un objet, mais plusieurs objets dans le pipeline. Par exemple, il est fréquent que la commande `Get-ChildItem` retourne plus d'un objet, car il y a généralement plusieurs fichiers et dossiers dans un dossier.
+
+![image](r03_04a.png)
+
+## Compter les objets d'une collection
+
+On peut connaître le nombre d'éléments retournés par une commande à l'aide de la commande `Measure-Object`.
+
+![image](r03_04b.png)
+
+Et comme plusieurs objets mis ensemble constituent une collection d'objets, et que cette collection est également un objet, on peut aussi lire l'attribut `.Length` de cette collection.
+
+![image](r03_04c.png)
+
+## Accéder à un élément précis
+
+Une collection dans PowerShell est une liste d'objet, qu'on appelle aussi Tableau ou Array, et qui est composé de plusieurs valeurs dans un ordre précis. Chaque élément occupe une position: le premier a la position 0, le deuxième 1, et ainsi de suite. Ces nombre s'appelle un indice (index). On peut obtenir l'élément correspondant en spécifiant l'indice voulu entre crochets.
+
+![image](r03_04d.png)
+
+## Créer un tableau
+
+Un tableau vide est créé avec la formule `@()`. Pour initialiser un nouveau tableau, donc, il suffit d'affecter le tableau vide à une variable. On peut ensuit lui ajouter des éléments, avec un opérateur d'affectation.
+
+![image](r03_05a.png)
+
+Un tableau peut comprendre plusieurs éléments de types différents, mais habituellement, on il est plus logique d'y retrouver des éléments du même type.
+
+On peut affecter directement des valeurs à la création d'un tableau. Dans ce cas, on n'est pas obligé de respecter la syntaxe `@(…)`; elle est implicite.
+
+![image](r03_05b.png)
+
+On peut aussi utiliser un raccourci pour créer rapidement un tableau d'entiers.
+
+![image](r03_05c.png)
+
+## Sélectionner des éléments
+
+Lorsqu'on a un tableau d'objet qui circule dans le pipeline, on peut vouloir manipuler ce tableau pour en ressortir certains éléments et pas d'autres.
+
+### Sélection des indices
+
+![image](r03_06a.png)
+
+### Sélection conditionnelle
+
+![image](r03_06b.png)
+
+Ou…
+
+![image](r03_06c.png)
+
+![image](r03_06d.png)
+
+![image](r03_06e.png)
+
+## Opérations sur un tableau
+
+### Opérateur -Contains
+
+Pour tester si un tableau contient une valeur spécifique, on peut utiliser l'opérateur `-Contains`.
+
+![image](r03_07a.png)
+
+### Concaténation
+
+Donne tous les objets des deux collections (fusionne deux collections bout à bout)
+
+![image](r03_07b.png)
+
+### Union
+
+Donne tous les objets de deux collections, mais sans doublons.
+
+![image](r03_07c.png)
+
+### Intersection
+
+Donne tous les objets qui ont à la fois dans deux collections
+
+![image](r03_07d.png)
+
+### Différence
+
+Retourne une collection moins tous les éléments semblables d'une deuxième collection
+
+![image](r03_07e.png)
+
+### Tri
+
+On peut trier une collection à l'aide de la commande `Sort-Object`, par ordre croissant ou décroissant.
+
+![image](r03_07f.png)
+
+Par défaut, le tri s'effectue sur le nom d'affichage, mais il est possible de spécifier sur quelle propriété devra s'effectuer le tri.
+
+![image](r03_07g.png)

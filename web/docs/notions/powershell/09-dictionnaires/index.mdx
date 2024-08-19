@@ -1,0 +1,266 @@
+---
+title: "Les dictionnaires"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+
+Un **dictionnaire**, aussi appelé *tableau associatif*, est une structure de données qui se caractérise par une liste de correspondance entre une clé et une valeur, qui représentent des propriétés. La clé représente le nom de la propriété, et la valeur, son contenu. Contrairement aux tableaux, l'ordre des éléments n'a pas d'importance, justement parce qu'on peut y accéder librement en utilisant la clé.
+
+Dans PowerShell, on travaille avec deux types de dictionnaires, des *HashTable*, et des *PSCustomObject*.
+
+
+## Tables de hachage (*HashTable*)
+
+La table de hachage (*HashTable*) est la forme la plus rudimentaire d'un dictionnaire en PowerShell.
+
+Voici un exemple de création d'un objet de type *HashTable*:
+
+<Tabs>
+
+<TabItem value="code" label="Code">
+
+```powershell
+$minou = @{ 
+    Nom = "Garfield"
+    Espece = "Felis catus"
+    Passion = "Manger"
+}
+```
+
+</TabItem>
+
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\" command="$minou" result="
+Name            Value
+----            -----
+Passion         Manger
+Nom             Garfield
+Espece          Felis catus"/>
+
+</TabItem>
+
+</Tabs>
+
+Chaque clé de cet objet est le nom d'une de ses propriétés. On peut donc accéder à une propriété avec la notation ".".
+
+<PowerShellWindow workdir="C:\" command="$minou.Passion" result="
+Manger
+"/>
+
+:::tip
+Pour créer un objet *hashtable* en une seule ligne, utilisez le caractère ; entre les éléments.
+
+```powershell
+$minou = @{ Nom = "Garfield" ; Espece = "Felis catus" ; Passion = "Manger" }
+```
+:::
+
+### Dictionnaires triés
+
+Généralement, on n'a pas besoin qu'un dictionnaire soit trié, car il sert à accéder à ses propriétés à la demande, et non de manière séquentielle. Mais si, pour une quelconque raison, vous souhaitiez tout de même préserver l'ordre des éléments du dictionnaire, pour pouvez déclarer l'attribut `[ordered]`.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$minou = [ordered]@{ 
+    Nom = "Garfield"
+    Espece = "Felis catus"
+    Passion = "Manger"
+}
+```
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\" command="$minou" result="
+Name            Value
+----            -----
+Nom             Garfield
+Espece          Felis catus
+Passion         Manger"/>
+
+</TabItem>
+</Tabs>
+
+### Comportement du *HashTable*
+
+Un *HashTable* n'a pas vraiment le même comportement qu'un objet PowerShell. Ce type d'objet est en fait une structure de données composée de clés et de valeurs, comme un dictionnaire.
+
+L'exemple suivant montre un tableau de *HashTable*, le résultat que nous nous attendrions d'avoir lors de l'affichage et le résultat réel.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$minous = @(
+    @{
+        Nom = "Garfield"
+        Espece = "Felis catus"
+        Passion = "Manger"
+    },
+    @{
+        Nom = "Grumpy Cat"
+        Espece = "Felis catus"
+        Passion = "Faire la baboune"
+    }
+)
+```
+
+</TabItem>
+<TabItem value="resultat_souhaite" label="Résultat souhaité">
+
+<PowerShellWindow workdir="C:\" command="$minou" result="
+Nom           Espece         Passion
+---           ------         -------
+Garfield      Felis catus    Manger
+Grumpy Cat    Felis catus    Faire la baboune" />
+
+</TabItem>
+<TabItem value="resultat" label="Résultat réel">
+
+<PowerShellWindow workdir="C:\" command="$minou" result="
+Name            Value
+----            -----
+Passion         Manger
+Nom             Garfield
+Espece          Felis catus
+Passion         Faire la baboune
+Nom             Grumpy Cat
+Espece          Felis catus" />
+
+</TabItem>
+</Tabs>
+
+
+## Objets personnalisés (*PSCustomObject*)
+
+Pour créer un objet disposant de propriétés propres mais se comportant de la même manière que les objets PowerShell, on utilise généralement le type *PSCustomObject*. Ce type représente littéralement un objet PowerShell personnalité, duquel nous définissons nous-même les propriétés. Ce type d'objet est conçu pour imiter un objet standard composé de propriétés et de méthodes, contrairement au *HashTable* qui n'est qu'un dictionnaire servant à associer des clés à des valeurs. C'est d'ailleurs ce type d'objet que produit la commande `Select-Object -Property`.
+
+On crée un objet PSCustomObject de la même manière qu'un *HashTable*, à une différence près: on doit spécifier qu'il s'agit du type PSCustomObject.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$minou = [PSCustomObject]@{ 
+    Nom = "Garfield"
+    Espece = "Felis catus"
+    Passion = "Manger"
+}
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\" command="$minou" result="
+Nom           Espece         Passion
+---           ------         -------
+Garfield      Felis catus    Manger" />
+
+</TabItem>
+</Tabs>
+
+
+### Collections de *PSCustomObject*
+
+Contrairement aux *HashTable*, les *PSCustomObject* sont structurés pour faciliter leur manipulation en collection.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$minous = @(
+    [PSCustomObject]@{
+        Nom = "Garfield"
+        Espece = "Felis catus"
+        Passion = "Manger"
+    },
+    [PSCustomObject]@{
+        Nom = "Grumpy Cat"
+        Espece = "Felis catus"
+        Passion = "Faire la baboune"
+    }
+)
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\" command="$minous" result="
+Nom           Espece         Passion
+---           ------         -------
+Garfield      Felis catus    Manger
+Grumpy Cat    Felis catus    Faire la baboune" />
+
+</TabItem>
+</Tabs>
+
+
+### Modifier une propriété
+
+Pour modifier une propriété d'un objet *PSCustomObject*, on n'a qu'à lui affecter une nouvelle valeur.
+
+```powershell
+$minou.Passion = "Manger de la lasagne"
+```
+
+Il faut toutefois que la propriété existe dans l'objet.
+
+
+### Ajouter des propriétés
+
+Nous avons vu plus haut comment créer un objet *PSCustomObject* lorsqu'on connaît toutes les propriétés de l'objet, et comment affecter une nouvelle valeur à une propriété existante. Pour créer une nouvelle propriété dans l'objet, on peut utiliser la commande `Add-Member` et lui passer en entrée l'objet à modifier par le *pipeline*.
+
+Pour une propriété simple, on n'a qu'à créer un nouveau membre de type "NoteProperty" et lui affecter un nom et une valeur.
+
+```powershell
+$minou | Add-Member -MemberType NoteProperty -Name "Couleur" -Value "Roux"
+```
+
+### Ajouter des méthodes
+
+On peut aussi ajouter d'autres types de membres, dont des méthodes. Contrairement aux propriétés qui retournent un objet stocké statiquement, les méthodes permettent d'exécuter du code. 
+
+Le procédé est semblable à l'ajout de propriétés, à l'exception qu'on définit un membre de type ScriptMethod et qu'on lui spécifie un ScriptBlock.
+
+```powershell
+$minou | Add-Member -MemberType ScriptMethod -Name "Miauler" -Value { Write-Host "Miaou" }
+```
+
+
+## Splatting
+
+Le *splatting* est une technique qui consiste à identifier les arguments à passer dans une commande à l'intérieur d'un objet.
+
+Il suffit de définir un HashTable composé des arguments, dont la clé représente le nom de l'argument et la valeur, la valeur de l'argument. Dans le cas des arguments de type *switch*, on leur affecte la valeur `$true`. Puis, il suffit se passer cette variable à la commande, en utilisant la forme `@Nomdelavariable`.
+
+<Tabs>
+<TabItem value="avec" label="Avec splatting">
+
+```powershell
+$splat = @{
+    FilePath = "C:\Windows\Notepad.exe"
+    ArgumentList = "C:\minou\allo.txt"
+    WorkingDirectory = "C:\"
+    PassThru = $true
+    WindowStyle = "Maximized"
+    Wait = $true
+    Verb = "Runas"
+}
+
+Start-Process @splat
+```
+
+</TabItem>
+<TabItem value="sans" label="Sans splatting">
+
+```powershell
+Start-Process -FilePath "C:\Windows\Notepad.exe" -ArgumentList "C:\minou\allo.txt" -WorkingDirectory "C:\" -PassThru -WindowStyle "Maximized" -Wait -Verb "Runas"
+```
+
+</TabItem>
+</Tabs>

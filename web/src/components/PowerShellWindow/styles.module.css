@@ -1,0 +1,86 @@
+@font-face {
+  font-family: "Consolas";
+  src: url("/static/fonts/Consolas.ttf") format("truetype");
+}
+
+.powerShellWindow {
+  border: 1px solid black;
+  box-shadow: 0 9px 19px 0 rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--ifm-leading);
+}
+
+.powerShellWindowHeader {
+  align-items: center;
+  background: white;
+  display: flex;
+  padding: 0.5rem 1rem;
+  color: black;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.windowTitle {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.logo {
+  height: 14px;
+  margin-right: 6px;
+}
+
+.right {
+  align-self: center;
+  width: 10%;
+}
+
+.powerShellWindowAddressBar {
+  flex: 1 0;
+  user-select: none;
+}
+
+.powerShellWindowMenuIcon {
+  margin-left: auto;
+}
+
+.powerShellWindowBody {
+  background-color: #012456;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  font-family: "Consolas";
+  color: white;
+  font-size: 14px;
+  padding: 1rem;
+}
+
+.powerShellWindowBody * {
+  background-color: #012456;
+  margin-bottom: 0;
+}
+
+.firstLine {
+  display: flex;
+}
+
+.copyButton {
+  display: flex;
+  opacity: 0;
+  transition: opacity var(--ifm-transition-fast) ease-in-out;
+}
+
+.powerShellWindowBody:hover .copyButton {
+  opacity: 0.4;
+}
+
+.spacer {
+  flex: 1 0;
+}
+
+.codeContainer {
+  padding: 0;
+}

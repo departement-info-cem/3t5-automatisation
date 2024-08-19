@@ -31,7 +31,15 @@
 }
 
 .examen {
+  color: black !important;
+  border-color: red;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.examen2 {
   background-color: #ff6e75;
+  color: #ffffff!important;
 }
 
 .remise-tp1::after {
@@ -68,4 +76,12 @@
   display: block;
   background: #8787ff;
   font-size: 0.75em;
+}
+
+.DocCardList--no-description .card h2 {
+  margin-bottom: 0;
+}
+
+.DocCardList--no-description .card p {
+  display: none;
 }
