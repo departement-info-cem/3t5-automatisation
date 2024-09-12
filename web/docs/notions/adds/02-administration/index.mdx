@@ -1,0 +1,61 @@
+---
+title: Administration d'un domaine
+sidebar_label: Administration
+description: Gérer un domaine AD avec PowerShell
+---
+
+### Informations sur le domaine et la forêt
+
+Les commandes `Get-ADDomain` et `Get-ADForest` permettent d'obtenir de l'information sur le domaine et la forêt respectivement, tels que le niveau fonctionnel, les contrôleurs de domaine qui disposent d'un rôle FSMO, les conteneurs par défaut, le SID du domaine, la topologie des sites, etc.
+
+[Get-ADDomain](.\get-addomain.png)
+
+Une information intéressante est celle du contexte de nom par défaut (*Default Naming Context*). Il équivaut à la partie domaine à la fin des noms distinctifs des objets dans le domaine. On peut l'obtenir à l'aide de la commande `Get-RootDSE`.
+
+```powershell
+(Get-ADRootDSE).defaultNamingContext
+```
+
+
+### Unités d'organisation
+
+Les unités d'organisation (*Organizational Unit*, ou *OU*) sont des conteneurs dans lesquels on peut disposer des objets du domaine et sur lesquels on peut lier des stratégies de groupe (GPO). Ce ne sont pas tous les conteneurs qui sont des unités d'organisation; ces dernières portent le préfixe `OU=` dans leur nom distinctif relatif.
+
+![Unités d'organisation](.\ad-ou.png)
+
+
+#### Recherche d'une unité d'organisation
+
+Pour obtenir de l'information sur une unité d'organisation spécifique, on peut utiliser la commande `Get-ADOrganizationalUnit` en lui fournissant le nom distinctif (DN) de l'unité d'organisation.
+
+```powershell
+Get-ADOrganizationalUnit -Identity "OU=Laptops,DC=ad,DC=mondomaine,DC=com"
+```
+
+On peut obtenir la liste de toutes les unités d'organisation du domaine en spécifiant le filtre *
+
+```powershell
+Get-ADOrganizationalUnit -Filter * | Format-Table
+```
+
+#### Création d'une unité d'organisation
+
+Pour créer une unité d'organisation dans un domaine, on utilise la commande `New-ADOrganizationalUnit` en lui spécifiant le nom de l'OU à créer ainsi que le nom distinctif complet du conteneur parent.
+
+```powershell
+$ADOrganizationalUnitSplat = @{
+    Name = "Laptops"
+    Path = "OU=Laptops,DC=ad,DC=mondomaine,DC=com"
+}
+
+New-ADOrganizationalUnit @ADOrganizationalUnitSplat
+```
+
+:::info
+La commande `New-ADOrganizationalUnit` ne retourne pas d'objet par défaut dans le pipeline. Pour qu'elle en retourne un, on n'a qu'à lui passer le switch `-PassThru`.
+
+```powershell
+New-ADOrganizationalUnit @ADOrganizationalUnitSplat -PassThru
+```
+:::
+

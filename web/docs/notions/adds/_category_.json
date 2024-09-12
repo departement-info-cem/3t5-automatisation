@@ -1,0 +1,13 @@
+{
+    "position": 3,
+    "label": "Active Directory",
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "doc",
+        "id": "adds"
+    },
+    "customProps": {
+        "description": "This description can be used in the swizzled DocCard"
+    }
+}

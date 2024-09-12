@@ -1,0 +1,183 @@
+---
+title: Gestion des comptes locaux
+sidebar_label: Comptes locaux
+description: Gestion des comptes locaux
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+À l'exception des contrôleurs de domaine, toutes les machines Windows, qu'elles soient d'une édition client (Windows 10 / 11) ou serveur, possèdent des utilisateurs locaux. Comme vous l'avez vu dans le cours de systèmes d'exploitation, les utilisateurs locaux peuvent être gérés au moyen du composant enfichable "Utilisateurs et groupes locaux" dans une console MMC (accessible par lusrmgr.msc ou compmgmt.msc). Par défaut, lorsqu'on installe Windows, un certain nombre de comptes utilisateurs sont créés, dont *Administrateur* et *Invité*.
+
+
+
+Windows possède également un ensemble de groupes locaux prédéfinis. On peut ajouter des comptes (locaux ou domaine) dans un groupe local. Certains groupes possèdent des privilèges particuliers, comme le groupe **Administrateurs**; tous les comptes utilisateurs membres de ce groupe disposent du **privilège d'élévation** ("exécuter en tant qu'admin"). Les membres du groupe **Utilisateurs**, quant à eux, disposent du privilège de **démarrage de session locale**. 
+
+:::caution
+Un utilisateur qui n'est pas membre d'un de ces groupes ne sera pas autorisé à démarrer une session.
+:::
+
+## Commandes PowerShell
+
+On peut utiliser PowerShell pour contrôler les utilisateurs locaux, les groupes locaux ainsi que l'appartenance aux groupes locaux. PowerShell offre pour ce faire un module `Microsoft.PowerShell.LocalAccounts` qui renferme plusieurs commandes, notamment:
+
+- `Add-LocalGroupMember`
+- `Disable-LocalUser`
+- `Enable-LocalUser`
+- `Get-LocalGroup`
+- `Get-LocalGroupMember`
+- `Get-LocalUser`
+- `New-LocalGroup`
+- `New-LocalUser`
+- `Remove-LocalGroup`
+- `Remove-LocalGroupMember`
+- `Remove-LocalUser`
+- `Rename-LocalGroup`
+- `Rename-LocalUser`
+- `Set-LocalGroup`
+- `Set-LocalUser`
+
+
+## Consulter les utilisateurs existants
+
+La commande Get-LocalUser permet d'obtenir la liste des utilisateurs locaux. Elle retourne un ou plusieurs objets de types `[Microsoft.PowerShell.Commands.LocalUser]` qui décrivent un compte utilisateur local.
+
+<PowerShellWindow workdir="C:\" command="Get-LocalUser" result="
+Name               Enabled Description 
+----               ------- -----------
+Administrateur     True    Compte d’utilisateur d’administration
+DefaultAccount     False   Compte utilisateur géré par le système.
+Invité             False   Compte d’utilisateur invité
+paul               True    Boss de la compagnie
+WDAGUtilityAccount False   Compte d’utilisateur géré et utilisé par le syst..."/>
+
+Ces objets possèdent plusieurs informations sur le compte utilisateur. On peut les voir en explorant la structure de l'objet, par exemple avec `Select-Object *`.
+
+<PowerShellWindow workdir="C:\" command="Get-LocalUser -Name 'paul' | Select-Object *" result="
+AccountExpires         : 2023-05-12 20:06:27
+Description            : Boss de la compagnie
+Enabled                : True
+FullName               : Paul Meilleur
+PasswordChangeableDate : 2023-04-13 20:06:27
+PasswordExpires        : 2023-05-24 20:06:27
+UserMayChangePassword  : True
+PasswordRequired       : False
+PasswordLastSet        : 2023-04-12 20:06:27
+LastLogon              :
+Name                   : paul
+SID                    : S-1-5-21-3297567932-2200011671-69726474-1001
+PrincipalSource        : Local
+ObjectClass            : Utilisateur"/>
+
+
+## Création d'un nouvel utilisateur
+
+La commande `New-LocalUser` crée un utilisateur local et retourne l'objet décrivant cet utilisateur dans le pipeline (comme il est d'usage par la majorité des commandes exploitant le verbe `New-`). Il faut évidemment que la session PowerShell soit élevée en tant qu'admin pour apporter des modifications sur les utilisateurs locaux.
+
+La commande offre un certains nombres de paramètres pour spécifier les différentes propriétés du compte à créer.
+
+| Paramètre | Type | Description |
+| -- | -- | -- |
+| `Name` | String | Le nom d'utilisateur (*login*) |
+| `FullName` | String | Le nom complet (prénom nom) |
+| `Description` | String | Le champ Description |
+| `AccountExpires` | DateTime | La date d'expiration de l'utilisateur |
+| `AccountNeverExpires` | Switch | Indique que le compte n'expire jamais |
+| `Disabled` | Switch | Indique que le compte est désactivé dès sa création |
+| `Password` | SecureString | Le mot de passe de l'utilisateur |
+| `NoPassword` | Switch | Indique que le compte n'a aucun mot de passe (pas très sécuritaire!) |
+| `PasswordNeverExpires` | Switch | Indique que le mot de passe n'expire jamais |
+| `UserMayNotChangePassword` | Switch | Indique que l'utilisateur n'a pas le droit de modifier son mot de passe |
+| `WhatIf` | Switch | Fait en sorte que la commande ne crée pas l'utilisateur pour vrai (utile pour tester) |
+
+:::info
+Le mot de passe est de type `[SecureString]` et pas une chaîne de caractères normale. Ce qui fait qu'on doit d'abord convertir la chaîne de caractère en chaîne sécurisée. On peut le faire au moyen de la commande `ConvertTo-SecureString`.
+
+```powershell
+$securepasswd = 'Passw0rd' | ConvertTo-SecureString -AsPlainText -Force
+```
+:::
+
+Voici un exemple de création d'un compte utilisateur local (en utilisant le *splatting*):
+
+```powershell
+$NouvelUtilisateurSplat = @{
+    Name = "paul"
+    FullName = "Paul Meilleur"
+    Description = "Boss de la compagnie"
+    AccountExpires = (Get-Date).AddDays(30)   # Dans 30 jours
+    Password = ConvertTo-SecureString -String "Passw0rd" -AsPlainText -Force
+}
+
+New-LocalUser @NouvelUtilisateurSplat
+```
+
+:::danger
+On ne devrait jamais mettre des mots de passe en clair dans un script, ni stocker un mot de passe dans une variable en texte clair!!! Voici quelques options pour l'éviter:
+
+- Créer un algorithme qui choisit automatiquement un mot de passe en fonction d'information provenant de l'extérieur
+- Utiliser la commande `Read-Host -AsSecureString` pour demander à l'utilisateur d'entrer un mot de passe (dont la saisie est masquée
+- Utiliser `Get-Credential` pour fournir un nom d'utilisateur et un mot de passe. Nous verrons plus loin cette commande lorsque nous traiterons de l'authentification par PowerShell.
+:::
+
+## Groupes locaux
+
+À l'instar des utilisateurs, on peut connaître les groupes locaux au moyen de la commande `Get-LocalGroup`.
+
+Pour créer un groupe local, on utilise la commande `New-LocalGroup`. Là encore, cette commande ne fonctionne que dans une session PowerShell élevée.
+
+Pour obtenir les membres d'un groupe, on peut utiliser la commande `Get-LocalGroupMember`.
+
+<PowerShellWindow workdir="C:\" command="Get-LocalGroupMember -Group 'Administrateurs'" result="
+ObjectClass Name                    PrincipalSource
+----------- ----                    ---------------
+Utilisateur PC0001\Administrateur   Local
+Utilisateur PC0001\bob              Local
+Utilisateur PC0001\paul             Local
+Utilisateur PC0001\pierre           Local
+Groupe      MINOU\Admins du domaine ActiveDirectory
+Utilisateur MINOU\paul.meilleur     ActiveDirectory"/>
+
+Pour ajouter un utilisateur dans un groupe, on utilise la commande `Add-LocalGroupMember`. Cette commande prend en paramètre `-Member` qui désigne le membre à ajouter, ainsi que `-Group` qui désigne le groupe dans lequel l'ajouter.
+
+Add-LocalGroupMember –Member "Paul" -Group "Administrateurs"
+
+Cette commande admet qu'on passe le membre à ajouter par le pipeline en entrée.
+
+Get-LocalUser -Name "Paul" | Add-LocalGroupMember -Group "Administrateurs"
+
+Cela permet, entre autres, de créer un compte et l'ajouter immédiatement à un groupe, puisque la création génère un objet représentant l'utilisateur.
+
+New-LocalUser -Name "Zoe" -NoPassword | Add-LocalGroupMember -Group "Utilisateurs"
+
+:::info
+On peut aussi ajouter des utilisateurs ou des groupes du domaine comme membre d'un groupe local. Pour ce faire, on n'a qu'à spécifier le sAMAccountName du principal de sécurité du domaine. Si la machine dispose d'une relation d'approbation avec le domaine du compte, celui-ci sera ajouté comme membre au groupe.
+
+Add-LocalGroupMember –Member "DOMAINE\paul.meilleur" -Group "Administrateurs"
+:::
+
+
+:::tip
+Le nom des groupes est différent sur les versions anglaise et française de Windows. Pour que le script fonctionne indépendamment de la langue du système, on peut utiliser le SID du groupe plutôt que son nom. Le SID est un numéro d'identification unique, et dans le cas des groupes prédéfinis dans Windows (Administrateurs, Utilisateurs), il est toujours le même peu importe la langue.
+
+On peut voir les SID des groupes avec la commande suivante:
+
+```powershell
+Get-LocalGroup | Select-Object -Property Name, SID
+```
+
+Voici quelques SID bien connus:
+
+| Nom français | Nom anglais | SID |
+| -- | -- | -- |
+| Administrateurs | Administrators | `S-1-5-32-544` |
+| Utilisateurs | Users | `S-1-5-32 545` |
+
+Par exemple, pour ajouter un utilisateur au groupe des administrateurs:
+
+```powershell
+$MonUtilisateur | Add-LocalGroupMember -SID "S-1-5-32-544"
+```
+:::
+
