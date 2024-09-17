@@ -99,3 +99,19 @@ On peut trier une collection à l'aide de la commande `Sort-Object`, par ordre c
 Par défaut, le tri s'effectue sur le nom d'affichage, mais il est possible de spécifier sur quelle propriété devra s'effectuer le tri.
 
 ![image](r03_07g.png)
+
+
+## Boucle *ForEach-Object*
+
+La commande `ForEach-Object` admet un bloc de script en paramètre, qui sera exécuté pour chaque élément du tableau qui lui est passé en entrée du pipeline. 
+
+L’objet courant est représenté par la variable pipeline `$_` (ou alternativement, `$PSItem`).
+
+
+<PowerShellWindow workdir="C:\" command="1..5 | ForEach-Object { Write-Host 'Numéro', $_ }" result="
+Numéro 1
+Numéro 2
+Numéro 3
+Numéro 4
+Numéro 5" />
+
