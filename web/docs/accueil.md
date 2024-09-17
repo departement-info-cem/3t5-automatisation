@@ -13,8 +13,8 @@ Vous retrouverez sur ce site le résumé de chaque cours dans la section [Rencon
 :::info[Pour me joindre]
 
 Mon nom est **Vincent Carrier** et j'enseigne ce cours à la session d'automne 2024. Mon bureau est situé au **E209**, près de la bibliothèque. Mes périodes de disponibilité sont:
-- Le **lundi 13:00 à 15:00** à mon bureau
-- Le **mardi 14:45 à 16:30** au centre d'aide (temporairement à mon bureau)
+- Le **lundi 13:00 à 15:00** à mon bureau (**E209**)
+- Le **mardi 14:45 à 16:30** au centre d'aide (**D0008**)
 
 Si vous souhaitez me rencontrer à un autre moment, contactez-moi par Teams pour prendre rendez-vous.
 
