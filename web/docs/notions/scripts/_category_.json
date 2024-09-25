@@ -1,11 +1,11 @@
 {
-    "position": 5,
-    "label": "Gestion de Windows",
+    "position": 3,
+    "label": "Scripts PowerShell",
     "collapsible": true,
     "collapsed": false,
     "link": {
         "type": "doc",
-        "id": "windows"
+        "id": "scripts"
     },
     "customProps": {
         "description": "This description can be used in the swizzled DocCard"

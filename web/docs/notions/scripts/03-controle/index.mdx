@@ -1,0 +1,456 @@
+---
+title: Les structures de contrôle
+sidebar_label: Structures de contrôle
+description: Les structures de contrôle (sélection et répétition) en PowerShell
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+A priori, les instructions contenues dans un fichier de script dont exécutées dans un ordre séquentiel, que l'on appelle le **flot de contrôle** (*control flow*). Les structures de contrôle sont des instructions qui permettent de dévier le flot de contrôle et ainsi rendre le programme dynamique.
+
+Il existe quatre grands types de structures de contrôle:
+- La **sélection**, qui permet d'ignorer des instructions sous certaines conditions;
+- La **répétition**, qui permet de revenir en arrière et répéter une instruction ou un ensemble d'instructions plusieurs fois en boucle;
+- Le **sous-programme**, qui permet d'interrompre le cours normal du programme et d'exécuter du code déclaré ailleurs;
+- Le **déplacement**, qui permet de se "déplacer" ailleurs dans le code. Ce type de structure de contrôle est jugée désuète dans de nombreux langages de programmation, y compris PowerShell.
+
+
+## Les structures de sélection
+
+### Sélection à une branche (*If*)
+
+La structure `If` permet une sélection de code conditionnelle. Dans sa variante à une branche, on pose une condition booléenne; si la condition est vraie, le code spécifié entre accolades sera exécuté, autrement il sera ignoré.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+
+if ($nombre -eq 1) {
+    Write-Host "Un!"
+}
+
+Write-Host "Fini!"
+
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\If.ps1" result="
+Entrez un nombre de 1 à 3...: 1
+Un!
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+### Sélection à deux branches (*If...Else*)
+
+Dans sa variable à deux branche, on déclare un deuxième bloc de code à l'aide de l'instruction `else`. C'est le code qui sera exécuté uniquement si la condition est évaluée `false`.
+
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+
+if ($nombre -eq 1) {
+    Write-Host "Un!"
+}
+else {
+    Write-Host "Autre!"
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\IfElse.ps1" result="
+Entrez un nombre de 1 à 3...: 2
+Autre!
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+
+### Sélection imbriquée (*If...ElseIf...Else*)
+
+On peut imbriquer autant de blocs `ElseIf` que l'on veut entre le `If` et le `Else`. Chaque bloc `ElseIf` pose une condition. Si la condition spécifiée dans le bloc `If` ou dans le bloc `ElseIf` précédent est fausse, alors le bloc suivant tente son exécution. En dernier recours, le bloc `Else` est exécuté uniquement lorsque toutes les conditions des blocs `If` et `ElseIf` n'ont pas été respectées. Il est important de noter que dès qu'une condition est vraie, les blocs `ElseIf` suivants ne seront pas exécutés, même si leur condition est vraie; seulement le premier à évaluer vrai sera exécuté.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+
+if ($nombre -eq 1) {
+    Write-Host "Un!"
+}
+elseif ($nombre -eq 2) {
+    Write-Host "Deux!"
+}
+else { 
+    Write-Host "Autre!" 
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\IfElseifElse.ps1" result="
+Entrez un nombre de 1 à 3...: 2
+Deux!
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+### Sélection à *n* branches (*switch*)
+
+L'instruction `Switch` est une alternative à `If`. Elle est pratique lorsqu'on a de nombreuses valeur à tester et que la condition est simple, comme les options d'un menu par exemple.
+
+Optionnellement, on peut spécifier un cas Default, qui est sélectionné si aucun autre cas n'est évalué vrai.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+
+switch ($nombre) {
+    1   { Write-Host "Un!"      }
+    2   { Write-Host "Deux!"    }
+    3   { Write-Host "Trois!"   }
+    Default { 
+        Write-Host "Autre!" 
+    }
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\Switch.ps1" result="
+Entrez un nombre de 1 à 3...: 2
+Deux!
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+### Exemples de sélection
+
+#### Tester l'existence d'un répertoire
+
+```powershell
+if (Test-Path -Path "C:\Minou" -PathType Container) {
+    Write-Host "Le répertoire existe!"
+}
+else {
+    Write-Host "Le répertoire n'existe pas!"
+}
+```
+
+#### Tester si une collection est vide
+
+```powershell
+$chemin = Read-Host -Prompt "Entrez un chemin de répertoire"
+
+$documents = Get-ChildItem -Path $chemin | Where-Object { $_.Name -like "*.docx" }
+
+if ($documents.count -gt 0) {
+    Write-Host "Il y a $($documents.count) documents."
+}
+else {
+    Write-Host "Il n'y a aucun document."
+}
+```
+
+
+#### Tester si un objet est nul (cas particulier)
+
+```powershell
+$service = Get-Service "Nexistepas"
+
+if ($null -ne $service) {
+    Write-Host "Le service est: $($service.status)."
+}
+else {
+    Write-Host "Service introuvable."
+}
+```
+
+
+## Structures de répétition (boucles)
+
+### Boucle *tant que* (*While*)
+
+Dans une boucle *While*, le code entre accolade est exécuté si la condition est vraie. Le code est réexécuté encore et encore tant que l’évaluation de la condition soit toujours vraie. Lorsque la condition devient fausse, la boucle est interrompue et le code continue son exécution normale.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$i = 0
+
+while ($i -le 3) {
+    Write-Host $i
+    $i++
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\While.ps1" result="
+0
+1
+2
+3
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+### Boucle *jusqu'à ce que* (*Do ... While*)
+
+Dans une boucle *Do ... While*, le code entre accolades après l’instruction do est exécuté.
+À la fin du bloc de code, si la condition est respectée, ce code est réexécuté.
+Lorsque la condition devient fausse, la boucle est interrompue et le code continue son exécution normale.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$i = 0
+
+do {
+    Write-Host $i
+    $i++
+}
+while ($i -le 3)
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\DoWhile.ps1" result="
+0
+1
+2
+3
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+:::caution
+
+La différence entre les boucles *While* et *Do...While* est subtile mais importante. Dans le cas de la boucle *While*, la condition est évaluée **avant** le premier tour de boucle. Donc il est possible que le code de la boucle ne soit exécuté aucune fois. À l'inverse, la condition de la boucle *Do...While* est évaluée après le premier tour; on a donc la certitude que le code de la boucle sera exécuté au moins une fois, même si la condition initiale ne le permettrait pas. Choisissez donc le type de boucle qui répond le mieux à votre besoin.
+
+:::
+
+
+### Boucle infinie
+
+Une boucle infinie survient lorsque la condition de bouclage est toujours vraie. En temps normal, on cherche à éviter ce scénario, sauf dans des cas très spécifiques. 
+
+Il faut toujours prévoir une façon de sortir de la boucle. On peut sortir de la boucle avec l’instruction `break`.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$i = 0
+while ($true) {
+    Write-Host $i
+
+    if ($i -gt 3) {
+        break
+    }
+    $i++
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\WhileTrue.ps1" result="
+0
+1
+2
+3
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+
+### Boucle compteur (*For*)
+
+Une boucle compteur est utile lorsqu’on souhaite répéter le code un certain nombre de fois. 
+
+La syntaxe comprend trois parties:
+- L’action à exécuter au début de la boucle (une seule fois)
+- La condition de bouclage (si elle est vraie, on entre dans la boucle)
+- L’action à exécuter après chaque tour de boucle
+
+La boucle *for* utilise typiquement une variable contenant un nombre entier comme compteur, bien que ce type de boucle puisse être utilisé de manière différente. 
+
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+for ($i = 0; $i -le 3; $i++) {
+    for ($j = 0; $j -le 2; $j++) {
+        Write-Host "$i.$j"
+    }
+}
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\For.ps1" result="
+0.0
+0.1
+0.2
+1.0
+1.1
+1.2
+2.0
+2.1
+2.2
+3.0
+3.1
+3.2
+Fini!" />
+
+</TabItem>
+</Tabs>
+
+:::tip
+
+Les variables compteur sont typiquement nommées `$i`. Normalement, les variables devraient avoir un nom plus significatif, mais par convention il est acceptable de nommer les compteurs avec une simple lettre.
+
+Si deux boucles ou plus sont imbriquées les unes dans les autres, on peut utiliser les variables `$j`, `$k`, et ainsi de suite.
+
+:::
+
+
+### Boucle de collection (*ForEach*)
+
+Une boucle de collection est utile lorsqu’on a du code à exécuter pour chaque élément d’une collection.
+
+La syntaxe comprend deux parties:
+- L’objet courant, **une variable** qui représente un élément. Il sera différent à chaque tour de boucle.
+- La **collection**, qui sera traitée un élément à la fois, à chaque tour de boucle.
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$collection = 0..3
+
+foreach ($element in $collection) {
+    Write-Host $element
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\ForEach.ps1" result="
+0
+1
+2
+3
+Fini!" />
+</TabItem>
+</Tabs>
+
+
+### Boucle de pipeline (*ForEach-Object*)
+
+Au lieu de la boucle ForEach, on peut utiliser le cmdlet `ForEach-Object`. L’effet est le même, mais fait usage du pipeline PowerShell. 
+
+L’objet courant est représenté par la variable pipeline `$_` (ou alternativement, `$PSItem`).
+
+<Tabs>
+<TabItem value="code" label="Code">
+
+```powershell
+$collection = 0..3
+
+$collection | ForEach-Object {
+    Write-Host $_
+}
+
+Write-Host "Fini!"
+```
+
+</TabItem>
+<TabItem value="resultat" label="Résultat">
+
+<PowerShellWindow workdir="C:\Scripts" command=".\ForEach-Object.ps1" result="
+0
+1
+2
+3
+Fini!" />
+</TabItem>
+</Tabs>
+
+
+## Échappement (*break*)
+
+Pour quitter "de force" une structure de contrôle, on peut utiliser l'instruction `break`.
+
+```powershell
+While ($true) {
+
+    $reponse = Read-Host -Prompt "Voulez-vous quitter? (O/N)"
+
+    if ($reponse -eq "O") {
+        Write-Host "kbye"
+        break
+    } 
+
+    Write-Host "Attendons un peu..."
+    Start-Sleep -Seconds 2
+
+}
+```
+
+:::tip
+
+À tout moment durant l'exécution d'un script, lorsqu'on est prisonnier d'une boucle infini, on peut appuyer sur `CTRL+C` dans la console pour mettre fin à l'exécution du script instantanément.
+
+:::
