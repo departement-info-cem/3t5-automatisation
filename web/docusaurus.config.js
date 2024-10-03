@@ -56,7 +56,7 @@ const config = {
       docs: {
         sidebar: {
           hideable: true,
-        },
+        }
       },
       navbar: {
         title: siteConfig.nom,
