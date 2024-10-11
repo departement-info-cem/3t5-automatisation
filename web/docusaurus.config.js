@@ -83,6 +83,11 @@ const config = {
             position: "left",
             label: "Travaux Pratiques",
           },
+          {
+            position: "right",
+            label: "Calendrier scolaire",
+            href: "https://www.cegepmontpetit.ca/cegep/calendrier-scolaire",
+          },
         ],
       },
       footer: {
