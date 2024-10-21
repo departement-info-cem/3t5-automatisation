@@ -13,7 +13,7 @@ const config = {
   tagline: siteConfig.description,
   url: "https://info.cegepmontpetit.ca/",
   baseUrl: `/${siteConfig.nomUrl}/`,
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
 
