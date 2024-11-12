@@ -263,7 +263,7 @@ $SetRegValSplat = @{
     Value = "Wingdings"
 }
 
-New-ItemProperty @SetRegValSplat
+Set-ItemProperty @SetRegValSplat
 ```
 
 ### Effacer une valeur
