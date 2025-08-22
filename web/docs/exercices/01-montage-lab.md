@@ -446,7 +446,7 @@ $dossierOutils = "C:\Outils"
 $zipPath = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite.zip"
 $dossierSysinternals = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite"
 
-New-Item -Path "C:\Outils" -ItemType Directory
+New-Item -Path $dossierOutils -ItemType Directory
 Invoke-WebRequest -Uri $Uri -OutFile $zipPath
 Expand-Archive -Path $zipPath -DestinationPath $dossierSysinternals
 Remove-Item $zipPath
