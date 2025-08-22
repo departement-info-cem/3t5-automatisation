@@ -309,6 +309,107 @@ Set-ItemProperty @ServerMgrCleanupSplat
 
 ## Préparation de votre machine de développement
 
+
+### Étape 1: Clonage de la VM
+
+Pour compléter cet environnement de lab, vous devez cloner un modèle de poste de travail.
+
+N'oubliez pas de connecter leur adaptateur réseau virtuel dans le même réseau privé que vos autres machines.
+
+
+### Étape 2: Changement du nom d'hôte
+
+Il est toujours important de donner un nom d'hôte significatif à un serveur ou un poste client. Celui-ci est plus convivial que l'adresse IP lorsqu'il est question de rejoindre un serveur pour profiter des services qu'il offre. Dans le cas d'un poste client, c'est important pour faciliter le support. Active Directory crée et maintient automatiquement un enregistrement A pour chaque machine membre du domaine, de sorte qu'on puisse la résoudre par son nom dans la zone associée au domaine.
+
+Voici un exemple de commande pour renommer la machine. Évidemment, chaque machine doit avoir un nom différent, autrement il y aura des conflits. Utilisez cette commande pour renommer chacune de vos machines (SRV01, SRV02, PC0001 et PC0002).
+
+<Tabs>
+<TabItem value="PowerShell" label="PowerShell">
+
+```powershell
+Rename-Computer -NewName "NOUVEAUNOM" -Restart
+```
+</TabItem>
+<TabItem value="Cmd" label="Cmd">
+
+```cmd
+wmic computersystem where caption='%COMPUTERNAME%' rename NOUVEAUNOM
+shutdown /r /t 0
+```
+</TabItem>
+</Tabs>
+
+
+### Étape 3: Configuration du réseau
+
+Cette étape est cruciale. Elle est différente pour les serveurs et les postes clients.
+
+Les postes clients (Windows 10/11) sont habituellement configurés par DHCP. Leur simple présence dans un réseau local où se trouve un serveur DHCP actif déclenchera un processus d'assignation automatique de configuration IP. Donc si vous avez correctement configuré le serveur DHCP, il n'y a pas d'action particulière à entreprendre. Vérifiez simplement avec la commande `ipconfig.exe` que l'adresse IP est bien configurée. Le quatrième bloc devrait normalement être 100 ou plus, puisque c'est ainsi que l'étendue DHCP devrait être configurée.
+
+:::info Configuration statique
+
+Si la machine requiert une configuration statique, vous pouvez utiliser la même technique de pour votre contrôleur de domaine, à l'aide de `New-NetIPAddress` et `Set-DnsClientServerAddress`. Il faut bien sûr s'assurer que le ou les resolveurs DNS soient les adresses de vos contrôleurs de domaine et rien d'autre.
+
+:::
+
+### Étape 4: Test de résolution DNS
+
+Tout d'abord, assurez-vous que la machine que vous souhaitez joindre à votre domaine dispose d'une connectivité à au moins un contrôleur de domaine, et surtout que la zone DNS du domaine Active Directory soit résolvable. Généralement, les résolveurs correspondent aux adresses IP des contrôleurs de domaine.
+- Si cet hôte a été configuré de manière statique, assurez-vous de lui configurer un résolveur appartenant au domaine (l'adresse d'un contrôleur de domaine).
+- Si cet hôte a été configuré par DHCP, assurez-vous que ce dernier lui a configuré un résolveur appartenant au domaine (option 6).
+
+:::caution
+Il ne faut **jamais** configurer des résolveurs DNS publics sur une machine membre du domaine, comme *8.8.8.8*, *8.8.4.4* ou *1.1.1.1*. Puisque le domaine AD, interne et privé, n'est pas propagé dans le DNS public, ces résolveurs ne seront jamais en mesure de résoudre le *namespace* de votre domaine. Il faut impérativement que les clients DNS soient configurés avec **uniquement** des résolveurs internes, généralement les contrôleurs de domaine.
+:::
+
+Pour tester la résolution DNS, vous pouvez lancer la commande suivante:
+
+<Tabs>
+<TabItem value="PowerShell" label="PowerShell">
+
+```powershell
+Resolve-DnsName -Name "auto.cemti.ca"
+```
+</TabItem>
+<TabItem value="Cmd" label="Cmd">
+
+```
+nslookup auto.cemti.ca
+```
+</TabItem>
+</Tabs>
+
+
+### Étape 5: Jonction au domaine
+
+Pour joindre la machine au domaine, vous pouvez utiliser la commande PowerShell `Add-Computer`. La commande suivante redémarrera automatiquement la machine; si vous ne souhaitez pas qu'elle redémarre maintenant, ne spécifiez pas `-Restart`. Sachez cependant que le nouveau nom ne prendra effet qu'après un redémarrage complet de la machine.
+
+```powershell
+Add-Computer -DomainName "auto.cemti.ca" -Restart
+```
+
+:::tip
+On peut utiliser cette commande pour créer le compte ordinateur dans une unité d'organisation de notre choix, plutôt que dans le conteneur par défaut "computers". Cela peut s'avérer utile dans un domaine où notre compte n'est pas administrateur de domaine et ne dispose de droits de création de comptes ordinateurs que dans certains OU spécifiques, ou encore pour faire en sorte qu'il reçoive des GPO. 
+
+Pour spécifier l'OU dans lequel créer le compte ordinateur, il suffit de passer le nom distinctif (*DistinguishedName*) de l'unité d'organisation ou du conteneur dans lequel créer le nouvel objet.
+
+```powershell
+$AddComputerSplat = @{
+    DomainName = "auto.cemti.ca" 
+    OUPath = "OU=Portables,OU=Ordinateurs,DC=auto,DC=cemti,DC=ca"
+}
+
+Add-Computer @AddComputerSplat
+```
+:::
+
+
+
+
+
+
+
+
 Si vous avez déjà préparé une VM avec vos outils de développement (VS Code, Git, etc.), vous pouvez simplement la connecter dans votre réseau privé, la laisser prendre sa configuration par DHCP, la renommer "PCDEV" puis la joindre au domaine!
 
 ### Consoles d'administration (RSAT)
