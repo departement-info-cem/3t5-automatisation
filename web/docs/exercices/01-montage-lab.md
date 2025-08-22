@@ -438,6 +438,20 @@ Get-WindowsCapability -Online | Where-Object { $_.Name -Match "^rsat\.activedire
 
 La suite Sysinternals est un incontournable pour tout admin réseau opérant dans un environnement Windows. Téléchargez la suite sur le [site de Sysinternals](https://learn.microsoft.com/fr-ca/sysinternals/downloads/sysinternals-suite) puis extrayez le fichier ZIP dans le répertoire `C:\Outils`.
 
+On peut installer les outils au moyen de PowerShell, bien sûr!
+
+```powershell
+$uri = "https://download.sysinternals.com/files/SysinternalsSuite.zip"
+$dossierOutils = "C:\Outils"
+$zipPath = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite.zip"
+$dossierSysinternals = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite"
+
+New-Item -Path "C:\Outils" -ItemType Directory
+Invoke-WebRequest -Uri $Uri -OutFile $zipPath
+Expand-Archive -Path $zipPath -DestinationPath $dossierSysinternals
+Remove-Item $zipPath
+```
+
 
 ## Utilisation de compte de domaine
 
