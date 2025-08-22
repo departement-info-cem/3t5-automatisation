@@ -460,6 +460,7 @@ $uri = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"
 $arg = "/VERYSILENT /MERGETASKS=!runcode,addcontextmenufiles,addcontextmenufolders,desktopicon"
 Invoke-WebRequest -Uri $uri -OutFile $dest
 Start-Process -FilePath $dest -ArgumentList $arg -Wait -PassThru
+Remove-Item $dest
 ```
 
 Et vous pouvez même installer l'extension PowerShell un coup parti.
