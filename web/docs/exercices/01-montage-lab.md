@@ -1,13 +1,11 @@
 ---
-title: Tutoriel - Montage du lab
-sidebar_label: Montage du lab (tutoriel)
+title: Montage du laboratoire
+sidebar_label: Montage du laboratoire
 description: Tutoriel d'installation d'un domaine AD
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-
-# Environnement de lab Active Directory
 
 Dans ce cours, vous devez monter un environnement de laboratoire virtualisé dans Labinfo. Voici comment le répliquer simplement avec des commandes PowerShell.
 
@@ -15,24 +13,20 @@ Dans ce cours, vous devez monter un environnement de laboratoire virtualisé dan
 
 Le diagramme ci-dessous montre le plan conceptuel du réseau que vous devrez concevoir dans votre environnement virtuel.
 
-![Architecture de l'environnement de laboratoire](./architecture-labo.svg)
+![Architecture de l'environnement de laboratoire](./assets/architecture-labo.svg)
 
 Il sera composé des machines virtuelles suivantes:
 
 | Hôte | Fonction | Adresse IP | Modèle (labinfo) |
 | ---- | ---- | ---- | ---- |
 | PFSENSE | Passerelle / NAT | 192.168.21.1 | MODELE_pfSense (Sans DHCP) |
-| DC01 | Contrôleur de domaine et serveur DHCP | 192.168.21.10 | MODELE_WindowsServer2022_Datacenter_x64_FR |
-| SRV01 | Serveur membre générique | 192.168.21.20 | MODELE_WindowsServer2022_Datacenter_x64_FR |
-| SRV02 | Serveur membre générique | 192.168.21.21 | MODELE_WindowsServer2022_Datacenter_x64_FR |
-| PC0001 | Poste client | 192.168.21.*(dyn)* | MODELE_Windows10-22H2_Education_x64_FR |
-| PC0002 | Poste client | 192.168.21.*(dyn)* | MODELE_Windows10-22H2_Education_x64_FR |
-| PCDEV | Poste client | 192.168.21.*(dyn)* | MODELE_Windows10-22H2_Education_x64_FR |
+| DC01 | Contrôleur de domaine et serveur DHCP | 192.168.21.10 | MODELE_WinServer2025_Datacenter |
+| PCDEV | Poste client | *(dynamique)* | MODELE_Win11-24H2_Education |
 
 :::tip
 Pour que vos VM soient organisées dans un même bloc dans Labinfo, ajoutez le préfixe `3T5-xx-` devant le nom des VM dans vSphere (où *xx* représente vos initiales).
 
-![](./esx-organisation.png)
+![](./assets/esx-organisation.png)
 :::
 
 
@@ -44,17 +38,21 @@ Dans votre environnement de laboratoire, vous devez placer une VM entre un rése
 
 Tout d'abord, créez une nouvelle machine virtuelle basée sur le modèle **MODELE_pfSense (Sans DHCP)**. 
 
+:::info
+Les modèles sont situés dans le répertoire **MODELES\420-VCarrier**.
+:::
+
 Puis modifiez ses paramètres matériels. Cette machine est dotée de deux cartes d'interface réseau matérielles virtualisées. La première interface est appelée "WAN" et est connectée à Internet (*Acces-Internet-1*). La deuxième interface est appelée "LAN" et est connectée dans le réseau privé interne. Vous n'avez qu'à choisir un de vos dix subnets privés et utiliser le même pour chacune de vos VM. Les réseaux privés sont nommés `L-###-01` à `L-###-10`.
 
-![pfSense NIC](./pfsense-nics.png)
+![pfSense NIC](./assets/pfsense-nics.png)
 
 Ensuite, démarrez la VM. Vous pouvez accéder à la console en cliquant sur "Lancer Remote Console".
 
-![Exécution de la VM pfSense](./pfsense-run.png)
+![Exécution de la VM pfSense](./assets/pfsense-run.png)
 
 Sur sa console, on peut y voir un écran d'information et un menu d'administration, mais la VM est déjà configurée alors on n'a pas à y toucher. Prenez toutefois note de l'adresse IP LAN. On y retrouve l'adresse `192.168.21.1/24`. Ce qui signifie que l'adresse IP de cette machine est `192.168.21.1` (l'adresse de la passerelle par défaut des machines situées dans le même réseau local) et que la partie réseau de l'adresse IP est de 24 bits (donc un masque de sous-réseau de `255.255.255.0`). Ce sera à considérer lorsque vous monterez d'autres machines dans ce réseau. Puis laissez simplement la machine allumée; tant qu'elle est allumée, elle assurera la liaison entre le réseau local et Internet.
 
-![Console pfsense](./pfsense-console.png)
+![Console pfsense](./assets/pfsense-console.png)
 
 
 :::tip
@@ -62,7 +60,7 @@ Pour sauver des ressources dans LabInfo, la DiSTI a programmé un script qui met
 
 Pour activer cette protection, il faut simplement attribuer la balise "Ne pas fermer".
 
-![Balise "ne pas fermer"](./balise-ne-pas-fermer.png)
+![Balise "ne pas fermer"](./assets/balise-ne-pas-fermer.png)
 :::
 
 
@@ -72,7 +70,7 @@ Pour créer un domaine, il faut installer le rôle des Services de domaine Activ
 
 ### Étape 1: Clonage de la machine virtuelle
 
-La première étape consiste à installer et configurer une édition Serveur de Windows. Pour le laboratoire, utilisez le modèle **MODELE_WindowsServer2022_Datacenter_x64_FR** pour créer votre VM. Assurez-vous de brancher son adaptateur réseau dans `L-###-##` (le réseau local privé que vous avez choisi lors du montage de votre passerelle).
+La première étape consiste à installer et configurer une édition Serveur de Windows. Pour le laboratoire, utilisez le modèle **MODELE_WindowsServer2025_Datacenter** pour créer votre VM. Assurez-vous de brancher son adaptateur réseau dans `L-###-##` (le réseau local privé que vous avez choisi lors du montage de votre passerelle).
 
 
 ### Étape 2: Changement du nom d'hôte
@@ -103,7 +101,7 @@ Tout d'abord, il nous faut connaître le nom de l'interface à configurer. Par d
 Get-NetAdapter
 ```
 
-![Get-NetAdapters](./netadapters.png)
+![Get-NetAdapters](./assets/netadapters.png)
 
 #### Assignation de l'adresse IP
 
@@ -163,15 +161,16 @@ Le système redémarrera automatiquement une fois l'opération complétée. Pour
 
 ```powershell
 $ADDSForestSplat = @{
-    DomainName = "auto.cemti.ca"
-    DomainNetbiosName = "AUTO"
-    ForestMode = "WinThreshold"
+    DomainName = "auto.cemti.ca"        # Le nom DNS de votre domaine racine
+    DomainNetbiosName = "AUTO"          # Le nom NETBIOS de votre domaine racine
+    ForestMode = "WinThreshold"         # Les plus récents niveaux fonctionnels
     DomainMode = "WinThreshold"
-    DatabasePath = "C:\Windows\NTDS"
+    DatabasePath = "C:\Windows\NTDS"    # Les emplacements par défaut pour la base de données
     LogPath = "C:\Windows\NTDS"
     SysvolPath = "C:\Windows\SYSVOL"
-    InstallDns = $true
-    CreateDnsDelegation = $false
+    InstallDns = $true                  # On doit installer un serveur DNS
+    CreateDnsDelegation = $false        # Pas de délégation possible (il n'y a pas d'autre domaine)
+    # Il faut aussi un mot de passe de récupération (DSRM). On doit le convertir en chaîne chiffrée.
     SafeModeAdministratorPassword = ConvertTo-SecureString -String "Passw0rd" -AsPlainText -Force
 }
 
@@ -187,13 +186,13 @@ La commande `Install-ADDSForest` sert à créer le domaine racine de sa forêt, 
 
 Lorsque le serveur est promu en tant que contrôleur de domaine, le résolveur DNS configuré dans l'interface réseau est automatiquement modifié pour 127.0.0.1, l'adresse *loopback*, faisant ainsi référence à l'hôte local. Autrement dit, l'interface réseau devient un client du service DNS hébergé sur la même machine. Tous les résolveurs DNS configurés auparavant sur l'interface seront automatiquement inscrits comme redirecteurs DNS dans la configuration du serveur.
 
-![Redirecteurs DNS](./dns-redirecteurs.png)
+![Redirecteurs DNS](./assets/dns-redirecteurs.png)
 
 
 :::info
 Lorsqu'on installe le rôle ADDS, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à en effectuer la promotion. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée. 
 
-![Configuration post-déploiement ADDS](./adds-postdeployment.png)
+![Configuration post-déploiement ADDS](./assets/adds-postdeployment.png)
 
 Cette opération n'est pas obligatoire, mais elle est souhaitable dans la mesure où on utilise le gestionnaire de serveur.
 
@@ -292,7 +291,7 @@ Set-DhcpServerv4Scope -ScopeId 192.168.21.0 -State Active
 :::info
 Lorsqu'on installe le rôle DHCP, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à activer et configurer le serveur. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée. 
 
-![Configuration post-déploiement DHCP](./dhcp-postdeployment.png)
+![Configuration post-déploiement DHCP](./assets/dhcp-postdeployment.png)
 
 Cette opération n'est pas obligatoire, mais elle est souhaitable dans la mesure où on utilise le gestionnaire de serveur.
 
@@ -308,135 +307,6 @@ Set-ItemProperty @ServerMgrCleanupSplat
 :::
 
 
-## Montage des autres machines
-
-### Étape 1: Clonage des machines virtuelles
-
-Pour compléter cet environnement de lab, vous devez monter deux serveurs et deux postes clients.
-
-| Hôte | Adresse IP | Modèle (labinfo) |
-| ---- | ---- | ---- |
-| SRV01 | 192.168.21.20 | MODELE_WindowsServer2022_Datacenter_x64_FR |
-| SRV02 | 192.168.21.21 | MODELE_WindowsServer2022_Datacenter_x64_FR |
-| PC0001 | 192.168.21.*(dyn)* | MODELE_Windows10-22H2_Education_x64_FR |
-| PC0002 | 192.168.21.*(dyn)* | MODELE_Windows10-22H2_Education_x64_FR |
-
-N'oubliez pas de connecter leur adaptateur réseau virtuel dans le même réseau privé que vos autres machines.
-
-
-### Étape 2: Changement du nom d'hôte
-
-Il est toujours important de donner un nom d'hôte significatif à un serveur ou un poste client. Celui-ci est plus convivial que l'adresse IP lorsqu'il est question de rejoindre un serveur pour profiter des services qu'il offre. Dans le cas d'un poste client, c'est important pour faciliter le support. Active Directory crée et maintient automatiquement un enregistrement A pour chaque machine membre du domaine, de sorte qu'on puisse la résoudre par son nom dans la zone associée au domaine.
-
-Voici un exemple de commande pour renommer la machine. Évidemment, chaque machine doit avoir un nom différent, autrement il y aura des conflits. Utilisez cette commande pour renommer chacune de vos machines (SRV01, SRV02, PC0001 et PC0002).
-
-<Tabs>
-<TabItem value="PowerShell" label="PowerShell">
-
-```powershell
-Rename-Computer -NewName "NOUVEAUNOM" -Restart
-```
-</TabItem>
-<TabItem value="Cmd" label="Cmd">
-
-```cmd
-wmic computersystem where caption='%COMPUTERNAME%' rename NOUVEAUNOM
-shutdown /r /t 0
-```
-</TabItem>
-</Tabs>
-
-
-### Étape 3: Configuration du réseau
-
-Cette étape est cruciale. Elle est différente pour les serveurs et les postes clients.
-
-#### Serveurs: configuration statique
-
-Il est généralement recommandé de donner une configuration IP statique à un serveur, contrairement aux postes de travail (clients) qui préfèrent un adressage dynamique avec DHCP. Pour 
-
-| Paramètre             | SRV01         | SRV02         |
-| --------------------- | ------------- | ------------- |
-| Adresse IP            | 192.168.21.20 | 192.168.21.21 |
-| Masque de sous-réseau | 255.255.255.0 | 255.255.255.0 |
-| Passerelle par défaut | 192.168.21.1  | 192.168.21.1  |
-| Résolveur DNS         | 192.168.21.10 | 192.168.21.10 |
-
-
-Voici le code PowerShell pour configurer l'adresse IP statique pour le serveur SRV01.
-
-```powershell
-$Adresse      = "192.168.21.20"   # Adresse IPv4 prévue pour SRV01
-$Masque       =  24               # Équivalent à 255.255.255.0 (/24)
-$Passerelle   = "192.168.21.1"    # L'adresse du pfSense
-$ResolveurDNS = "192.168.21.10"   # L'adresse du contrôleur de domaine
-
-New-NetIPAddress -IPaddress $Adresse -PrefixLength $Masque -DefaultGateway $Passerelle -AddressFamily "IPv4" -InterfaceAlias "Ethernet0"
-Set-DnsClientServerAddress -ServerAddresses $ResolveurDNS -InterfaceAlias "Ethernet0"
-```
-
-:::tip
-Pour être certain du nom de l'interface, utilisez la commande `Get-NetAdapter`.
-:::
-
-
-#### Postes clients: configuration dynamique
-
-Les postes clients (Windows 10/11) sont habituellement configurés par DHCP. Leur simple présence dans un réseau local où se trouve un serveur DHCP actif déclenchera un processus d'assignation automatique de configuration IP. Donc si vous avez correctement configuré le serveur DHCP, il n'y a pas d'action particulière à entreprendre. Vérifiez simplement avec la commande `ipconfig.exe` que l'adresse IP est bien configurée. Le quatrième bloc devrait normalement être 100 ou plus, puisque c'est ainsi que l'étendue DHCP devrait être configurée.
-
-
-### Étape 4: Test de résolution DNS
-
-Tout d'abord, assurez-vous que la machine que vous souhaitez joindre à votre domaine dispose d'une connectivité à au moins un contrôleur de domaine, et surtout que la zone DNS du domaine Active Directory soit résolvable. Généralement, les résolveurs correspondent aux adresses IP des contrôleurs de domaine.
-- Si cet hôte a été configuré de manière statique, assurez-vous de lui configurer un résolveur appartenant au domaine (l'adresse d'un contrôleur de domaine).
-- Si cet hôte a été configuré par DHCP, assurez-vous que ce dernier lui a configuré un résolveur appartenant au domaine (option 6).
-
-:::caution
-Il ne faut **jamais** configurer des résolveurs DNS publics sur une machine membre du domaine, comme *8.8.8.8*, *8.8.4.4* ou *1.1.1.1*. Puisque le domaine AD, interne et privé, n'est pas propagé dans le DNS public, ces résolveurs ne seront jamais en mesure de résoudre le *namespace* de votre domaine. Il faut impérativement que les clients DNS soient configurés avec **uniquement** des résolveurs internes, généralement les contrôleurs de domaine.
-:::
-
-Pour tester la résolution DNS, vous pouvez lancer la commande suivante:
-
-<Tabs>
-<TabItem value="PowerShell" label="PowerShell">
-
-```powershell
-Resolve-DnsName -Name "auto.cemti.ca"
-```
-</TabItem>
-<TabItem value="Cmd" label="Cmd">
-
-```
-nslookup auto.cemti.ca
-```
-</TabItem>
-</Tabs>
-
-
-### Étape 5: Jonction au domaine
-
-Pour joindre la machine au domaine, vous pouvez utiliser la commande PowerShell `Add-Computer`. La commande suivante redémarrera automatiquement la machine; si vous ne souhaitez pas qu'elle redémarre maintenant, ne spécifiez pas `-Restart`. Sachez cependant que le nouveau nom ne prendra effet qu'après un redémarrage complet de la machine.
-
-```powershell
-Add-Computer -DomainName "auto.cemti.ca" -Restart
-```
-
-:::tip
-On peut utiliser cette commande pour créer le compte ordinateur dans une unité d'organisation de notre choix, plutôt que dans le conteneur par défaut "computers". Cela peut s'avérer utile dans un domaine où notre compte n'est pas administrateur de domaine et ne dispose de droits de création de comptes ordinateurs que dans certains OU spécifiques, ou encore pour faire en sorte qu'il reçoive des GPO. 
-
-Pour spécifier l'OU dans lequel créer le compte ordinateur, il suffit de passer le nom distinctif (*DistinguishedName*) de l'unité d'organisation ou du conteneur dans lequel créer le nouvel objet.
-
-```powershell
-$AddComputerSplat = @{
-    DomainName = "auto.cemti.ca" 
-    OUPath = "OU=Portables,OU=Ordinateurs,DC=auto,DC=cemti,DC=ca"
-}
-
-Add-Computer @AddComputerSplat
-```
-:::
-
-
 ## Préparation de votre machine de développement
 
 Si vous avez déjà préparé une VM avec vos outils de développement (VS Code, Git, etc.), vous pouvez simplement la connecter dans votre réseau privé, la laisser prendre sa configuration par DHCP, la renommer "PCDEV" puis la joindre au domaine!
@@ -445,7 +315,7 @@ Si vous avez déjà préparé une VM avec vos outils de développement (VS Code,
 
 Les outils d'administration à distance (Remote Server Administration Tools, RSAT) désignes les consoles d'administration graphiques qui s'installent avec un rôle sur un serveur. Mais il est généralement possible d'installer les consoles sur un autre serveur, ou même sur un poste client, afin que l'administrateur puisse manipuler les consoles d'administration sans devoir démarrer une session interactive sur le serveur. On peut donc installer les consoles sans installer le rôle ou le service.
 
-Le mode d'installation de ces outils est différent selon qu'on souhaite l'installer sous Windows 10/11 ou sous Windows Server, et les commandes sont différentes. Les exemples suivants installent toutes les consoles d'administration pour Active Directory, DNS et DHCP.
+Le mode d'installation de ces outils est différent selon qu'on souhaite l'installer sous Windows 11 ou sous Windows Server, et les commandes sont différentes. Les exemples suivants installent toutes les consoles d'administration pour Active Directory, DNS et DHCP.
 
 #### Sous Windows Serveur
 
@@ -453,7 +323,11 @@ Le mode d'installation de ces outils est différent selon qu'on souhaite l'insta
 Install-WindowsFeature -Name "RSAT-AD-Tools", "GPMC", "RSAT-DNS-Server", "RSAT-DHCP" -IncludeAllSubFeature
 ```
 
-#### Sous Windows 10/11
+:::tip
+Vous n'avez pas besoin de faire ceci sur un contrôleur de domaine, puisque les outils sont installés automatiquement lors de la configuration d'Active Directory.
+:::
+
+#### Sous Windows 11
 
 ```powershell
 Get-WindowsCapability -Online | Where-Object { $_.Name -Match "^rsat\.activedirectory|grouppolicy|dns|dhcp.*$" } | Add-WindowsCapability -Online
@@ -470,8 +344,8 @@ Lorsque vous avez effectué la promotion de votre contrôleur de domaine, le com
 
 Pour l'utiliser toutefois, vous devez spécifier le nom de votre domaine, car sinon Windows pensera que vous voulez utiliser le compte Administrateur local, qui est différent. Il est important de démarrer une session avec un compte du domaine si vous voulez vous connecter à des machines distantes.
 
-![login domaine](./domain-login.png)
+![login domaine](./assets/domain-login.png)
 
 Pour vous assurer que vous avez démarré une session avec un compte du domaine, lancez la commande `whoami`. Si c'est le nom de votre domaine qui est à la gauche du *backslash*, alors vous êtez bel et bien authentifiés avec un compte du domaine; si c'est plutôt le nom d'hôte de la machine, c'est que vous utilisez un compte local. Vous aurez de la difficulté à lancer des tâches administratives sur des ordinateurs distants!
 
-![whoami](./whoami.png)
+![whoami](./assets/whoami.png)

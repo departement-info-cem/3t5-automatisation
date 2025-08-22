@@ -9,13 +9,11 @@ Bienvenue dans le cours d'automatisation de tâches. Dans ce cours, vous apprend
 
 Vous retrouverez sur ce site le résumé de chaque cours dans la section [Rencontres](/rencontres/r01). Les notes de cours, quant à elles, se retrouvent dans la section [Notions](/notions/intro). Finalement, les énoncés des différents TP à livrer dans ce cours sont consignés dans la section [Travaux pratiques](/tp/tp1).
 
-
 :::info[Pour me joindre]
 
-Mon nom est **Vincent Carrier** et j'enseigne ce cours à la session d'automne 2024. Mon bureau est situé au **E209**, près de la bibliothèque. Mes périodes de disponibilité sont:
-- Le **lundi 13:00 à 15:00** à mon bureau (**E209**)
-- Le **mardi 14:45 à 16:30** au centre d'aide (**D0008**)
+Mon nom est **Vincent Carrier** et j'enseigne ce cours à la session d'automne 2025. Mon bureau est situé au **E209**, près de la bibliothèque. Mes périodes de disponibilité sont inscrites dans Léa.
 
-Si vous souhaitez me rencontrer à un autre moment, contactez-moi par Teams pour prendre rendez-vous.
+Si vous souhaitez me rencontrer à un autre moment, prenez [rendez-vous avec moi](https://bit.ly/BookingVincentCarrier).
 
 :::
+

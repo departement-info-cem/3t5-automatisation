@@ -1,6 +1,6 @@
-import React, { type CSSProperties, ReactNode } from "react";
+import React, { type CSSProperties, JSX, ReactNode } from "react";
 
-import CopyButton from "@theme/CodeBlock/CopyButton";
+//import CopyButton from "@theme/CodeBlock/CopyButton";
 
 import styles from "./styles.module.css";
 import Logo from "./assets/logo.svg";
@@ -38,7 +38,7 @@ export default function PowerShellWindow({
           PS {workdir}&gt;
           {` ${command}`}
           <div className={styles.spacer}></div>
-          <CopyButton className={styles.copyButton} code={command}></CopyButton>
+          {/* <CopyButton className={styles.copyButton} code={command}></CopyButton> */}
         </div>
 
         <pre className={styles.codeContainer}>

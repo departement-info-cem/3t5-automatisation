@@ -79,10 +79,16 @@ const config = {
           },
           {
             type: "doc",
-            docId: "tp/tp1",
+            docId: "exercices/montage-lab",
             position: "left",
-            label: "Travaux Pratiques",
+            label: "Exercices",
           },
+          //{
+          //  type: "doc",
+          //  docId: "tp/tp1",
+          //  position: "left",
+          //  label: "Travaux Pratiques",
+          //},
           {
             position: "right",
             label: "Calendrier scolaire",

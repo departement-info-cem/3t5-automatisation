@@ -13,5 +13,5 @@ export default {
   Row,
   Video,
   GHCode,
-  PowerShellWindow
+  PowerShellWindow,
 };
