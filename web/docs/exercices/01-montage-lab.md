@@ -142,6 +142,11 @@ Cette commande procède également à l'installation de tous les rôles et fonct
 Import-Module -Name ActiveDirectory
 ```
 
+:::info
+La commande précédente affiche un message d'avertissement pour signaler qu'aucun contrôleur de domaine n'a été trouvé. C'est normal, puisque votre domaine n'existe pas encore! Vous avez quand même besoin du module pour utiliser la commande qui vous permet de promouvoir votre serveur. Vous pouvez donc ignorer l'avertissement.
+:::
+
+
 #### Promotion du contrôleur de domaine
 
 Une fois le rôle installé, on peut procéder à la promotion. La commande `Install-ADDSForest` permet la création de la forêt par la promotion de son premier contrôleur de domaine. Il faut fournir plusieurs arguments à la commande, l'exemple suivant les identifie dans un *hashtable* pour ensuite les passer par *splatting*.
@@ -404,14 +409,6 @@ Add-Computer @AddComputerSplat
 :::
 
 
-
-
-
-
-
-
-Si vous avez déjà préparé une VM avec vos outils de développement (VS Code, Git, etc.), vous pouvez simplement la connecter dans votre réseau privé, la laisser prendre sa configuration par DHCP, la renommer "PCDEV" puis la joindre au domaine!
-
 ### Consoles d'administration (RSAT)
 
 Les outils d'administration à distance (Remote Server Administration Tools, RSAT) désignes les consoles d'administration graphiques qui s'installent avec un rôle sur un serveur. Mais il est généralement possible d'installer les consoles sur un autre serveur, ou même sur un poste client, afin que l'administrateur puisse manipuler les consoles d'administration sans devoir démarrer une session interactive sur le serveur. On peut donc installer les consoles sans installer le rôle ou le service.
@@ -424,7 +421,7 @@ Le mode d'installation de ces outils est différent selon qu'on souhaite l'insta
 Install-WindowsFeature -Name "RSAT-AD-Tools", "GPMC", "RSAT-DNS-Server", "RSAT-DHCP" -IncludeAllSubFeature
 ```
 
-:::tip
+:::info
 Vous n'avez pas besoin de faire ceci sur un contrôleur de domaine, puisque les outils sont installés automatiquement lors de la configuration d'Active Directory.
 :::
 
@@ -451,6 +448,27 @@ Invoke-WebRequest -Uri $Uri -OutFile $zipPath
 Expand-Archive -Path $zipPath -DestinationPath $dossierSysinternals
 Remove-Item $zipPath
 ```
+
+
+### Installation de Visual Studio Code
+
+Pour installer Visual Studio Code, vous pouvez utiliser le gestionnaire de paquets Winget, mais cela ne permet pas de modifier le comportement de l'installation. Par ailleurs, Winget n'est pas une commande PowerShell. Voici comment l'installer grâce à PowerShell tout en l'enregistrant dans les menus contextuel et en créant un raccourci sur le bureau.
+
+```powershell
+$dest = "$env:TEMP\vscodesetup.exe"
+$uri = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"
+$arg = "/VERYSILENT /MERGETASKS=!runcode,addcontextmenufiles,addcontextmenufolders,desktopicon"
+Invoke-WebRequest -Uri $uri -OutFile $dest
+Start-Process -FilePath $dest -ArgumentList $arg -Wait -PassThru
+```
+
+Et vous pouvez même installer l'extension PowerShell un coup parti.
+
+```powershell
+$codecli = "C:\Program Files\Microsoft VS Code\bin\code.cmd"
+Start-Process -FilePath $codecli -ArgumentList "--install-extension ms-vscode.powershell" -Wait -NoNewWindow
+```
+
 
 
 ## Utilisation de compte de domaine
