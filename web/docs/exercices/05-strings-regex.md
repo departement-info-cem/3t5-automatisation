@@ -68,7 +68,7 @@ En utilisant **une expression régulière**, valider si la chaîne de caractère
 
 #### 5.1.7
 
-En utilisant **une expression régulière**, trouvez une ligne de commande qui retourne tous les chemins de la variable `PATH` qui **se terminent par un "\"**.
+En utilisant **une expression régulière**, trouvez une ligne de commande qui retourne tous les chemins de la variable `PATH` qui **se terminent par un "\\"**.
 
 ![Image 5.1.7](image-5.1.7.png)
 
