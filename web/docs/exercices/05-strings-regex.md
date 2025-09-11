@@ -15,7 +15,7 @@ Vous pouvez télécharger ces exercices sous forme de fichier PowerShell. Ouvrez
 
 Obtenir la liste de tous les chemins contenus dans la variable d'environnement `PATH`, sous forme de **tableau de strings**.
 
-![Image 5.1.1](image-5.1.1.png)
+![Image 5.1.1](assets/image-5.1.1.png)
 
 
 #### 5.1.2
@@ -27,7 +27,7 @@ Inverser le sens des barres obliques dans la chaîne `C:\Windows\System32` pour 
 
 En utilisant les solutions précédentes, inversez le sens des barres obliques pour tous les chemins de la variable `PATH`.
 
-![Image 5.1.3](image-5.1.3.png)
+![Image 5.1.3](assets/image-5.1.3.png)
 
 
 #### 5.1.4
@@ -70,7 +70,7 @@ En utilisant **une expression régulière**, valider si la chaîne de caractère
 
 En utilisant **une expression régulière**, trouvez une ligne de commande qui retourne tous les chemins de la variable `PATH` qui **se terminent par un "\\"**.
 
-![Image 5.1.7](image-5.1.7.png)
+![Image 5.1.7](assets/image-5.1.7.png)
 
 
 

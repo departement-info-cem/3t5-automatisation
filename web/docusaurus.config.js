@@ -83,12 +83,12 @@ const config = {
             position: "left",
             label: "Exercices",
           },
-          //{
-          //  type: "doc",
-          //  docId: "tp/tp1",
-          //  position: "left",
-          //  label: "Travaux Pratiques",
-          //},
+          {
+            type: "doc",
+            docId: "tp/tp1",
+            position: "left",
+            label: "Travaux Pratiques",
+          },
           {
             position: "right",
             label: "Calendrier scolaire",
