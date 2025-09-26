@@ -10,7 +10,7 @@ toc_max_heading_level: 2
 **A)** Dans le fichier `Invoke-Addition.PS1`, définissez **une fonction** `Invoke-Addition` qui prend en paramètre un nombre illimité de termes.
 
 ```powershell showLineNumbers
-function Invoke-Addition{
+function Invoke-Addition {
     param(
         [double[]] $termes
     )
@@ -23,7 +23,6 @@ function Invoke-Addition{
 
     $total
 }
-
 ```
 
 Testez ce script avec `F5`. Celui-ci ne donne aucun résultat. **Pourquoi selon vous?**
@@ -32,17 +31,8 @@ Testez ce script avec `F5`. Celui-ci ne donne aucun résultat. **Pourquoi selon 
 Pour tester votre fonction, appelez-la dans le code principal de votre script, comme ceci:
 
 ```powershell showLineNumbers
-function Invoke-Addition{
-    param(
-        [double[]] $termes
-    )
-
-    $total = 0
-    foreach ($terme in $termes) {
-        $total += $terme
-    }
-
-    $total
+function Invoke-Addition {
+    # le code de la fonction...
 }
 
 Invoke-Addition 2, 3, 5
@@ -71,7 +61,7 @@ Pour tester une fonction, vous devez la déclarer en premier. Pour tester la fon
 :::
 
     
-**A)** Écrivez une fonction `Start-Notepad` qui démarre Notepad.exe à l'aide de `Start-Process` et **retourne un objet** décrivant le processus dans le pipeline.
+**A)** Écrivez une fonction `Start-Notepad` qui démarre Notepad.exe à l'aide de `Start-Process` et **retourne un objet** décrivant le processus dans le pipeline (en utilisant le paramètre `-PassThru`).
 
 ```
 PS C:\> Start-Notepad
@@ -118,15 +108,15 @@ Write-Host "La réponse est $c"
 
 On aura la trace suivante :
 
-| Ligne exécutée | Effet                             | Pile d'appel |
-|:----------------|:----------------------------------|:--|
-| $a = 3      | $a: 3                             | **Script** |
-| $b = 5      | $a: 3 ; $b: 5                           | **Script** |
-| $c = MaFonction $a $b      | $a: 3 ; $b: 5 <br/> Appelle MaFonction avec $x=3 et $y=5  | **Script** |
-| $z = $x + $y | $x: 3 ; $y: 5 ; $z: 8 | **MaFonction**<br/>Script |
-| return $z | $x: 3 ; $y: 5 ; $z: 8 <br/> Sortie: 8 | **MaFonction**<br/>Script |
-| $c = MaFonction $a $b | $a: 3 ; $b: 5 ; $c: 8 | **Script** |
-| Write-Host "La réponse est $c" | Écrit "La réponse est 8" | **Script** |
+| Ligne exécutée                 | Effet                                                  | Pile d'appel              |
+|:-------------------------------|:-------------------------------------------------------|:--------------------------|
+| $a = 3                         | $a: 3                                                  | **Script**                |
+| $b = 5                         | $a: 3 ; $b: 5                                          | **Script**                |
+| $c = MaFonction $a $b          | $a: 3 ; $b: 5<br/>Appelle MaFonction avec $x=3 et $y=5 | **Script**                |
+| $z = $x + $y                   | $x: 3 ; $y: 5 ; $z: 8                                  | **MaFonction**<br/>Script |
+| return $z                      | $x: 3 ; $y: 5 ; $z: 8<br/>Sortie: 8                    | **MaFonction**<br/>Script |
+| $c = MaFonction $a $b          | $a: 3 ; $b: 5 ; $c: 8                                  | **Script**                |
+| Write-Host "La réponse est $c" | Écrit "La réponse est 8"                               | **Script**                |
 
 
 ### Deuxième trace
