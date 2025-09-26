@@ -60,8 +60,38 @@ PS C:\EspaceLabo> Invoke-Addition 2, 4, 6
 ```
 
 
+## 2. Paramètres de fonctions
 
-## 2. Pile d'appel (trace)
+Pour les questions suivantes, écrivez une fonction qui fait l'action demandée. Définissez les paramètres dans un bloc Param().
+
+:::tip
+Pour tester une fonction, vous devez la déclarer en premier. Pour tester la fonction dans VS Code, sélectionnez la fonction au complet (toutes les lignes en commençant par "function … {" jusqu'à celle du dernier "}" puis faites F8. Cela aura pour effet de recopier tout ce code dans le terminal intégré. Puis, testez la fonction directement dans le terminal. Vous devrez refaire cela chaque fois que vous apportez une modification dans le code de votre fonction.
+:::
+
+    
+**A)** Écrivez une fonction `Start-Notepad` qui démarre Notepad.exe à l'aide de `Start-Process` et **retourne un objet** décrivant le processus dans le pipeline.
+
+```
+PS C:\> Start-Notepad
+
+ NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
+ ------    -----      -----     ------      --  -- -----------
+     13     2,93      15,01       0,08   42308   1 Notepad
+```
+
+
+**B)** Réécrivez la fonction précédente et faites en sorte qu'il soit possible de **spécifier un fichier texte**. 
+
+:::info
+Pour ouvrir Notepad avec un fichier existant, il suffit de fournir le chemin complet du fichier texte à en argument (par exemple, `notepad.exe "C:\dossier\fichier.txt"`). Vous pouvez passer l'argument à la commande `Start-Process` à l'aide du paramètre `-ArgumentList`
+:::
+
+
+**C)** Réécrivez la fonction précédente et faites en sorte qu'elle **plante si le fichier n'existe pas**. Utilisez les **validations de paramètres**.
+
+
+
+## 3. Pile d'appel (trace)
 
 On veut accomplir trois éléments principaux:
 1. Indiquer quelles lignes de code s'exécutent dans quel ordre
@@ -120,7 +150,7 @@ Write-Host "La réponse est $c"
 Une fois terminé, copiez ce code dans un fichier PS1, insérez un point d'arrêt **à la première ligne exécutée** et validez votre réponse à l'aide du débogueur.
 
 
-## 3. Portée
+## 4. Portée
 
 Tentez de deviner le texte qui sera écrit par les scripts suivants, puis comparez votre réponse en testant le script. Utilisez le débogueur au besoin.
 
@@ -215,7 +245,7 @@ Write-Host $v
 
 
 
-## 4. Configuration du débogueur dans VSCode
+## 5. Configuration du débogueur dans VSCode
 
 Créez un espace de travail (un répertoire qui contiendra vos sources). Vous pouvez utiliser `C:\EspaceLabo`, qui existe déjà.
 
@@ -256,3 +286,9 @@ Pour ajouter une configuration, vous pouvez cliquer sur le bouton "ajouter une c
 Enregistrez le fichier, puis retournez dans votre script. Dans le panneau "Exécuter et déboguer", vous devriez voir une liste déroulante tout en haut, écrit "PowerShell: Launch Current File". Sélectionnez votre configuration. Puis appuyez sur F5 pour injecter automatiquement vos arguments dans la session de débogage.
 
 Vous savez maintenant comment déboguer des scripts avec arguments!
+
+
+
+
+
+
