@@ -26,7 +26,7 @@ function Invoke-Addition{
 
 ```
 
-Testez ce script. Celui-ci ne donne aucun résultat. **Pourquoi selon vous?**
+Testez ce script avec `F5`. Celui-ci ne donne aucun résultat. **Pourquoi selon vous?**
 
 
 Pour tester votre fonction, appelez-la dans le code principal de votre script, comme ceci:
@@ -41,6 +41,8 @@ function Invoke-Addition{
     foreach ($terme in $termes) {
         $total += $terme
     }
+
+    $total
 }
 
 Invoke-Addition 2, 3, 5
