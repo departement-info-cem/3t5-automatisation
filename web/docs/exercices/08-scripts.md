@@ -28,7 +28,7 @@ Faites de même dans votre VM **Windows 11**. Si vous avez des erreurs, n'oublie
 
 ## Exercice 2: Traces
 
-On veut accomplit deux éléments principaux:
+On veut accomplir deux éléments principaux:
 1. Indiquer quelles lignes de code s'exécutent dans quel ordre
 2. Indiquer les effets de chaque ligne de code (valeur des variables)
 
