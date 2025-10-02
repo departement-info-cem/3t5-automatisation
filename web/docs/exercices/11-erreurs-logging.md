@@ -56,6 +56,7 @@ Les minutes sont paires!
 
 PS C:\Demo> .\Script2.ps1
 Il est 14 heures et 31 minutes.
+# error-next-line
 Erreur attrapée!
 ```
 
