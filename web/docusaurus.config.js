@@ -122,7 +122,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ["csharp", "java", "dart", "python", "powershell"],
+        additionalLanguages: ["csharp", "java", "dart", "python", "powershell", "csv"],
         magicComments: [
           {
             className: 'theme-code-block-highlighted-line',
