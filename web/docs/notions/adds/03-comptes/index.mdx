@@ -19,7 +19,7 @@ Get-ADUser -Identity "zzappa"
 Pour rechercher les utilisateurs obéissant à certains critères, on peut utiliser le paramètre `-Filter`.
 
 ```powershell
-Get-ADUser -Filter 'sAMAccountName -like "z*"'
+Get-ADUser -Filter {sAMAccountName -like "z*"}
 ```
 
 #### Vérification de l'existence d'un compte utilisateur
@@ -27,7 +27,8 @@ Get-ADUser -Filter 'sAMAccountName -like "z*"'
 Pour tester l'existence d'un utilisateur dans le domaine, voici un exemple:
 
 ```powershell
-if (Get-ADUser -Filter 'sAMAccountName -eq "zzappa"') {
+$NomUtilisateur = "pmeilleur"
+if (Get-ADUser -Filter {sAMAccountName -eq $NomUtilisateur}) {
     Write-Host "L'utilisateur existe."
 }
 else {
@@ -121,13 +122,12 @@ Get-ADGroup -Identity "CN=Comptables,OU=Groupes,DC=ad,DC=mondomaine,DC=com"
 Pour vérifier si un groupe existe, on peut employer la même logique que pour les utilisateurs.
 
 ```powershell
-if (Get-ADGroup -Filter 'sAMAccountName -eq "Comptables"') {
+if (Get-ADGroup -Filter {sAMAccountName -eq "Comptables"}) {
     Write-Host "L'utilisateur existe."
 }
 else {
     Write-Host "L'utilisateur n'existe pas."
-}
-```
+}```
 
 #### Création d'un nouveau groupe
 
