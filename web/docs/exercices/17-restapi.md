@@ -155,7 +155,7 @@ DEPINFO\Modèles\MODELE pfSense-CE 2.8.1 (sans DHCP)
 N'oubliez pas de **modifier l'interface réseau #2** pour qu'elle corresponde au commutateur virtuel de votre environnement.
 
 
-### Tutoriel: consulter la doc
+### Consulter la doc
 
 Ensuite, démarrez une session sur n'importe quelle VM Windows de votre réseau privé et tentez de vous connecter à l'interface Web Configurator `http://192.168.21.1/` avec l'identifiant `admin` et le mot de passe `pfsense`. Puis naviguez sur la page de documentation: `http://192.168.21.1/api/v2/documentation/`.
 
@@ -164,6 +164,30 @@ Vous pouvez tester des requêtes directement à partir de la documentation. Pour
 Pour que cette requête fonctionne, on doit être authentifié. L'API supporte plusieurs modes d'autorisation (apikey, bearer, oauth 2.0...) mais on va utiliser une authentification de base avec un nom d'utilisateur et un mot de passe. Pour tester, cliquez sur le petit cadenas en haut du panneau. Choisissez le mode Basic et entrez le nom d'utilisateur et le mot de passe de votre compte utilisateur de pfSense. Puis recliquez sur **Execute**. Il devrait maintenant y avoir une réponse `200 OK` accompagnée du résultat formaté en JSON.
 
 
-### Défi
+### Avec PowerShell
 
-À l'aide de la commande `Invoke-RestMethod`, tentez d'obtenir l'adresse IP, le masque de sous-réseau et la passerelle par défaut de l'interface WAN.
+À l'aide de la commande `Invoke-RestMethod`, tentez d'obtenir l'adresse IP, le masque de sous-réseau et la passerelle par défaut de l'interface WAN. Pour celà il vous faut connaître certaines informations:
+- URI: `http://192.168.21.1/api/v2/status/interfaces`
+- Méthode: `Get` (par défaut)
+- Autorisation: `Basic`
+
+Il faut aussi obtenir l'identifiant de l'utilisateur et son mot de passe avec `Get-Credential`.
+
+```powershell
+$uri = "http://192.168.21.1/api/v2/status/interfaces"
+$cred = Get-Credential
+$response = Invoke-RestMethod -Uri $uri -Authentication Basic -Credential $cred -AllowUnencryptedAuthentication
+$response.data
+```
+
+Vous pouvez ensuite extraire les informations que vous souhaitez.
+
+```powershell
+$response.data | Select-Object hwif, descr, ipaddr, subnet, gateway, macaddr
+```
+
+:::caution
+Ici, parce que c'est un environnement de laboratoire et que l'interface Web est sur HTTP non sécurisé, le nom d'utilisateur et le mot de passe ne sont pas chiffrés. Cela pose un risque important pour la sécurité. C'est pourquoi il faut spécifier `-AllowUnencryptedAuthentication`. 
+
+Mais dans une infrastructure de production, il est important d'utiliser HTTPS avec un certificat valide (vous verrez ça dans le cours de Cybersécurité 2: Architecture) pour chiffrer les échanges entre le client et le serveur. Il est aussi souhaitable d'utiliser des méthodes d'autorisation plus robustes comme un OAuth2 ou Bearer.
+:::
