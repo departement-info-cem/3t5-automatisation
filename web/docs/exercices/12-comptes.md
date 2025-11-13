@@ -59,6 +59,7 @@ Get-LocalGroupMember -SID 'S-1-5-32-544'
 C'est très utile pour que la commande fonctionne peu importe la langue du système.
 :::
 
+
 Pour vérifier si tout est beau, démarrez une session avec un compte de prof sur votre machine de développement et vérifiez:
 - Que le prof est admin local (il peut démarrer une session PowerShell en tant qu'admin)
 - Que le prof n'est pas admin du domaine (confirmez avec la commande whoami /groups)
