@@ -30,16 +30,44 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.examen {
-  color: black !important;
-  border-color: red;
-  border-style: solid;
-  border-width: 2px;
+
+
+/* Style commun pour TP et examens */
+.tp, .examen {
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+.tp {
+  font-size: 90%;
 }
 
-.examen2 {
-  background-color: #ff6e75;
-  color: #ffffff!important;
+/* TP - Bleu */
+/* Mode clair */
+html[data-theme="light"] .tp {
+  background-color: #e6f0ff; /* bleu pâle */
+  border-color: #99c2ff;
+  color: #003366;
+}
+/* Mode sombre */
+html[data-theme="dark"] .tp {
+  background-color: #00264d; /* bleu foncé */
+  border-color: #66a3ff;
+  color: #cce0ff;
+}
+
+/* Examens - Rouge */
+/* Mode clair */
+html[data-theme="light"] .examen {
+  background-color: #ffe6e6; /* rouge pâle */
+  border-color: #ff9999;
+  color: #660000;
+}
+/* Mode sombre */
+html[data-theme="dark"] .examen {
+  background-color: #660000; /* rouge foncé */
+  border-color: #ff4d4d;
+  color: #ffe6e6;
 }
 
 .remise-tp1::after {
