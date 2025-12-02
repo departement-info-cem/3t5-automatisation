@@ -33,7 +33,7 @@
 
 
 /* Style commun pour TP et examens */
-.tp, .examen {
+.tp, .examen, .formatif {
   font-weight: bold;
   border-radius: 6px;
   border: 1px solid transparent;
@@ -68,6 +68,20 @@ html[data-theme="dark"] .examen {
   background-color: #660000; /* rouge foncé */
   border-color: #ff4d4d;
   color: #ffe6e6;
+}
+
+/* Examen formatif - Jaune */
+/* Mode clair */
+html[data-theme="light"] .formatif {
+  background-color: #fffde6; /* jaune pâle */
+  border-color: #d8d52a;
+  color: #665f00;
+}
+/* Mode sombre */
+html[data-theme="dark"] .formatif {
+  background-color: #595a01; /* jaune foncé */
+  border-color: #cfda43;
+  color: #ffffe6;
 }
 
 .remise-tp1::after {
