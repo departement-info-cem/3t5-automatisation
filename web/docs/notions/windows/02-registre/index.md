@@ -254,7 +254,7 @@ New-ItemProperty @NewRegValSplat
 
 ### Modifier une valeur existante
 
-Pour modifier une valeur de registre existante, on peut utiliser la commande `Set-ItemProperty`. La valeur doit déjà exister pour que cette commande fonction
+Pour modifier une valeur de registre existante, on peut utiliser la commande `Set-ItemProperty`. La valeur doit déjà exister pour que cette commande fonctionne correctement.
 
 ```powershell
 $SetRegValSplat = @{
