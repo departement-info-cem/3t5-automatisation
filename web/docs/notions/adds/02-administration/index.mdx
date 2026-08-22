@@ -8,7 +8,7 @@ description: Gérer un domaine AD avec PowerShell
 
 Les commandes `Get-ADDomain` et `Get-ADForest` permettent d'obtenir de l'information sur le domaine et la forêt respectivement, tels que le niveau fonctionnel, les contrôleurs de domaine qui disposent d'un rôle FSMO, les conteneurs par défaut, le SID du domaine, la topologie des sites, etc.
 
-[Get-ADDomain](.\get-addomain.png)
+[Get-ADDomain](./get-addomain.png)
 
 Une information intéressante est celle du contexte de nom par défaut (*Default Naming Context*). Il équivaut à la partie domaine à la fin des noms distinctifs des objets dans le domaine. On peut l'obtenir à l'aide de la commande `Get-RootDSE`.
 
@@ -21,7 +21,7 @@ Une information intéressante est celle du contexte de nom par défaut (*Default
 
 Les unités d'organisation (*Organizational Unit*, ou *OU*) sont des conteneurs dans lesquels on peut disposer des objets du domaine et sur lesquels on peut lier des stratégies de groupe (GPO). Ce ne sont pas tous les conteneurs qui sont des unités d'organisation; ces dernières portent le préfixe `OU=` dans leur nom distinctif relatif.
 
-![Unités d'organisation](.\ad-ou.png)
+![Unités d'organisation](./ad-ou.png)
 
 
 #### Recherche d'une unité d'organisation
