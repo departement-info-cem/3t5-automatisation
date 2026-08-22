@@ -28,6 +28,9 @@
   --module3-border: #f0b066;
   --custom-tag-yellow-bg: #b3b010;
   --custom-tag-yellow-fg: #ffffff;
+  --tag-date-bg: #5050a0;
+  --tag-date-fg: #ffffff;
+
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -51,6 +54,8 @@
   --module3-border: #c78800;
   --custom-tag-yellow-bg: #f1f391;
   --custom-tag-yellow-fg: #000000;
+  --tag-date-bg: #a0a0d0;
+  --tag-date-fg: #000000;
 }
 
 /* Style commun pour TP et examens */
@@ -204,6 +209,18 @@ html[data-theme="dark"] .formatif {
   width: fit-content;
   margin-bottom: 1em;
 }
+
+.tag-date {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.25rem 0.4rem;
+  border-radius: 5px;
+  width: fit-content;
+  margin-bottom: 1em;
+}
+
 
 
 .DocCardList--no-description .card h2 {

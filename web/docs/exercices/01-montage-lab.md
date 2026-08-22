@@ -18,18 +18,17 @@ Le diagramme ci-dessous montre le plan conceptuel du réseau que vous devrez con
 
 Il sera composé des machines virtuelles suivantes:
 
-| Hôte | Fonction | Adresse IP | Modèle (labinfo) |
+| Hôte | Fonction | Adresse IP | Modèle (sous Modèles/420-3A5) |
 | ---- | ---- | ---- | ---- |
-| PFSENSE | Passerelle / NAT | 192.168.21.1 | MODELE_pfSense (Sans DHCP) |
-| DC01 | Contrôleur de domaine et serveur DHCP | 192.168.21.10 | MODELE_WinServer2025_Datacenter |
-| PCDEV | Poste client | *(dynamique)* | MODELE_Win11-24H2_Education |
+| PFSENSE | Passerelle / NAT | 192.168.21.1 | **MODELE pfSense-CE 2.8.1 (sans DHCP)** |
+| DC01 | Contrôleur de domaine et serveur DHCP | 192.168.21.10 | **MODELE_WinServer2025_Datacenter (v1.0)** |
+| PCDEV | Poste client | *(dynamique)* | **MODELE_Win11-24H2_Edu (v1.0)** |
 
 :::tip
 Pour que vos VM soient organisées dans un même bloc dans Labinfo, ajoutez le préfixe `3T5-xx-` devant le nom des VM dans vSphere (où *xx* représente vos initiales).
 
-![](./assets/esx-organisation.png)
+![Organisation de vos VM dans Labinfo](./assets/esx-organisation.png)
 :::
-
 
 ## Montage de la passerelle (pfSense)
 
@@ -37,10 +36,12 @@ Dans l'environnement Labinfo, vous avez un profil Large, comme en témoigne le n
 
 Dans votre environnement de laboratoire, vous devez placer une VM entre un réseau offrant une connectivité Internet et un réseau privé. Les notions derrière cette technologique seront vues dans un autre cours.
 
-Tout d'abord, créez une nouvelle machine virtuelle basée sur le modèle **MODELE_pfSense (Sans DHCP)**. 
+Tout d'abord, créez une nouvelle machine virtuelle basée sur le modèle **MODELE_pfSense (Sans DHCP)**.
 
 :::info
-Les modèles sont situés dans le répertoire **MODELES\420-VCarrier**.
+Les modèles sont situés dans le répertoire **DEPINFO/Modèles/420-3T5/**.
+
+![Contenu de DEPINFO/Modèles/420-3T5](./assets/labinfo-modeles.png)
 :::
 
 Puis modifiez ses paramètres matériels. Cette machine est dotée de deux cartes d'interface réseau matérielles virtualisées. La première interface est appelée "WAN" et est connectée à Internet (*Acces-Internet-1*). La deuxième interface est appelée "LAN" et est connectée dans le réseau privé interne. Vous n'avez qu'à choisir un de vos dix subnets privés et utiliser le même pour chacune de vos VM. Les réseaux privés sont nommés `L-###-01` à `L-###-10`.
@@ -55,7 +56,6 @@ Sur sa console, on peut y voir un écran d'information et un menu d'administrati
 
 ![Console pfsense](./assets/pfsense-console.png)
 
-
 :::tip
 Pour sauver des ressources dans LabInfo, la DiSTI a programmé un script qui met automatiquement hors tension toutes les VM à chaque nuit. Vous pouvez protéger vos VM de ce mécanisme. Je vous le conseille pour votre passerelle et votre contrôleur de domaine.
 
@@ -63,7 +63,6 @@ Pour activer cette protection, il faut simplement attribuer la balise "Ne pas fe
 
 ![Balise "ne pas fermer"](./assets/balise-ne-pas-fermer.png)
 :::
-
 
 ## Montage du contrôleur de domaine
 
@@ -73,26 +72,20 @@ Pour créer un domaine, il faut installer le rôle des Services de domaine Activ
 
 La première étape consiste à installer et configurer une édition Serveur de Windows. Pour le laboratoire, utilisez le modèle **MODELE_WindowsServer2025_Datacenter** pour créer votre VM. Assurez-vous de brancher son adaptateur réseau dans `L-###-##` (le réseau local privé que vous avez choisi lors du montage de votre passerelle).
 
-
 ### Étape 2: Changement du nom d'hôte
 
 À l'installation du système d'exploitation, il est d'usage de modifier le nom d'hôte de la machine. Le nom d'hôte de Windows à son installation est généré aléatoirement et il est préférable que les machines de notre environnement aient un nom représentatif de leur rôle. Il est un bon réflexe de le faire au tout début du processus de montage, car il est plus compliqué changer le nom d'un système après sa promotion. Je vous recommande de le faire aussitôt le système d'exploitation installé.
 
 ```powershell
-Rename-Computer -NewName "DC01" -Restart
+Rename-Computer -NewName "DC01"
+Restart-Computer
 ```
-
-:::tip
-Vous pouvez omettre le paramètre `-Restart` si vous voulez éviter que le serveur ne redémarre automatiquement.
-:::
-
 
 ### Étape 3: Configuration du réseau
 
 Lors de l'installation de Windows, le client DHCP est activé par défaut tant pour l'assignation d'une adresse IP que pour ses résolveurs DNS. Il est généralement une bonne pratique de désactiver le client DHCP sur les serveurs et de plutôt opter pour une assignation statique.
 
 On a l'habitude de voir les configurations IP et DNS comme une seule et même catégorie de paramètres, puisqu'ils sont configurables au même endroit dans l'interface graphique, mais avec PowerShell, on les configure avec deux commandes distinctes.
-
 
 #### Identification de l'interface
 
@@ -147,7 +140,6 @@ Import-Module -Name ActiveDirectory
 La commande précédente affiche un message d'avertissement pour signaler qu'aucun contrôleur de domaine n'a été trouvé. C'est normal, puisque votre domaine n'existe pas encore! Vous avez quand même besoin du module pour utiliser la commande qui vous permet de promouvoir votre serveur. Vous pouvez donc ignorer l'avertissement.
 :::
 
-
 #### Promotion du contrôleur de domaine
 
 Une fois le rôle installé, on peut procéder à la promotion. La commande `Install-ADDSForest` permet la création de la forêt par la promotion de son premier contrôleur de domaine. Il faut fournir plusieurs arguments à la commande, l'exemple suivant les identifie dans un *hashtable* pour ensuite les passer par *splatting*.
@@ -163,7 +155,6 @@ Une fois le rôle installé, on peut procéder à la promotion. La commande `Ins
 - Le paramètre `-SafeModeAdministratorPassword` permet de spécifier un mot de passe pour la récupération d'urgence. Il doit être fourni pour activer le mode de restauration des services d'annuaire (DSRM), un sorte de mode sans échec pour contrôleurs de domaine destiné à réparer ou restaurer la base de données Active Directory. Bien qu'il ne soit que peu utilisé, il peut s'avérer nécessaire en cas de problème, et il est important de choisir un mot de passe fort et de le garder en lieu sûr (et surtout pas en texte clair). Il admet une chaîne sécurisée (securestring) alors on doit procéder à sa conversion. Concernant le choix du mot de passe dans l'exemple suivant, on se permet bien sûr des largesses, puisqu'il s'agit d'un environnement de laboratoire.
 
 Le système redémarrera automatiquement une fois l'opération complétée. Pour ne pas qu'il redémarre automatiquement, on peut activer le switch `-NoRebootOnCompletion`.
-
 
 ```powershell
 $ADDSForestSplat = @{
@@ -187,16 +178,14 @@ Install-ADDSForest @ADDSForestSplat -Force
 La commande `Install-ADDSForest` sert à créer le domaine racine de sa forêt, et par conséquent, la forêt elle-même. Si on avait voulu créer un nouveau domaine dans une forêt existante (par exemple, un domaine enfant), il aurait fallu utiliser la commande `Install-ADDSDomain`. Et si on avait voulu installer un contrôleur de domaine au sein d'un domaine existant, alors la commande à utiliser aurait été `Install-ADDSDomainController`.
 :::
 
-
 #### Vérification de la configuration DNS
 
 Lorsque le serveur est promu en tant que contrôleur de domaine, le résolveur DNS configuré dans l'interface réseau est automatiquement modifié pour 127.0.0.1, l'adresse *loopback*, faisant ainsi référence à l'hôte local. Autrement dit, l'interface réseau devient un client du service DNS hébergé sur la même machine. Tous les résolveurs DNS configurés auparavant sur l'interface seront automatiquement inscrits comme redirecteurs DNS dans la configuration du serveur.
 
 ![Redirecteurs DNS](./assets/dns-redirecteurs.png)
 
-
 :::info
-Lorsqu'on installe le rôle ADDS, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à en effectuer la promotion. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée. 
+Lorsqu'on installe le rôle ADDS, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à en effectuer la promotion. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée.
 
 ![Configuration post-déploiement ADDS](./assets/adds-postdeployment.png)
 
@@ -211,13 +200,12 @@ $ServerMgrCleanupSplat = @{
 
 Set-ItemProperty @ServerMgrCleanupSplat
 ```
-:::
 
+:::
 
 ### Étape 5: Installation du service DHCP
 
 Dans ce laboratoire, on souhaite installer, configurer et activer le service DHCP sur le contrôleur de domaine. Habituellement, en production, on préfère que le serveur DHCP soit sur une machine différente d'un contrôleur de domaine, pour des raisons de sécurité, mais dans un laboratoire on peut se permettre de tricher un peu.
-
 
 #### Installation du rôle
 
@@ -235,7 +223,6 @@ Si vous installez un serveur DHCP sur une machine membre d'un domaine Active Dir
 Add-DhcpServerInDC -DnsName "DC01.auto.cemti.ca" -IPAddress "192.168.21.10"
 ```
 
-
 #### Configuration des mises à jour DNS
 
 Le serveur DHCP de Windows est capable de communiquer avec le DNS afin d'enregistrer automatiquement les hôtes qui obtiennent une adresse. Ce n'est pas obligatoire, mais dans un environnement de domaine, c'est souvent souhaitable.
@@ -244,11 +231,9 @@ Le serveur DHCP de Windows est capable de communiquer avec le DNS afin d'enregis
 Set-DhcpServerv4DnsSetting -DynamicUpdates Always -DeleteDnsRRonLeaseExpiry $True
 ```
 
-
 ### Étape 6: Configuration de l'étendue DHCP
 
-Pour la configuration des étendues, les commandes à utiliser dépendent fortement de la topologie du réseau. Voici les étapes pour un environnement de laboratoire simple à un seul segment (plat). 
-
+Pour la configuration des étendues, les commandes à utiliser dépendent fortement de la topologie du réseau. Voici les étapes pour un environnement de laboratoire simple à un seul segment (plat).
 
 #### Création de l'étendue
 
@@ -269,6 +254,7 @@ Add-DhcpServerv4Scope @DhcpScopeSplat
 #### Ajout d'options d'étendue
 
 On souhaite également ajouter à cette étendue certaines options, notamment:
+
 - La passerelle par défaut (option 3)
 - Le(s) résolveur(s) DNS (option 6)
 - Le nom de domaine DNS (option 15)
@@ -295,7 +281,7 @@ Set-DhcpServerv4Scope -ScopeId 192.168.21.0 -State Active
 ```
 
 :::info
-Lorsqu'on installe le rôle DHCP, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à activer et configurer le serveur. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée. 
+Lorsqu'on installe le rôle DHCP, le gestionnaire de serveur de Windows affiche un petit drapeau pour nous inciter à activer et configurer le serveur. Comme nous configurons le service par PowerShell, cette notification n'est pas nécessaire et peut même induire en erreur, en laissant faussement croire qu'il reste une étape à effectuer. Il suffit alors d'inscrire au registre que cette opération a été effectuée.
 
 ![Configuration post-déploiement DHCP](./assets/dhcp-postdeployment.png)
 
@@ -310,18 +296,16 @@ $ServerMgrCleanupSplat = @{
 
 Set-ItemProperty @ServerMgrCleanupSplat
 ```
+
 :::
 
-
 ## Préparation de votre machine de développement
-
 
 ### Étape 1: Clonage de la VM
 
 Pour compléter cet environnement de lab, vous devez cloner un modèle de poste de travail.
 
 N'oubliez pas de connecter leur adaptateur réseau virtuel dans le même réseau privé que vos autres machines.
-
 
 ### Étape 2: Changement du nom d'hôte
 
@@ -335,6 +319,7 @@ Voici un exemple de commande pour renommer la machine. Évidemment, chaque machi
 ```powershell
 Rename-Computer -NewName "NOUVEAUNOM" -Restart
 ```
+
 </TabItem>
 <TabItem value="Cmd" label="Cmd">
 
@@ -342,9 +327,9 @@ Rename-Computer -NewName "NOUVEAUNOM" -Restart
 wmic computersystem where caption='%COMPUTERNAME%' rename NOUVEAUNOM
 shutdown /r /t 0
 ```
+
 </TabItem>
 </Tabs>
-
 
 ### Étape 3: Configuration du réseau
 
@@ -361,6 +346,7 @@ Si la machine requiert une configuration statique, vous pouvez utiliser la même
 ### Étape 4: Test de résolution DNS
 
 Tout d'abord, assurez-vous que la machine que vous souhaitez joindre à votre domaine dispose d'une connectivité à au moins un contrôleur de domaine, et surtout que la zone DNS du domaine Active Directory soit résolvable. Généralement, les résolveurs correspondent aux adresses IP des contrôleurs de domaine.
+
 - Si cet hôte a été configuré de manière statique, assurez-vous de lui configurer un résolveur appartenant au domaine (l'adresse d'un contrôleur de domaine).
 - Si cet hôte a été configuré par DHCP, assurez-vous que ce dernier lui a configuré un résolveur appartenant au domaine (option 6).
 
@@ -376,15 +362,16 @@ Pour tester la résolution DNS, vous pouvez lancer la commande suivante:
 ```powershell
 Resolve-DnsName -Name "auto.cemti.ca"
 ```
+
 </TabItem>
 <TabItem value="Cmd" label="Cmd">
 
-```
+```batch
 nslookup auto.cemti.ca
 ```
+
 </TabItem>
 </Tabs>
-
 
 ### Étape 5: Jonction au domaine
 
@@ -395,7 +382,7 @@ Add-Computer -DomainName "auto.cemti.ca" -Restart
 ```
 
 :::tip
-On peut utiliser cette commande pour créer le compte ordinateur dans une unité d'organisation de notre choix, plutôt que dans le conteneur par défaut "computers". Cela peut s'avérer utile dans un domaine où notre compte n'est pas administrateur de domaine et ne dispose de droits de création de comptes ordinateurs que dans certains OU spécifiques, ou encore pour faire en sorte qu'il reçoive des GPO. 
+On peut utiliser cette commande pour créer le compte ordinateur dans une unité d'organisation de notre choix, plutôt que dans le conteneur par défaut "computers". Cela peut s'avérer utile dans un domaine où notre compte n'est pas administrateur de domaine et ne dispose de droits de création de comptes ordinateurs que dans certains OU spécifiques, ou encore pour faire en sorte qu'il reçoive des GPO.
 
 Pour spécifier l'OU dans lequel créer le compte ordinateur, il suffit de passer le nom distinctif (*DistinguishedName*) de l'unité d'organisation ou du conteneur dans lequel créer le nouvel objet.
 
@@ -407,8 +394,8 @@ $AddComputerSplat = @{
 
 Add-Computer @AddComputerSplat
 ```
-:::
 
+:::
 
 ### Consoles d'administration (RSAT)
 
@@ -444,24 +431,28 @@ $dossierOutils = "C:\Outils"
 $zipPath = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite.zip"
 $dossierSysinternals = Join-Path -Path $dossierOutils -ChildPath "SysinternalsSuite"
 
+$ProgressPreference = 'SilentlyContinue'    # On veut faire taire la barre de progression car elle
+                                            # ralentit le traitement (c'est moins pire en pwsh 7+).
+
 New-Item -Path $dossierOutils -ItemType Directory
 Invoke-WebRequest -Uri $Uri -OutFile $zipPath
 Expand-Archive -Path $zipPath -DestinationPath $dossierSysinternals
 Remove-Item $zipPath
 ```
 
-
 ### Installation de Visual Studio Code
 
 Pour installer Visual Studio Code, vous pouvez utiliser le gestionnaire de paquets Winget, mais cela ne permet pas de modifier le comportement de l'installation. Par ailleurs, Winget n'est pas une commande PowerShell. Voici comment l'installer grâce à PowerShell tout en l'enregistrant dans les menus contextuel et en créant un raccourci sur le bureau.
 
 ```powershell
-$dest = "$env:TEMP\vscodesetup.exe"
 $uri = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"
+$fichier = "$env:TEMP\vscodesetup.exe"
 $arg = "/VERYSILENT /MERGETASKS=!runcode,addcontextmenufiles,addcontextmenufolders,desktopicon"
-Invoke-WebRequest -Uri $uri -OutFile $dest
-Start-Process -FilePath $dest -ArgumentList $arg -Wait -PassThru
-Remove-Item $dest
+
+$ProgressPreference = 'SilentlyContinue'
+Invoke-WebRequest -Uri $uri -OutFile $fichier
+Start-Process -FilePath $fichier -ArgumentList $arg -Wait -PassThru
+Remove-Item $fichier
 ```
 
 Et vous pouvez même installer l'extension PowerShell un coup parti.
@@ -470,8 +461,6 @@ Et vous pouvez même installer l'extension PowerShell un coup parti.
 $codecli = "C:\Program Files\Microsoft VS Code\bin\code.cmd"
 Start-Process -FilePath $codecli -ArgumentList "--install-extension ms-vscode.powershell" -Wait -NoNewWindow
 ```
-
-
 
 ## Utilisation de compte de domaine
 
