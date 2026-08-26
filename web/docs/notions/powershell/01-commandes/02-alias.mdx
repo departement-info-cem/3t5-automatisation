@@ -9,20 +9,118 @@ La forme `Verbe-Nom` des commandes a l'avantage d'être explicite et claire, mai
 
 Par exemple, `Get-ChildItem` dispose de trois alias par défaut: `dir`, `ls` et `gci`. Utiliser ces trois commandes a le même effet que d'utiliser `Get-ChildItem`; on peut voir ça comme un raccourci.
 
-![image](r01_11a.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-ChildItem Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+
+PS C:\> dir Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+
+PS C:\> ls Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+
+PS C:\> gci Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+```
+</ConsoleWindow>
 
 
 C'est bien pratique dans la ligne de commande, mais il est tout de même préférable d'utiliser le vrai nom de la commande dans un script, car cela aide à la compréhension du script.
 
 Pour voir la liste des alias, il suffit de lancer la commande `Get-Alias`.
 
-![image](r01_11b.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Alias
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Alias           ? -> Where-Object
+Alias           % -> ForEach-Object
+Alias           ac -> Add-Content
+Alias           cat -> Get-Content
+Alias           cd -> Set-Location
+Alias           chdir -> Set-Location
+Alias           clc -> Clear-Content
+Alias           clear -> Clear-Host
+  (...)
+```
+</ConsoleWindow>
 
 
 Pour créer un nouvel alias, la commande à utiliser est `New-Alias`. 
 
-![image](r01_11c.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> New-Alias -Name Questcequilyadans -Value Get-ChildItem
+PS C:\> Questcequilyadans Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+```
+</ConsoleWindow>
 
 
-Il faut faire attention cependant, car cet alias sera détruit lorsque votre session PowerShell se terminera (soit en fermant la console, soit à la fin d'un script). Pour qu'un alias soit permanent, il faut le définir dans un profil. Vous pouvez lire cet article pour en apprendre plus au sujet des profils PowerShell: [à propos des profils - PowerShell | Microsoft Docs](https://docs.microsoft.com/fr-ca/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-5.1)
+Il faut faire attention cependant, car cet alias sera détruit lorsque votre session PowerShell se terminera (soit en fermant la console, soit à la fin d'un script). 
+
+:::tip Profil PowerShell
+Pour qu'un alias soit permanent, il faut le définir dans un profil. Un profil est un script PowerShell qui démarre automatiquement lorsqu'on ouvre PowerShell.
+
+Tout d'abord, on doit connaître l'emplacement du profil. Le fichier n'est pas le même pour PowerShell et Windows PowerShell
+
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> $PROFILE
+C:\Users\vincent\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+```
+</ConsoleWindow>
+<ConsoleWindow title="Windows PowerShell 5.1" backgroundColor="#000046">
+```text
+PS C:\> $PROFILE
+C:\Users\vincent\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+```
+</ConsoleWindow>
+
+Créez simplement un fichier texte ayant ce chemin (il n'existe pas nécessairement) et ajoutez les commandes à lancer. Elles seront accessibles au prochain démarrage d'un terminal PowerShell.
+
+```powershell title="C:\Users\vincent\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+# Mon super profil PowerShell
+New-Alias -Name Questcequilyadans -Value Get-ChildItem
+```
+
+Vous pouvez lire cet article pour en apprendre plus au sujet des profils PowerShell: [à propos des profils - PowerShell | Microsoft Docs](https://docs.microsoft.com/fr-ca/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-5.1)
+:::
 

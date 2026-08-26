@@ -12,25 +12,82 @@ Non seulement PowerShell permet le développement de scripts, il est également 
 
 Dans la plupart des interpréteurs (cmd, bash, etc.), la très grande majorité des commandes qu'on emploie à la ligne de commande ou par script sont essentiellement des exécutables qui se trouvent dans un répertoire spécial. Lorsqu'on utilise des commandes comme Ping ou Ipconfig dans la console, cela ne fait que lancer l'exécutable ping.exe ou ipconfig.exe qui se trouvent dans C:\Windows\system32\ et afficher le texte qui en résulte dans la console.
 
-![image](r01_04a.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> C:\Windows\System32\ping.exe 8.8.8.8
+
+Envoi d’une requête 'Ping'  8.8.8.8 avec 32 octets de données :
+Réponse de 8.8.8.8 : octets=32 temps=3 ms TTL=117
+Réponse de 8.8.8.8 : octets=32 temps=3 ms TTL=117
+Réponse de 8.8.8.8 : octets=32 temps=3 ms TTL=117
+Réponse de 8.8.8.8 : octets=32 temps=3 ms TTL=117
+
+Statistiques Ping pour 8.8.8.8:
+    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%),
+Durée approximative des boucles en millisecondes :
+    Minimum = 3ms, Maximum = 3ms, Moyenne = 3ms
+```
+</ConsoleWindow>
 
 Les données en format textuel sont particulièrement difficiles à interpréter, en supposant par exemple qu'on veuille en extraire certaines valeurs. 
 
 PowerShell fonctionne différemment. En PowerShell, une commande "native" est appelée "cmdlet" et retournent des objets plutôt que du texte. Cela procure plusieurs avantages.
 
-![image](r01_04b.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Test-Connection 8.8.8.8
+
+   Destination: 8.8.8.8
+
+Ping Source           Address                   Latency BufferSize Status
+                                                   (ms)        (B)
+---- ------           -------                   ------- ---------- ------
+   1 PCDEV            8.8.8.8                         4         32 Success
+   2 PCDEV            8.8.8.8                         3         32 Success
+   3 PCDEV            8.8.8.8                         3         32 Success
+   4 PCDEV            8.8.8.8                         5         32 Success
+```
+</ConsoleWindow>
 
 Ce qui est affiché dans la console est une conversion automatique de l'objet en texte. Mais PowerShell permet toute une panoplie de manipulations qu'on peut effectuer sur l'objet avant sa conversion. Par exemple, on peut spécifier le format d'affichage de l'objet, et les propriétés à afficher.
 
-![image](r01_04c.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Test-Connection 8.8.8.8 | Format-Table Address, Latency
+
+Address Latency
+------- -------
+8.8.8.8       3
+8.8.8.8       4
+8.8.8.8       6
+8.8.8.8       3
+```
+</ConsoleWindow>
 
 Ou encore, effectuer un calcul sur l'objet. Par exemple, calculer la somme des temps réponse de chacune des 4 tentatives de ping.
 
-![image](r01_04d.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Test-Connection 8.8.8.8 | Measure-Object Latency -AllStats
+
+Count             : 4
+Average           : 5
+Sum               : 20
+Maximum           : 6
+Minimum           : 4
+StandardDeviation : 1,15470053837925
+Property          : Latency
+```
+</ConsoleWindow>
 
 On peut aussi extraire une valeur spécifique.
 
-![image](r01_04e.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Test-Connection 8.8.8.8 -Count 1).Latency
+8
+```
+</ConsoleWindow>
 
 
 ## Appellation d'une commande PowerShell
@@ -105,10 +162,32 @@ Les arguments viennent s'insérer dans les paramètres qui sont admis par la com
 Il est possible de spécifier des paramètres sans toujours identifier leur nom. C'est particulièrement pratique à la ligne de commande, pour sauver du temps et des frappes de touches.
 
 ![image](r01_09a.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-ChildItem -Path C:\Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+PS C:\> Get-ChildItem C:\Minou
+
+    Directory: C:\Minou
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          2026-03-27    10:19                croquettes
+-a---          2026-05-12    11:19            374 miaou.txt
+
+```
+</ConsoleWindow>
 
 L'utilisation de paramètres positionnels nuit toutefois à la lisibilité, puisqu'il faut connaître par cœur ce que signifie la première position, la seconde, etc. 
 
-Par exemple, lorsqu'on utilise la commande Copy-Item avec deux paramètres positionnels, le premier représente le chemin de la source et le second, le chemin de destination; bien que cet ordre soit intuitif et bien ancré dans nos réflexes, il faut néanmoins le connaître par cœur. En spécifiant les noms des paramètres, non seulement la signification de chaque argument est explicite, mais en plus, ils peuvent être disposés dans n'importe quel ordre.
+Par exemple, lorsqu'on utilise la commande `Copy-Item` avec deux paramètres positionnels, le premier représente le chemin de la source et le second, le chemin de destination; bien que cet ordre soit intuitif et bien ancré dans nos réflexes, il faut néanmoins le connaître par cœur. En spécifiant les noms des paramètres, non seulement la signification de chaque argument est explicite, mais en plus, ils peuvent être disposés dans n'importe quel ordre.
 
 Par exemple, `Copy-Item -Path C:\Minou\miaou.txt -Destination C:\Pitou\wouf.txt` a le même effet que `Copy-Item -Destination C:\Pitou\wouf.txt -Path C:\Minou\miaou.txt`
 
@@ -116,10 +195,10 @@ La signification des paramètres positionnels varie selon le type des valeurs qu
 
 ![image](r01_09b.png)
 
-Source: [Copy-Item (Microsoft.PowerShell.Management) - PowerShell | Microsoft Docs](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/copy-item?view=powershell-5.1#parameters)
+Source: [Copy-Item (Microsoft.PowerShell.Management) - PowerShell | Microsoft Docs](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/copy-item#parameters)
 
 
-Pour en savoir plus sur les paramètres: [à propos des paramètres - PowerShell | Microsoft Docs](https://docs.microsoft.com/fr-ca/powershell/module/microsoft.powershell.core/about/about_parameters?view=powershell-5.1)
+Pour en savoir plus sur les paramètres: [à propos des paramètres - PowerShell | Microsoft Docs](https://docs.microsoft.com/fr-ca/powershell/module/microsoft.powershell.core/about/about_parameters)
 
 
 ## Commandes disponibles
@@ -134,19 +213,87 @@ La commande `Get-Command` retourne un objet qui énumère toutes les commandes d
 
 Attention, y'en a beaucoup!
 
-![image](r01_10a.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Command
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Alias           Add-AppPackage ->                                  2.0.1.0    Appx
+Alias           Add-AppPackageVolume ->                            2.0.1.0    Appx
+Alias           Add-AppProvisionedPackage ->                       3.0        Dism
+Alias           Add-AssertionOperator ->                           6.0.1      Pester
+Alias           Add-MsixPackage ->                                 2.0.1.0    Appx
+Alias           Add-MsixPackageVolume ->                           2.0.1.0    Appx
+Alias           Add-MsixVolume ->                                  2.0.1.0    Appx
+Alias           Add-ProvisionedAppPackage ->                       3.0        Dism
+   (...)
+```
+</ConsoleWindow>
 
 On peut savoir combien il y en a avec la commande Measure-Object. Cette commande sert à effectuer une analyse d'un objet, comme pour compter ses éléments (lorsqu'il s'agit d'une collection d'objets).
 
-![image](r01_10b.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Command | Measure-Object
+
+Count             : 13573
+Average           :
+Sum               :
+Maximum           :
+Minimum           :
+StandardDeviation :
+Property          :
+```
+</ConsoleWindow>
 
 On peut rechercher toutes les commandes qui concernent un type d'objet en particulier, à l'aide du paramètre -Noun.
 
-![image](r01_10c.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Command -Noun Process
 
-Ou encore, toutes les commandes qui font partie d'un module précis (dans cet exemple, le module Defender qui permet de contrôler l'anti-virus Microsoft Defender)
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Cmdlet          Debug-Process                                      7.0.0.0    Microsoft.PowerShell.Management
+Cmdlet          Get-Process                                        7.0.0.0    Microsoft.PowerShell.Management
+Cmdlet          Start-Process                                      7.0.0.0    Microsoft.PowerShell.Management
+Cmdlet          Stop-Process                                       7.0.0.0    Microsoft.PowerShell.Management
+Cmdlet          Wait-Process                                       7.0.0.0    Microsoft.PowerShell.Management
+```
+</ConsoleWindow>
 
-![image](r01_10d.png)
+Ou encore, toutes les commandes qui font partie d'un module précis (dans cet exemple, le module DnsClient qui permet de contrôler la configuration du client DNS)
+
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Command -Module DnsClient
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Function        Add-DnsClientDohServerAddress                      1.0.0.0    DnsClient
+Function        Add-DnsClientNrptRule                              1.0.0.0    DnsClient
+Function        Clear-DnsClientCache                               1.0.0.0    DnsClient
+Function        Get-DnsClient                                      1.0.0.0    DnsClient
+Function        Get-DnsClientCache                                 1.0.0.0    DnsClient
+Function        Get-DnsClientDohServerAddress                      1.0.0.0    DnsClient
+Function        Get-DnsClientGlobalSetting                         1.0.0.0    DnsClient
+Function        Get-DnsClientNrptGlobal                            1.0.0.0    DnsClient
+Function        Get-DnsClientNrptPolicy                            1.0.0.0    DnsClient
+Function        Get-DnsClientNrptRule                              1.0.0.0    DnsClient
+Function        Get-DnsClientServerAddress                         1.0.0.0    DnsClient
+Function        Register-DnsClient                                 1.0.0.0    DnsClient
+Function        Remove-DnsClientDohServerAddress                   1.0.0.0    DnsClient
+Function        Remove-DnsClientNrptRule                           1.0.0.0    DnsClient
+Function        Set-DnsClient                                      1.0.0.0    DnsClient
+Function        Set-DnsClientDohServerAddress                      1.0.0.0    DnsClient
+Function        Set-DnsClientGlobalSetting                         1.0.0.0    DnsClient
+Function        Set-DnsClientNrptGlobal                            1.0.0.0    DnsClient
+Function        Set-DnsClientNrptRule                              1.0.0.0    DnsClient
+Function        Set-DnsClientServerAddress                         1.0.0.0    DnsClient
+Cmdlet          Resolve-DnsName                                    1.0.0.0    DnsClient
+```
+</ConsoleWindow>
 
 
 ### Show-Command

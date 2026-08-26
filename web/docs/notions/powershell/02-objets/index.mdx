@@ -8,56 +8,263 @@ Les commandes PowerShell retournent un ou plusieurs objets. Un objet est une str
 
 La commande `Get-Member` permet d'obtenir la liste des propriétés et des méthodes offertes par cet objet. Dans le cas d'une collection d'objets, elle analyse le type d'objet dans la collection.
 
-![image](r02_01a.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Item C:\Windows\notepad.exe | Get-Member
+
+   TypeName: System.IO.FileInfo
+
+Name                      MemberType     Definition
+----                      ----------     ----------
+Target                    AliasProperty  Target = LinkTarget
+LinkType                  CodeProperty   System.String LinkType{get=GetLinkType;}
+Mode                      CodeProperty   System.String Mode{get=Mode;}
+ModeWithoutHardLink       CodeProperty   System.String ModeWithoutHardLink{get=ModeWithoutHardLink;}
+ResolvedTarget            CodeProperty   System.String ResolvedTarget{get=ResolvedTarget;}
+AppendText                Method         System.IO.StreamWriter AppendText()
+CopyTo                    Method         System.IO.FileInfo CopyTo(string destFileName), System.IO.FileInfo CopyTo(string destFileName, bool overwrite)
+Create                    Method         System.IO.FileStream Create()
+CreateAsSymbolicLink      Method         void CreateAsSymbolicLink(string pathToTarget)
+CreateText                Method         System.IO.StreamWriter CreateText()
+  (...)
+```
+</ConsoleWindow>
 
 On peut spécifier le type de membre pour une recherche plus ciblée.
 
-![image](r02_01b.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Item C:\Windows\notepad.exe | Get-Member -MemberType Properties
 
+   TypeName: System.IO.FileInfo
+
+Name                MemberType     Definition
+----                ----------     ----------
+Target              AliasProperty  Target = LinkTarget
+LinkType            CodeProperty   System.String LinkType{get=GetLinkType;}
+Mode                CodeProperty   System.String Mode{get=Mode;}
+ModeWithoutHardLink CodeProperty   System.String ModeWithoutHardLink{get=ModeWithoutHardLink;}
+ResolvedTarget      CodeProperty   System.String ResolvedTarget{get=ResolvedTarget;}
+PSChildName         NoteProperty   string PSChildName=notepad.exe
+PSDrive             NoteProperty   PSDriveInfo PSDrive=C
+PSIsContainer       NoteProperty   bool PSIsContainer=False
+PSParentPath        NoteProperty   string PSParentPath=Microsoft.PowerShell.Core\FileSystem::C:\Windows
+PSPath              NoteProperty   string PSPath=Microsoft.PowerShell.Core\FileSystem::C:\Windows\notepad.exe
+PSProvider          NoteProperty   ProviderInfo PSProvider=Microsoft.PowerShell.Core\FileSystem
+Attributes          Property       System.IO.FileAttributes Attributes {get;set;}
+CreationTime        Property       datetime CreationTime {get;set;}
+CreationTimeUtc     Property       datetime CreationTimeUtc {get;set;}
+Directory           Property       System.IO.DirectoryInfo Directory {get;}
+DirectoryName       Property       string DirectoryName {get;}
+Exists              Property       bool Exists {get;}
+Extension           Property       string Extension {get;}
+FullName            Property       string FullName {get;}
+IsReadOnly          Property       bool IsReadOnly {get;set;}
+LastAccessTime      Property       datetime LastAccessTime {get;set;}
+LastAccessTimeUtc   Property       datetime LastAccessTimeUtc {get;set;}
+LastWriteTime       Property       datetime LastWriteTime {get;set;}
+LastWriteTimeUtc    Property       datetime LastWriteTimeUtc {get;set;}
+Length              Property       long Length {get;}
+LinkTarget          Property       string LinkTarget {get;}
+Name                Property       string Name {get;}
+UnixFileMode        Property       System.IO.UnixFileMode UnixFileMode {get;set;}
+BaseName            ScriptProperty System.Object BaseName {get=if ($this.Extension.Length -gt 0){$this.Name.Remove($this.Name.Length - $this.Extension.Len…
+VersionInfo         ScriptProperty System.Object VersionInfo {get=[System.Diagnostics.FileVersionInfo]::GetVersionInfo($this.FullName);}
+```
+</ConsoleWindow>
 
 ## Obtenir une propriété
 
 Par exemple, la commande `Get-Item` retourne l'information sur un fichier ou un dossier. Le résultat de cette commande est un objet qui décrit le fichier ou le dossier correspondant.
 
-![image](r02_01c.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Item C:\Windows\notepad.exe
+
+    Directory: C:\Windows
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          2026-07-28    21:53         360448 notepad.exe
+```
+</ConsoleWindow>
 
 Si l'objet représente un fichier, il possèdera une propriété `.Length` qui représente sa taille, en octets. Pour accéder à un membre d'un objet, on utilise le caractère point. Il y a plusieurs manières d'identifier l'objet, soit avec des parenthèses, soit en le passant dans une variable.
 
-![image](r02_01d.png)
-
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Get-Item C:\Windows\notepad.exe).Length
+360448
+PS C:\> $MonFichier = Get-Item C:\Windows\notepad.exe
+PS C:\> $MonFichier.Length
+360448
+PS C:\> (Get-Item C:\Windows\notepad.exe).Length / 1KB
+352
+```
+</ConsoleWindow>
 
 ## Explorer les propriétés d'un objet
 
-Pour explorer un objet, il est également utile de demander à lister toutes ses propriétés.
+Pour explorer un objet, il est également utile de demander à lister toutes ses propriétés. Il est ainsi plus facile de trouver des propriétés intéressantes.
 
-![image](r02_01e.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Item C:\Windows\notepad.exe | Select-Object *
 
-Il est ainsi plus facile de trouver des propriétés intéressantes.
+PSPath              : Microsoft.PowerShell.Core\FileSystem::C:\Windows\notepad.exe
+PSParentPath        : Microsoft.PowerShell.Core\FileSystem::C:\Windows
+PSChildName         : notepad.exe
+PSDrive             : C
+PSProvider          : Microsoft.PowerShell.Core\FileSystem
+PSIsContainer       : False
+Mode                : la---
+ModeWithoutHardLink : -a---
+VersionInfo         : File:             C:\Windows\notepad.exe
+                      InternalName:     Notepad
+                      OriginalFilename: NOTEPAD.EXE.MUI
+                      FileVersion:      10.0.26100.8457 (WinBuild.160101.0800)
+                      FileDescription:  Bloc-notes
+                      Product:          Système d’exploitation Microsoft® Windows®
+                      ProductVersion:   10.0.26100.8457
+                      Debug:            False
+                      Patched:          False
+                      PreRelease:       False
+                      PrivateBuild:     False
+                      SpecialBuild:     False
+                      Language:         Français (Canada)
+
+BaseName            : notepad
+ResolvedTarget      : C:\Windows\notepad.exe
+Target              :
+LinkType            : HardLink
+Name                : notepad.exe
+Length              : 360448
+DirectoryName       : C:\Windows
+Directory           : C:\Windows
+IsReadOnly          : False
+Exists              : True
+FullName            : C:\Windows\notepad.exe
+Extension           : .exe
+CreationTime        : 2026-07-28 21:53:29
+CreationTimeUtc     : 2026-07-29 01:53:29
+LastAccessTime      : 2026-08-25 19:59:18
+LastAccessTimeUtc   : 2026-08-25 23:59:18
+LastWriteTime       : 2026-07-28 21:53:29
+LastWriteTimeUtc    : 2026-07-29 01:53:29
+LinkTarget          :
+UnixFileMode        : -1
+Attributes          : Archive
+```
+</ConsoleWindow>
 
 
-## Appeler une méthode
 
-L'appel d'une méthode se fait de la même manière que pour une propriété, sauf que la méthode peut accepter des paramètres. Comme une méthode n'est pas une commande PowerShell, les paramètres n'obéissent pas aux même règles: ils ne sont pas nommés, et doivent être spécifiés en parenthèses.
+:::tip Des objets dans des objets
+Parfois, une propriété d'un objet est elle aussi un objet. Par exemple, `Get-Culture` donne la configuration des paramètres régionaux de votre session Windows.
 
-![image](r02_01f.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Culture | Select-Object *
+(...)
+CultureTypes                   : SpecificCultures, InstalledWin32Cultures
+NumberFormat                   : System.Globalization.NumberFormatInfo
+DateTimeFormat                 : System.Globalization.DateTimeFormatInfo
+Calendar                       : System.Globalization.GregorianCalendar
+(...)
+```
+</ConsoleWindow>
 
-Si la méthode qu'on appelle n'a pas de paramètre, il faut écrire les parenthèses quand même.
+L'objet retourné par la commande semble posséder l'information sur le format de date et de temps, car il existe une propriété `DateTimeFormat`. Cependant, l'information est ambiguë. En fait, `System.Globalization.DateTimeFormatInfo` est un nom de classe. 
 
-![image](r02_01g.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Get-Culture).DateTimeFormat
+(...)
+ShortestDayNames                 : {D, L, M, M…}
+DayNames                         : {dimanche, lundi, mardi, mercredi…}
+AbbreviatedMonthNames            : {janv., févr., mars, avr.…}
+MonthNames                       : {janvier, février, mars, avril…}
+IsReadOnly                       : True
+(...)
+```
+</ConsoleWindow>
+
+On peut donc naviguer dans la structure d'objets, comme le montre l'exemple ci-dessous.
+
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Get-Culture).DateTimeFormat.DayNames
+dimanche
+lundi
+mardi
+mercredi
+jeudi
+vendredi
+samedi
+```
+</ConsoleWindow>
+
+:::
 
 
 ## Connaître le type d'un objet
 
-Une manière de connaître le type d'un objet est d'appeler sa méthode GetType(). Cette méthode existe dans tous les types d'objets, et retourne un objet qui décrit le type de cet objet.
+Une manière de connaître le type d'un objet est d'appeler sa méthode `GetType()`. Cette méthode existe dans tous les types d'objets, et retourne un objet qui décrit le type de cet objet. 
 
-![image](r02_01h.png)
+:::tip Appel de méthodes
+Le membre `.GetType` n'est pas une propriété mais une **méthode**. Il faut obligatoirement que le nom du membre soit suivi de **parenthèses**. Selon la méthode, il pourrait y avoir des arguments dans les parenthèses. Certaines méthodes, comme `GetType()`, n'admet aucun argument; on doit tout de même écrire des parenthèses vides.
+
+Les méthodes n'apparaissent pas avec `Select-Object *` puisque ce ne sont pas des propriétés. Vous pouvez toutefois les voir avec `Get-Member`.
+
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> Get-Item C:\Windows\notepad.exe | Get-Member -MemberType Method
+
+   TypeName: System.IO.FileInfo
+
+Name                      MemberType Definition
+----                      ---------- ----------
+(...)
+Encrypt                   Method     void Encrypt()
+Equals                    Method     bool Equals(System.Object obj)
+GetHashCode               Method     int GetHashCode()
+GetLifetimeService        Method     System.Object GetLifetimeService()
+GetObjectData             Method     void GetObjectData(System.Runtime.Serializ…
+GetType                   Method     type GetType()
+InitializeLifetimeService Method     System.Object InitializeLifetimeService()
+(...)
+```
+</ConsoleWindow>
+:::
 
 Par exemple, la commande Get-Item peut retourner des fichiers et des dossiers, qui sont des structures très différentes. Selon l'élément que l'on tente d'obtenir, le type de l'objet résultant sera différent.
 
-![image](r02_01i.png)
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Get-Item C:\Windows\notepad.exe).GetType()
 
-Si la commande retourne plusieurs objets, alors le type de l'objet retourné sera un array, c'est-à-dire un objet qui contient plusieurs objets. On les identifie avec des crochets [ ] à la fin de leur type.
+IsPublic IsSerial Name                                     BaseType
+-------- -------- ----                                     --------
+True     False    FileInfo                                 System.IO.FileSystemInfo
 
-![image](r02_01j.png)
+PS C:\> (Get-Item C:\Windows\System32).GetType()
+
+IsPublic IsSerial Name                                     BaseType
+-------- -------- ----                                     --------
+True     False    DirectoryInfo                            System.IO.FileSystemInfo
+```
+</ConsoleWindow>
+
+Si la commande retourne plusieurs objets, alors le type de l'objet retourné sera un array, c'est-à-dire un objet qui contient plusieurs objets. On les identifie avec des crochets à la fin de leur type, par exemple `Object[]`.
+
+<ConsoleWindow title="PowerShell 7" backgroundColor="#000046">
+```text
+PS C:\> (Get-ChildItem C:\Windows).GetType()
+
+IsPublic IsSerial Name                                     BaseType
+-------- -------- ----                                     --------
+True     True     Object[]                                 System.Array
+```
+</ConsoleWindow>
 
 

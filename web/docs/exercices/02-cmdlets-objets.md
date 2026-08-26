@@ -1,7 +1,7 @@
 ---
 title: Commandes, alias et objets
 sidebar_label: Commandes, alias et objets
-draft: true
+draft: false
 ---
 
 Les exercices suivants visent à vous familiariser avec les commandes PowerShell, les alias et les objets retournés par les commandes.
@@ -42,22 +42,23 @@ Dans cet exercice, vous devez identifier si la commande donnée est un **alias**
 20. `taskkill`
 21. `Invoke-History`
 
-
-
 :::tip Conseils
 Pour trouver une commande à partir d'un alias, vous pouvez utiliser la commande `Get-Alias -Name`.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```powershell
 PS C:\> Get-Alias -Name cls
 
 CommandType     Name                                               Version    Source
 -----------     ----                                               -------    ------
 Alias           cls -> Clear-Host
 ```
+</ConsoleWindow>
 
 Pour trouver les alias d'une commande, vous pouvez utiliser la commande `Get-Alias -Definition`.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```powershell
 PS C:\> Get-Alias -Definition Clear-Host
 
 CommandType     Name                                               Version    Source
@@ -65,6 +66,7 @@ CommandType     Name                                               Version    So
 Alias           clear -> Clear-Host
 Alias           cls -> Clear-Host
 ```
+</ConsoleWindow>
 
 Vous pouvez aussi utiliser la commande `Get-Help`.
 :::
@@ -93,17 +95,20 @@ Utilisez la vraie commande PowerShell, pas un alias ni une commande externe.
 ::::tip Conseils
 Pour connaître le nom de la commande, vous pouvez utiliser son alias comme point de départ.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```text
 PS C:\Windows> Get-Location
 
 Path
 ----
 C:\Windows
 ```
+</ConsoleWindow>
 
 Si vous connaissez le nom de cette commande, vous pouvez voir quelles commandes existent pour ce nom à l'aide de `Get-Command -Noun`.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```text
 PS C:\Windows> Get-Command -Noun Location
 
 CommandType     Name          
@@ -113,12 +118,15 @@ Cmdlet          Pop-Location
 Cmdlet          Push-Location 
 Cmdlet          Set-Location  
 ```
+</ConsoleWindow>
 
 Aussi, pour connaître la syntaxe de cette commande, comme ses paramètres, vous pouvez utiliser la commande `Get-Help`. L'aide est assez difficile à consulter dans la console, mais vous pouvez spécifier les arguments `-ShowWindow` ou `-Online` pour consulter la rubrique d'aide dans une fenêtre ou un navigateur.
 
+<ConsoleWindow backgroundColor="#000046">
 ```
 PS C:\Windows> Get-Help Get-Location -Online
 ```
+</ConsoleWindow>
 
 :::caution
 Notez qu'il se peut que les rubriques d'aide ne soient pas à jour sur votre ordinateur. Il vous suffit de déclencher une mise à jour de l'aide avec la commande `Update-Help -Scope CurrentUser -UICulture en-US`.
@@ -150,13 +158,15 @@ Dans cet exercice, trouvez la ligne de commande PowerShell à utiliser pour obte
 
 Souvent, lorsqu'on développe un script ou un automatisme, on ne connaît pas à l'avance la langue du système ou celle choisie dans les paramètre de l'utilisateur. Lorsqu'on gère un environnement TI multilingue, on doit souvent faire en sorte que nos commandes fonctionnent peu importe la langue. La commande `Get-Culture` permet d'obtenir de l'information sur la configuration linguistique du système et de son profil utilisateur.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```text
 PS C:\> Get-Culture
 
 LCID             Name             DisplayName
 ----             ----             -----------
 3084             fr-CA            français (Canada)
 ```
+</ConsoleWindow>
 
 Cette commande semble donner très peu d'information, mais elle retourne en réalité un objet qui contient beaucoup plus d'informations que ce qui est affiché par défaut. 
 
@@ -177,7 +187,8 @@ Vous pouvez utiliser la commande `Get-Member` pour voir tous les membres de l'ob
 
 Vous pouvez utiliser la commande `Select-Object *` pour afficher la liste de toutes les propriétés disponibles dans l'objet ainsi que leur valeur.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```text
 PS C:\> Get-Process explorer | Select-Object *
 
 Name                       : explorer
@@ -185,10 +196,12 @@ Id                         : 4820
 PriorityClass              : Normal
 ...
 ```
+</ConsoleWindow>
 
-Vous pouvez aussi voir une liste des propriétés d'un objet en utilisant le raccourci clavier CTRL+ESPACE.
+Vous pouvez aussi voir une liste des propriétés d'un objet en utilisant le raccourci clavier `CTRL + ESPACE`.
 
-```
+<ConsoleWindow backgroundColor="#000046">
+```text
 PS C:\> $WinUpdateService = Get-Service -Name wuauserv
 PS C:\> $WinUpdateService.[CTRL+ESPACE]
 Name                       DisplayName                UserName                   Pause
@@ -202,4 +215,5 @@ DelayedAutoStart           StartType                  GetLifetimeService
 DependentServices          StartupType                GetType
 Description                Status                     InitializeLifetimeService
 ```
+</ConsoleWindow>
 :::
