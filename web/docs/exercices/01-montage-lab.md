@@ -81,6 +81,20 @@ Rename-Computer -NewName "DC01"
 Restart-Computer
 ```
 
+:::tip Copier-coller du texte dans la VM
+Dans ce laboratoire, vous devez copier et coller du texte de votre ordinateur principal vers votre VM. Il y a deux manières de s'y prendre:
+
+**Manière 1: Utiliser VMware Workstation comme client**
+
+L'accès à votre VM par le Web ne permet pas le copier-coller, mais VMware Workstation peut agir comme client. Il suffit de choisir "Lancer Remote Console".
+
+![Cliquer sur Lancer Remote Console](./assets/vm-remoteconsole.png)
+
+**Manière 2: Utiliser un outil**
+
+Si vous tenez absolument à utiliser le client Web pour contrôler vos machines virtuelles, vous pouvez utiliser [l'outil ClickPaste](https://github.com/Collective-Software/ClickPaste). Cet outil sert à simuler des frappes de clavier à partir du texte copié dans le presse-papier. Notez que cet outil ne fonctionne que dans ce sens; il ne permet pas de copier du texte issu de votre VM vers votre poste principal.
+:::
+
 ### Étape 3: Configuration du réseau
 
 Lors de l'installation de Windows, le client DHCP est activé par défaut tant pour l'assignation d'une adresse IP que pour ses résolveurs DNS. Il est généralement une bonne pratique de désactiver le client DHCP sur les serveurs et de plutôt opter pour une assignation statique.
