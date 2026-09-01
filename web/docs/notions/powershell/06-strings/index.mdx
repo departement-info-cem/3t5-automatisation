@@ -10,76 +10,135 @@ Les chaînes de caractères sont un type de données particulièrement commun da
 
 En PowerShell, les chaînes de caractères sont balisées par des guillemets. Les guillemets simples et doubles sont acceptés.
 
-![image](r03_02a.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> ("Guillemets doubles").GetType().Name
+String
+
+PS C:\> ('Guillemets simples').GetType().Name
+String
+```
+</ConsoleWindow>
 
 Un type de guillemet compris dans une chaîne balisée par l'autre type de guillemets sera affiché tel quel.
 
 ![image](r03_02b.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> Write-Host "Bienvenue au cours 'Automatisation de tâches'"
+Bienvenue au cours 'Automatisation de tâches'
+
+PS C:\> Write-Host 'Bienvenue au cours "Automatisation de tâches"'
+Bienvenue au cours "Automatisation de tâches"
+```
+</ConsoleWindow>
+
 
 Par contre, les deux types de guillemets se comportent différemment avec les variables. Le variables écrites dans une chaîne à guillemets doubles sont résolues, alors que celles dans une chaîne à guillemets simples ne le sont pas.
 
-![image](r03_02c.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $NomDuCours = "Automatisation de tâches"
+PS C:\> Write-Host 'Bienvenue au cours $NomDuCours!'
+Bienvenue au cours $NomDuCours!
+PS C:\> Write-Host "Bienvenue au cours $NomDuCours!"
+Bienvenue au cours Automatisation de tâches!
+```
+</ConsoleWindow>
+
+:::tip Indices de couleur dans le terminal
+Portez attention, le terminal vous donne des indices de couleur pour suggérer qu'une variable est vu comme telle ou comme du texte littéral. Si la variable porte une couleur différente du reste de la chaîne, elle sera résolue.
+
+![Couleur dans le terminal](couleur.png)
+:::
+
+
 
 Pour écrire à la fois des guillemets doubles dans une chaîne et résoudre une variable, on peut soit doubler les guillemets doubles (un double-double-guillemet représente le caractère du double-guillemet), ou encore mettre un caractère d'échappement (le backtick) juste avant pour le forcer à être représenté comme caractère dans la chaîne.
 
-![image](r03_02d.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> Write-Host "Bienvenue au cours `"$NomDuCours!`""
+Bienvenue au cours "Automatisation de tâches!"
+
+PS C:\> Write-Host "Bienvenue au cours ""$NomDuCours!"""
+Bienvenue au cours "Automatisation de tâches!"
+```
+</ConsoleWindow>
 
 Pour les cas plus complexes, on peut construire une variable temporaire au sein d'une chaîne de caractères, avec la formule $(). C'est pratique si on veut non pas résoudre une variable dans une chaîne, mais plutôt résoudre une expression.
 
-![image](r03_02e.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> Write-Host "Bienvenue au cours $NomDuCours.ToUpper()!"
+Bienvenue au cours Automatisation de tâches.ToUpper()!
+
+PS C:\> Write-Host "Bienvenue au cours $($NomDuCours.ToUpper())!"
+Bienvenue au cours AUTOMATISATION DE TÂCHES!
+```
+</ConsoleWindow>
 
 De cette manière, on peut résoudre n'importe quelle expression au sein de la chaîne de caractères.
 
-![image](r03_02f.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> Write-Host "Nous sommes le $(Get-Date -Format "dddd d MMMM yyy")."
+Nous sommes le mardi 1 septembre 2026.
+```
+</ConsoleWindow>
 
 ### Concaténation
 
 On peut aussi concaténer deux chaînes de caractères avec l'opérateur de concaténation `+`.
 
-![image](r03_02g.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $Nom = "Meilleur"
+PS C:\> $Prenom = "Paul"
+PS C:\> $NomComplet = $Prenom + " " + $Nom
+PS C:\> Write-Host "Mon nom est $NomComplet."
+Mon nom est Paul Meilleur.
+```
+</ConsoleWindow>
 
 Une autre option pour unir plusieurs éléments d'une chaîne est d'utiliser l'opérateur de formatage `-f`. On écrit la chaîne de caractères mais en y insérant des jetons \{n\}. Ceux-ci seront remplacés par le contenu des variables spécifiées après l'opérateur `-f`.
 
-![image](r03_02h.png)
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $Message = "Mon nom est {0} {1}." -f $Prenom, $Nom
+PS C:\> Write-Host $Message
+Mon nom est Paul Meilleur.
+```
+</ConsoleWindow>
 
 Ou encore, on peut toujours insérer les variables directement dans la chaîne, lorsqu'on utilise des guillemets doubles.
 
-![image](r03_02i.png)
-
-
-```powershell
-$prenom = "Yvon"
-$nom = "Rocher"
-
-"Bonjour $prenom $nom!"
-#retourne: "Bonjour Yvon Rocher!"
-
-"Bonjour {0} {1}!" -f $prenom $nom
-#retourne: "Bonjour Yvon Rocher!"
-
-"Bonjour " + $prenom + " " + $nom + "!"
-#retourne: "Bonjour Yvon Rocher!"
-
-[String]::Concat("Bonjour ",$prenom," ",$nom,"!")
-#retourne: "Bonjour Yvon Rocher!"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $Message = "Mon nom est $Prenom $Nom."
+PS C:\> Write-Host $Message
+Mon nom est Paul Meilleur.
 ```
+</ConsoleWindow>
 
 ### Nettoyage
 
 Il arrive que des chaînes de caractères comprennent des espaces de trop au début ou à la fin. Les méthodes `Trim()`, `TrimStart()` et `TrimEnd()` les éliminent.
 
-```powershell
-$miaou = "          miaou          "  # 10 espaces avant et après
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $miaou = "          miaou          "  # 10 espaces avant et après
 
-"[" + $miaou.Trim() + "]"
-#retourne: "[miaou]"
+PS C:\> "[" + $miaou.Trim() + "]"
+[miaou]
 
-"[" + $miaou.TrimStart() + "]"
-#retourne: "[miaou          ]"
+PS C:\> "[" + $miaou.TrimStart() + "]"
+[miaou          ]
 
-"[" + $miaou.TrimEnd() + "]"
-#retourne: "[          miaou]"
+PS C:\> "[" + $miaou.TrimEnd() + "]"
+[          miaou]
 ```
+</ConsoleWindow>
 
 ### Padding
 
@@ -87,50 +146,62 @@ Le padding est une opération qui consiste à ajouter des espaces au début ou �
 
 Les méthodes `PadRight(<n>)` et `PadLeft(<n>)` permettent d’ajouter assez d’espaces à droite ou à gauche pour que la longueur totale de la chaîne soit de `n`.
 
-```powershell
-$pitou = "Wouf!"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $pitou = "Wouf!"
+PS C:\> "["+ $pitou.PadLeft(10) +"]"
+[     Wouf!]
 
-"["+ $pitou.PadLeft(10) +"]"
-#retourne: "[     Wouf!]" (5 espaces avant + 5 caractères = 10)
-
-"["+ $pitou.PadRight(10) +"]"
-#retourne: "[Wouf!     ]" (5 caractères + 5 espaces après = 10)
+PS C:\> "["+ $pitou.PadRight(10) +"]"
+[Wouf!     ]
 ```
+</ConsoleWindow>
 
 ### Fractionnement (split)
 
 La méthode `Split()` permet séparer une chaîne en plusieurs morceaux. Elle produit donc un array de chaînes plus petites, séparées par un délimiteur commun. Le délimiteur par défaut est l’espace, mais on peut en spécifier un en paramètre.
 
-```powershell
-$fruits = "pomme banane kiwi"
-$fruits.Split()
-#retourne un array contenant les chaînes "pomme", "banane" et "kiwi"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $fruits = "pomme banane kiwi"
+PS C:\> $fruits.Split()
+pomme
+banane
+kiwi
 
-$legumes = "oignon;carotte;celeri"
-$legumes.Split(';')
-#retourne un array contenant les chaînes "oignon", "carotte" et "celeri"
+PS C:\> $legumes = "oignon;carotte;celeri"
+PS C:\> $legumes.Split(';')
+oignon
+carotte
+celeri
 ```
+</ConsoleWindow>
 
 On peut aussi spécifier le nombre maximum de fractions.
 
-```powershell
-$legumes = "oignon;carotte;celeri"
-$legumes.Split(';',2)
-#retourne un array contenant les chaînes "oignon" et "carotte;celeri"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $legumes = "oignon;carotte;celeri"
+PS C:\> $legumes.Split(';',2)
+oignon
+carotte;celeri
 ```
+</ConsoleWindow>
 
 Comme le résultat de la méthode `Split()` retourne un *array*, on peut le manipuler comme n'importe quelle collection. Voici un exemple:
 
-```powershell
-$fruits = "pomme banane kiwi"
-$tabFruits = $fruits.Split()
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $fruits = "pomme banane kiwi"
+PS C:\> $tabFruits = $fruits.Split()
 
-$tabFruits[1]
-#retourne la chaîne: "banane"
+PS C:\> $tabFruits[1]
+banane
 
-$tabFruits | Where-Object { $_ -like "b*" } | Write-Host -ForegroundColor Yellow
-#écrit "banane" en jaune dans la console.
+PS C:\> $tabFruits | Where-Object { $_ -like "b*" }
+banane
 ```
+</ConsoleWindow>
 
 ### Extraction
 
@@ -140,18 +211,21 @@ Cette méthode prend deux paramètres:
 - Le premier désigne le point de départ (le premier caractère est 0)
 - Le deuxième désigne le nombre de caractères à l'inclure
 
-```powershell
-"Lorem ipsum".Substring(2,3)
-# Retourne les 3 caractères à partir du caractère #2, soit "rem".
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".Substring(2,3)
+rem
 ```
+</ConsoleWindow>
 
 Suivant la même logique, la méthode `Remove()` permet de retirer une partie de la chaîne.
 
-```powershell
-"Lorem ipsum".Remove(2,3)
-# Retourne la chaîne sans les 3 caractères à partir du caractère #2, soit "Lo ipsum".
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".Remove(2,3)
+Lo ipsum
 ```
-
+</ConsoleWindow>
 
 ### Remplacement
 
@@ -161,22 +235,26 @@ Cette méthode prend deux paramètres:
 - Le premier désigne le texte à remplacer
 - Le deuxième désigne le texte de remplacement
 
-```powershell
-"Lorem ipsum".Replace("m","che")
-# Retourne "Loreche ipsuche"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".Replace("m","che")
+Loreche ipsuche
 ```
+</ConsoleWindow>
 
 ### Recherche
 
 La méthode `IndexOf()` retourne le numéro du caractère (le premier étant 0) où débute un certain texte. Cette méthode retourne uniquement la position de la première occurrence, mais on peut spécifier un point de départ; dans ce cas, elle retourne la première occurrence à partir de cette position.
 
-```powershell
-"Lorem ipsum".IndexOf("m")
-#retourne: 4
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".IndexOf("m")
+4
 
-"Lorem ipsum".IndexOf("m",6)
-#retourne: 10
+PS C:\> "Lorem ipsum".IndexOf("m",6)
+10
 ```
+</ConsoleWindow>
 
 ### Comparaison
 
@@ -184,42 +262,49 @@ PowerShell offre déjà les opérateurs `-eq`, `-ieq` et `-ceq` pour comparer le
 - Les opérateurs `-eq` (sous Windows) et `-ieq` ignorent la casse.
 - L’opérateur `-ceq`, lui, est sensible à la casse.
 
-```powershell
-"Lorem ipsum" -eq "lorem ipsum"
-#retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum" -eq "lorem ipsum"
+True
 
-"Lorem ipsum" -ieq "lorem ipsum"
-#retourne: False
+PS C:\> "Lorem ipsum" -ieq "lorem ipsum"
+True
 ```
+</ConsoleWindow>
 
 On peut aussi utiliser la méthode `Equals()`.
 - Par défaut, elle est sensible à la casse.
 - On peut spécifier 1 au deuxième paramètre pour qu'elle ignore la casse.
 
-```powershell
-"Lorem ipsum".Equals("lorem ipsum")
-#retourne: False
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".Equals("lorem ipsum")
+False
 
-"Lorem ipsum".Equals("lorem ipsum",1)
-#retourne: True
+PS C:\> "Lorem ipsum".Equals("lorem ipsum",1)
+True
 ```
+</ConsoleWindow>
 
 ### Correspondance
 
 Pour savoir si une chaîne contient une autre chaîne, on peut utiliser la méthode `Contains()`.
 
-```powershell
-"Lorem ipsum".Contains("rem")
-#retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum".Contains("rem")
+True
 ```
+</ConsoleWindow>
 
 On peut aussi arriver au même résultat avec l'opérateur `-like` et les wildcards `*`.
 
-```powershell
-"Lorem ipsum" -like "*rem*"
-#retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Lorem ipsum" -like "*rem*"
+True
 ```
-
+</ConsoleWindow>
 
 ## Expressions régulières (regex)
 
@@ -235,10 +320,12 @@ L'opérateur `-match` est l'équivalent de `-like`, mais permet des patterns reg
 
 L'exemple suivant teste si la chaîne de caractère contient "oo".
 
-```powershell
-"google" -match "oo"
-#retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "google" -match "oo"
+True
 ```
+</ConsoleWindow>
 
 Les patterns regex permettent des validation beaucoup plus précises. Voici quelques possibilités que permettent les expressions régulières.
 
@@ -247,63 +334,71 @@ Les patterns regex permettent des validation beaucoup plus précises. Voici quel
 
 Si on spécifie plusieurs lettres entre crochets, cela signifie qu'on permet une de ces lettres. Par exemple, pour le pattern `cr[iao]c`, on permet les chaînes `cric`, `crac`, `croc`, mais pas `cruc`.
 
-```powershell
-"cric" -match "cr[iao]c"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "cric" -match "cr[iao]c"
+True
 
-"crac" -match "cr[iao]c"
-# Retourne: True
+PS C:\> "crac" -match "cr[iao]c"
+True
 
-"croc" -match "cr[iao]c"
-# Retourne: True
+PS C:\> "croc" -match "cr[iao]c"
+True
 
-"cruc" -match "cr[iao]c"
-# Retourne: False
+PS C:\> "cruc" -match "cr[iao]c"
+False
 ```
+</ConsoleWindow>
 
 À l'inverse, le pattern `cr[^iao]c` permet `cruc` mais pas `cric`. La lettre représentée par `[^iao]` peut être n'importe quel caractère SAUF i, a et o.
 
-```powershell
-"cric" -match "cr[^iao]c"
-# Retourne: False
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "cric" -match "cr[^iao]c"
+False
 
-"crac" -match "cr[^iao]c"
-# Retourne: False
+PS C:\> "crac" -match "cr[^iao]c"
+False
 
-"croc" -match "cr[^iao]c"
-# Retourne: False
+PS C:\> "croc" -match "cr[^iao]c"
+False
 
-"cruc" -match "cr[^iao]c"
-# Retourne: True
+PS C:\> "cruc" -match "cr[^iao]c"
+True
 ```
+</ConsoleWindow>
 
 ### Début et fin de ligne
 
 Par défaut, un pattern s'applique à n'importe quelle partie de la chaîne. Par exemple, le pattern `cr[iao]c` signifie que la chaîne est valide si, à n'importe quel endroit dans la chaîne, on retrouve un **c**, suivi d'un **r**, suivi d'un **i** ou d'un **a** ou d'un **o**, suivi d'un **c**.
 
-```powershell
-"cric" -match "cr[iao]c"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "cric" -match "cr[iao]c"
+True
 
-"crachat" -match "cr[iao]c"
-# Retourne: True
+PS C:\> "crachat" -match "cr[iao]c"
+True
 
-"escroc" -match "cr[iao]c"
-# Retourne: True
+PS C:\> "escroc" -match "cr[iao]c"
+True
 ```
+</ConsoleWindow>
 
 On peut spécifier le début ou la fin de la chaîne avec les caractères `^` et `$` respectivement.
 
-```powershell
-"cric" -match "^cr[iao]c$"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "cric" -match "^cr[iao]c$"
+True
 
-"crachat" -match "^cr[iao]c$"
-# Retourne: False
+PS C:\> "crachat" -match "^cr[iao]c$"
+False
 
-"escroc" -match "^cr[iao]c$"
-# Retourne: False
+PS C:\> "escroc" -match "^cr[iao]c$"
+False
 ```
+</ConsoleWindow>
 
 ### Caractères spécifiques
 
@@ -325,56 +420,59 @@ On peut spécifier des catégories de caractères spécifiques.
 | `\r` | Le caractère de retour de chariot (`U+000D`) |
 | `\n` | Le caractère de saut de ligne (`U+000A`) |
 
-```powershell
-"42" -match "^\d\d$"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "42" -match "^\d\d$"
+True
 
-"42" -match "^\D\D$"
-# Retourne: False
+PS C:\> "42" -match "^\D\D$"
+False
 
-"42" -match "^[0-9][1-4]$"
-# Retourne: True
+PS C:\> "42" -match "^[0-9][1-4]$"
+True
 
-"4x" -match "^\w\w$"
-# Retourne: True
+PS C:\> "4x" -match "^\w\w$"
+True
 
-"&%" -match "^\W\W$"
-# Retourne: True
+PS C:\> "&%" -match "^\W\W$"
+True
 
-"lol" -match "^[a-z][a-z][a-z]$"
-# Retourne: True
+PS C:\> "lol" -match "^[a-z][a-z][a-z]$"
+True
 
-"l0l" -match "^[a-z][a-z][a-z]$"
-# Retourne: False
+PS C:\> "l0l" -match "^[a-z][a-z][a-z]$"
+False
 
-"cr&c" -match "^cr.c$"
-# Retourne: True
+PS C:\> "cr&c" -match "^cr.c$"
+True
 
-"cr c" -match "^cr.c$"
-# Retourne: True
+PS C:\> "cr c" -match "^cr.c$"
+True
 
-"A 1" -match "^\S\s\S$"
-# Retourne: True
+PS C:\> "A 1" -match "^\S\s\S$"
+True
 
-"A-1" -match "^\S\s\S$"
-# Retourne: False
+PS C:\> "A-1" -match "^\S\s\S$"
+False
 ```
+</ConsoleWindow>
 
 ### Valeurs énumérées
 
 Le caractère `|` permet d'énumérer certaines valeurs possibles.
 
-```powershell
-"Il y a une erreur!" -match "erreur|error"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "Il y a une erreur!" -match "erreur|error"
+True
 
-"There is an error!" -match "erreur|error"
-# Retourne: True
+PS C:\> "There is an error!" -match "erreur|error"
+True
 
-"Il y a un problème!" -match "erreur|error"
-# Retourne: False
+PS C:\> "Il y a un problème!" -match "erreur|error"
+False
 ```
-
+</ConsoleWindow>
 
 ### Quantification
 
@@ -391,76 +489,90 @@ On peut définir des répétitions de caractères dans un pattern regex. Voici l
 
 Voici quelques exemples:
 
-```powershell
-$mots = @("Ggle", "Gogle", "Google", "Gooogle")
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $mots = @("Ggle", "Gogle", "Google", "Gooogle")
+PS C:\> $mots | Where-Object { $_ -match '^Go*gle$'}
+Ggle
+Gogle
+Google
+Gooogle
 
-$mots | Where-Object { $_ -match '^Go*gle$'}
-# Retourne: Ggle, Gogle, Google, Gooogle
+PS C:\> $mots | Where-Object { $_ -match '^Go+gle$'}
+Gogle
+Google
+Gooogle
 
-$mots | Where-Object { $_ -match '^Go+gle$'}
-# Retourne: Gogle, Google, Gooogle
+PS C:\> $mots | Where-Object { $_ -match '^Go?gle$'}
+Ggle
+Gogle
 
-$mots | Where-Object { $_ -match '^Go?gle$'}
-# Retourne: Ggle, Gogle
+PS C:\> $mots | Where-Object { $_ -match '^Go{2}gle$'}
+Google
 
-$mots | Where-Object { $_ -match '^Go{2}gle$'}
-# Retourne: Google
+PS C:\> $mots | Where-Object { $_ -match '^Go{1,2}gle$'}
+Gogle
+Google
 
-$mots | Where-Object { $_ -match '^Go{1,2}gle$'}
-# Retourne: Gogle, Google
-
-$mots | Where-Object { $_ -match '^Go{2,}gle$'}
-# Retourne: Google, Gooogle
+PS C:\> $mots | Where-Object { $_ -match '^Go{2,}gle$'}
+Google
+Gooogle
 ```
-
+</ConsoleWindow>
 
 ### Groupes de capture
 
 Les patterns regex permettent de définir des groupes de caractères, pour la répétition ou encore l'extraction de leur valeur. On identifie les groupes entre parenthèses et leur valeur est répertoriée dans le *hashtable* contenu dans la variable `$Matches`.
 
-```powershell
-$Message = "The last logged on user was CONTOSO\jsmith"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $Message = "Votre nom d'utilisateur est DOMAINE\paul.meilleur"
 
-$Message -match '(.+was )(.+)'
-# Retourne: True
+PS C:\> $Message -match '(.+est )(.+)'
+True
 
-$Matches.0
-# Retourne: la chaîne complète
+PS C:\> $Matches.0
+Votre nom d'utilisateur est DOMAINE\paul.meilleur
 
-$Matches.1
-# Retourne: "The last logged on user was "
+PS C:\> $Matches.1
+Votre nom d'utilisateur est
 
-$Matches.2
-# Retourne: "CONTOSO\jsmith"
+PS C:\> $Matches.2
+DOMAINE\paul.meilleur
 ```
+</ConsoleWindow>
 
 On peut donner des noms aux groupes. La syntaxe est alors: `(?<nomdugroupe>pattern)`.
 
-```powershell
-$Message = "The last logged on user was CONTOSO\jsmith"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $Message = "Votre nom d'utilisateur est DOMAINE\pmeilleur"
 
-$Message -match 'was (?<domain>.+)\\(?<user>.+)'
-# Retourne: True
+PS C:\> $Message -match 'est (?<domain>.+)\\(?<user>.+)'
+True
 
-$Matches.domain
-# Retourne: "CONTOSO"
+PS C:\> $Matches.domain
+DOMAINE
 
-$Matches.user
-# Retourne: "jsmith"
+PS C:\> $Matches.user
+pmeilleur
 ```
+</ConsoleWindow>
 
 Un groupe peut aussi servir d'unité de répétition.
 
-```powershell
-"poutpout" -match '^(pout){3,}$'
-# Retourne: False
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "poutpout" -match '^(pout){3,}$'
+False
 
-"poutpoutpout" -match '^(pout){3,}$'
-# Retourne: True
+PS C:\> "poutpoutpout" -match '^(pout){3,}$'
+True
 
-"poutpoutpoutpout" -match '^(pout){3,}$'
-# Retourne: True
+PS C:\> "poutpoutpoutpout" -match '^(pout){3,}$'
+True
 ```
+</ConsoleWindow>
 
 ### Caractère d'échappement
 
@@ -468,30 +580,35 @@ Dans un pattern, on peut représenter la plupart des caractères, mais certains 
 
 Pour utiliser ces caractères dans leur valeur litérale au sein d'un pattern, ils doivent être précédés d'un `\`. Ce caractère "annule" leur effet sur la syntaxe.
 
-```powershell
-"3.141" -match "3\.\d{2,}"
-# Retourne: True
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "3.141" -match "3\.\d{2,}"
+True
 
-"C:\Windows" -match "^C:\\."
-# Retourne: True
+PS C:\> "C:\Windows" -match "^C:\\."
+True
 ```
+</ConsoleWindow>
 
 ### Remplacement
 
 L'opérateur -replace admet les expressions régulières. Il permet de remplacer toutes les occurrences d'un pattern par une chaîne de caractères de remplacement.
 
-```powershell
-$message = "Mon numéro de téléphone est 450-555-0168 et mon cellulaire est 514-555-0666"
-$message -replace "\d{3}-\d{3}-\d{4}", "confidentiel"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> $message = "Mon numéro de téléphone est 450-555-0168 et mon cellulaire est 514-555-0666"
 
-# Retourne: "Mon numéro de téléphone est confidentiel et mon cellulaire est confidentiel."
+PS C:\> $message -replace "\d{3}-\d{3}-\d{4}", "confidentiel"
+Mon numéro de téléphone est confidentiel et mon cellulaire est confidentiel
 ```
+</ConsoleWindow>
 
 On peut aussi faire un remplacement en préservant le contenu d'un groupe.
 
-```powershell
-'CONTOSO\jsmith' -replace '\w+\\(?<user>\w+)', 'MONDOMAINE\${user}'
-
-# Retourne: "MONDOMAINE\jsmith"
+<ConsoleWindow backgroundColor="#000046" >
+```text
+PS C:\> "DOMAINE\pmeilleur" -replace '\w+\\(?<user>\w+)', 'MINOU\${user}'
+MINOU\pmeilleur
 ```
+</ConsoleWindow>
 

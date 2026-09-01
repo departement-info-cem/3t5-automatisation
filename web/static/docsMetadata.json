@@ -12,7 +12,7 @@
     "title": "02 - Commandes",
     "sidebar_label": "02 - Commandes, objets",
     "description": "Utilisation des commandes, introduction aux objets et aux structures de données de PowerShell",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -20,7 +20,7 @@
     "title": "03 - Pipeline",
     "sidebar_label": "03 - Le pipeline de PowerShell",
     "description": "Chaînage des commandes et circulation d'objets dans le pipeline de PowerShell",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -28,7 +28,7 @@
     "title": "04 - Tableaux",
     "sidebar_label": "04 - Tableaux et collections",
     "description": "Collections d'objets, filtres et boucles du pipeline",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -36,7 +36,7 @@
     "title": "05 - Strings",
     "sidebar_label": "05 - Strings, types, regex",
     "description": "Chaînes de caractères, conversions de types, expressions régulières (regex)",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -44,7 +44,7 @@
     "title": "06 - CSV et JSON",
     "sidebar_label": "06 - Fichiers CSV et JSON",
     "description": "Importation et exportation de données (texte, CSV, json)",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {

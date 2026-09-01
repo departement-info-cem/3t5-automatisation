@@ -18,10 +18,9 @@ La table de hachage (*HashTable*) est la forme la plus rudimentaire d'un diction
 
 Voici un exemple de création d'un objet de type *HashTable*:
 
-<Tabs>
+<Row>
 
-<TabItem value="code" label="Code">
-
+<Column>
 ```powershell
 $minou = @{ 
     Nom = "Garfield"
@@ -29,27 +28,29 @@ $minou = @{
     Passion = "Manger"
 }
 ```
+</Column>
+<Column>
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou
 
-</TabItem>
-
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\" command="$minou" result="
 Name            Value
 ----            -----
 Passion         Manger
 Nom             Garfield
-Espece          Felis catus"/>
+Espece          Felis catus
+```
+</ConsoleWindow>
+</Column></Row>
 
-</TabItem>
+Chaque clé de cet objet est le nom d'une de ses propriétés. On peut donc accéder à une propriété avec la notation `Objet.Membre`.
 
-</Tabs>
-
-Chaque clé de cet objet est le nom d'une de ses propriétés. On peut donc accéder à une propriété avec la notation ".".
-
-<PowerShellWindow workdir="C:\" command="$minou.Passion" result="
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou.Passion
 Manger
-"/>
+```
+</ConsoleWindow>
 
 :::tip
 Pour créer un objet *hashtable* en une seule ligne, utilisez le caractère ; entre les éléments.
@@ -63,8 +64,7 @@ $minou = @{ Nom = "Garfield" ; Espece = "Felis catus" ; Passion = "Manger" }
 
 Généralement, on n'a pas besoin qu'un dictionnaire soit trié, car il sert à accéder à ses propriétés à la demande, et non de manière séquentielle. Mais si, pour une quelconque raison, vous souhaitiez tout de même préserver l'ordre des éléments du dictionnaire, pour pouvez déclarer l'attribut `[ordered]`.
 
-<Tabs>
-<TabItem value="code" label="Code">
+<Row><Column>
 
 ```powershell
 $minou = [ordered]@{ 
@@ -73,18 +73,20 @@ $minou = [ordered]@{
     Passion = "Manger"
 }
 ```
-</TabItem>
-<TabItem value="resultat" label="Résultat">
+</Column>
+<Column>
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou
 
-<PowerShellWindow workdir="C:\" command="$minou" result="
 Name            Value
 ----            -----
 Nom             Garfield
 Espece          Felis catus
-Passion         Manger"/>
-
-</TabItem>
-</Tabs>
+Passion         Manger
+```
+</ConsoleWindow>
+</Column></Row>
 
 ### Comportement du *HashTable*
 
@@ -92,9 +94,7 @@ Un *HashTable* n'a pas vraiment le même comportement qu'un objet PowerShell. Ce
 
 L'exemple suivant montre un tableau de *HashTable*, le résultat que nous nous attendrions d'avoir lors de l'affichage et le résultat réel.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
+<Row><Column>
 ```powershell
 $minous = @(
     @{
@@ -109,20 +109,27 @@ $minous = @(
     }
 )
 ```
+</Column><Column>
+<Tabs>
+<TabItem value="resultat_souhaite" label="Résultat souhaité?">
 
-</TabItem>
-<TabItem value="resultat_souhaite" label="Résultat souhaité">
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou
 
-<PowerShellWindow workdir="C:\" command="$minou" result="
 Nom           Espece         Passion
 ---           ------         -------
 Garfield      Felis catus    Manger
-Grumpy Cat    Felis catus    Faire la baboune" />
-
+Grumpy Cat    Felis catus    Faire la baboune
+```
+</ConsoleWindow>
 </TabItem>
 <TabItem value="resultat" label="Résultat réel">
 
-<PowerShellWindow workdir="C:\" command="$minou" result="
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou
+
 Name            Value
 ----            -----
 Passion         Manger
@@ -130,11 +137,13 @@ Nom             Garfield
 Espece          Felis catus
 Passion         Faire la baboune
 Nom             Grumpy Cat
-Espece          Felis catus" />
+Espece          Felis catus
+```
+</ConsoleWindow>
 
 </TabItem>
 </Tabs>
-
+</Column></Row>
 
 ## Objets personnalisés (*PSCustomObject*)
 
@@ -142,8 +151,8 @@ Pour créer un objet disposant de propriétés propres mais se comportant de la 
 
 On crée un objet PSCustomObject de la même manière qu'un *HashTable*, à une différence près: on doit spécifier qu'il s'agit du type PSCustomObject.
 
-<Tabs>
-<TabItem value="code" label="Code">
+<Row>
+<Column>
 
 ```powershell
 $minou = [PSCustomObject]@{ 
@@ -153,24 +162,29 @@ $minou = [PSCustomObject]@{
 }
 ```
 
-</TabItem>
-<TabItem value="resultat" label="Résultat">
+</Column>
+<Column>
 
-<PowerShellWindow workdir="C:\" command="$minou" result="
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minou
+
 Nom           Espece         Passion
 ---           ------         -------
-Garfield      Felis catus    Manger" />
+Garfield      Felis catus    Manger
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
+</Column>
+</Row>
 
 
 ### Collections de *PSCustomObject*
 
 Contrairement aux *HashTable*, les *PSCustomObject* sont structurés pour faciliter leur manipulation en collection.
 
-<Tabs>
-<TabItem value="code" label="Code">
+<Row>
+<Column>
 
 ```powershell
 $minous = @(
@@ -187,17 +201,22 @@ $minous = @(
 )
 ```
 
-</TabItem>
-<TabItem value="resultat" label="Résultat">
+</Column>
+<Column>
 
-<PowerShellWindow workdir="C:\" command="$minous" result="
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $minous
+
 Nom           Espece         Passion
 ---           ------         -------
 Garfield      Felis catus    Manger
-Grumpy Cat    Felis catus    Faire la baboune" />
+Grumpy Cat    Felis catus    Faire la baboune
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
+</Column>
+</Row>
 
 
 ### Modifier une propriété
@@ -230,7 +249,6 @@ Le procédé est semblable à l'ajout de propriétés, à l'exception qu'on déf
 ```powershell
 $minou | Add-Member -MemberType ScriptMethod -Name "Miauler" -Value { Write-Host "Miaou" }
 ```
-
 
 ## Splatting
 

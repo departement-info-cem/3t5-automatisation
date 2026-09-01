@@ -1,1 +1,3 @@
 node_modules
+
+./web/static/docsMetadata.json

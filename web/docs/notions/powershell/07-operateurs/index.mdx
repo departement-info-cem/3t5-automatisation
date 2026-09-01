@@ -4,6 +4,7 @@ title: "Les opérateurs"
 
 ## Opérateurs arithmétiques
 
+<Row><Column size={4}>
 | Opérateur | Description    |
 | --------- | -------------- |
 | `+`       | Addition       |
@@ -11,12 +12,32 @@ title: "Les opérateurs"
 | `*`       | Multiplication |
 | `/`       | Division       |
 | `%`       | Modulo         |
+</Column><Column>
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> 9 + 2
+11
+PS C:\> 9 - 2
+7
+PS C:\> 9 * 2
+18
+PS C:\> 9 / 2
+4,5
+PS C:\> 9 % 2
+1
+```
+</ConsoleWindow></Column></Row>
 
-![image](r03_03a.png)
-
+:::tip Modulo et division entière
 L'opérateur modulo sert à donner le reste de la division entière. En PowerShell, c'est le caractère `%` qui désigne cet opérateur. Pour la division entière par contre, PowerShell n'offre pas d'opérateur, à la différence de plusieurs autres langages. L'opérateur `/` produit une valeur de type `[double]` si le résultat n'est pas un nombre entier, et caster le résultat à `[int]` arrondit ce résultat à l'entier le plus proche. Par conséquent, la composante entière de la division peut être obtenue en appelant la fonction plancher de la classe utilitaire Math.
 
-![image](r03_03b.png)
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> [Math]::Floor(9 / 2)
+4
+```
+</ConsoleWindow>
+:::
 
 ## Opérateurs de comparaison
 
@@ -41,8 +62,6 @@ Les opérateurs de comparaison retournent une valeur booléenne vraie ou fausse 
 | `-not` _ou_ `!` | Non logique               | `-not (1 -eq 0)` <br/> `!(1 -eq 0)`           |
 | `-xor`          | Ou exclusif               | `$true -xor $false`                           |
 
-![image](r03_03c.png)
-
 ## Opérateurs d'affectation
 
 Les opérateurs d'affectation modifient l'opérande de gauche.
@@ -57,3 +76,33 @@ Les opérateurs d'affectation modifient l'opérande de gauche.
 | `%=`                  | Affectation après modulo         | `$i %= 2`  | `$i = $i % 2` |
 | `++`                  | Incrémentation                   | `$i++`     | `$i = $i + 1` |
 | `--`                  | Décrémentation                   | `$i--`     | `$i = $i - 1` |
+
+:::tip
+Les opérateurs d'incrémentation et de décrémentation peuvent être utilisés à la fois pour donner une valeur et pour modifier la variable.
+
+Par exemple, `$i++` retourne la valeur de la variable avant son incrémentation et `++$i` incrémente avant et retourne la valeur après sa modification.
+
+<Row><Column>
+Avec `++` après, l'incrémentation a lieu après l'interrogation:
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $i = 1
+PS C:\> Write-Host ($i++)
+1
+PS C:\> $i
+2
+```
+</ConsoleWindow>
+</Column><Column>
+Avec `++` avant, l'incrémentation a lieu avant l'interrogation:
+<ConsoleWindow backgroundColor="#000046" noCopy="true">
+```text
+PS C:\> $i = 1
+PS C:\> Write-Host (++$i)
+2
+PS C:\> $i
+2
+```
+</ConsoleWindow>
+</Column></Row>
+:::
