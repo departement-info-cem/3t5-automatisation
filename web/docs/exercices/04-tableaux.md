@@ -26,7 +26,7 @@ Vous pouvez télécharger ces exercices sous forme de fichier PowerShell. Ouvrez
 
 ![Image 4.1.3](assets/04-q1c.png)
 
-#### 4.1.4. Même chose, mais montrer seulement les fichiers qui pèsent entre 1 et 10 mégaoctets.
+#### 4.1.4. Même chose, mais montrer seulement les fichiers qui pèsent entre 1 mégaoctet et 100 kilooctets.
 
 ![Image 4.1.4](assets/04-q1d.png)
 
