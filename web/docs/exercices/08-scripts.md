@@ -2,7 +2,7 @@
 title: Scripts
 sidebar_label: Scripts
 toc_max_heading_level: 3
-draft: true
+draft: false
 ---
 
 
@@ -25,41 +25,34 @@ Tentez de lancer le script de plusieurs manières, en vous référant aux notes 
 
 Faites de même dans votre VM **Windows 11**. Si vous avez des erreurs, n'oubliez pas d'ajuster la stratégie d'exécution!
 
-
-
 ## Exercice 2: Traces
 
 On veut accomplir deux éléments principaux:
+
 1. Indiquer quelles lignes de code s'exécutent dans quel ordre
 2. Indiquer les effets de chaque ligne de code (valeur des variables)
 
 ### Exemple
 
-<Row>
-
-<Column>
-
+<Row><Column>
 Si on a le code suivant :
 ```powershell  showLineNumbers
 $a = 3 + 4
 $b = $a * 2
 Write-Host "Le nombre est $b."
 ```
-
-</Column>
-<Column>
+</Column><Column>
 On aura la trace suivante :
 
-| ligne exécutée | effet                             |
+| Ligne exécutée | Effet après son exécution                             |
 |-----------------|-----------------------------------|
-| $a = 3 + 4       | $a: 7                             |
-| $b = $a * 2      | $a: 7, $b: 14                     |
-| Write-Host "Le nombre est $b." | $a: 7, $b: 14<br/>affiche "Le nombre est 14" |
+| 1: `$a = 3 + 4`       | `$a: 7`                             |
+| 2: `$b = $a * 2`      | `$a: 7`<br/>`$b: 14 `                    |
+| 3: `Write-Host` | `$a: 7`<br/>`$b: 14`<br/>*affiche "Le nombre est 14"* |
 
-</Column>
-</Row>
+</Column></Row>
 
-### Première trace!
+### Première trace
 
 Faites la trace pour le script suivant:
 
@@ -80,37 +73,33 @@ foreach ($item in $coll) {
 
 Sur une feuille de papier ou dans un bloc-notes, remplissez un tableau comme pour l'exemple précédent. Vous devez indiquer chaque ligne de l'exécution.
 
-
 ### Validation de la trace
 
 Une fois que votre tableau est rempli, validez la trace à l'aide du débogueur dans VS Code. Créez un fichier PS1 et copiez le code, puis insérer un point d'arrêt à la première ligne. Appuyez sur F5 pour déclencher le débogueur et faites un pas à pas détaillé. Notez l'état de chaque variable dans le panneau de gauche ou en survolant les variables avec votre curseur de souris. Si vous n'êtes pas à l'aise avec le débogueur, n'hésitez pas à interpeller votre professeur.
-
-
 
 ## Exercice 3: Algorithmes
 
 Écrivez les scripts suivants.
 
-
 **A)** Écrivez un script qui demande un nombre à l'utilisateur, et dit si ce nombre est pair ou impair. La commande à utiliser pour poser une question à l'utilisateur est `Read-Host`.
 
-
-```
-PS C:\Temp> .\monscript.ps1
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```text
+PS C:\EspaceLabo> .\exercice_3a.ps1
 Entrez un nombre: 3
 Le nombre est impair!
 
-PS C:\Temp> .\monscript.ps1
+PS C:\EspaceLabo> .\exercice_3a.ps1
 Entrez un nombre: 2
 Le nombre est pair!
 ```
-
+</ConsoleWindow>
 
 **B)** Modifiez le script précédent pour demander à l'utilisateur s'il veut poursuivre, et recommencer en boucle jusqu'à ce que l'utilisateur décide de quitter.
 
-
-```
-PS C:\Temp> .\monscript.ps1
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```text
+PS C:\EspaceLabo> .\exercice_3b.ps1
 Entrez un nombre: 3
 Le nombre est impair!
 
@@ -120,19 +109,20 @@ Le nombre est pair!
 Entrez un nombre:
 Ok bye!!
 ```
-
+</ConsoleWindow>
 
 **C)** Écrivez un script qui dessine cette forme à l'écran, de la dimension fournie par l'utilisateur. Vous devez utiliser une boucle.
 
-```
-PS C:\Temp> .\monscript.ps1
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```text
+PS C:\EspaceLabo> .\exercice_3c.ps1
 Entrez un nombre: 4
 *
 **
 ***
 ****
 
-PS C:\Temp> .\monscript.ps1
+PS C:\EspaceLabo> .\exercice_3c.ps1
 Entrez un nombre: 5
 *
 **
@@ -140,11 +130,38 @@ Entrez un nombre: 5
 ****
 *****
 ```
+</ConsoleWindow>
 
+**D)** Écrivez ce petit jeu de devinette. Le script choisit un nombre secret de 0 à 100 et demande à l'utilisateur de deviner ce nombre.
 
-**D)** Écrivez ce petit jeu de devinette. Le script choisit un nombre secret de 0 à 100, et demande à l'utilisateur de deviner ce nombre.
+Utilisez la commande `Get-Random` avec les paramètres `-Minimum` et `-Maximum` pour générer le nombre.
 
-Utilisez la commande Get-Random avec les paramètres `-Minimum` et `-Maximum` pour générer le nombre.
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```text
+PS C:\EspaceLabo> .\exercice_3d.ps1
+J'ai choisi un nombre de 0 à 100. Devine-le!
+---
+Entrer un nombre de 0 à 100: -1
+Le nombre choisi est invalide!
+---
+Entrer un nombre de 0 à 100: 101
+Le nombre choisi est invalide!
+---
+Entrer un nombre de 0 à 100: 50
+Le nombre choisi est plus petit!
+---
+Entrer un nombre de 0 à 100: 25
+Le nombre choisi est plus grand!
+---
+Entrer un nombre de 0 à 100: 38
+Le nombre choisi est plus petit!
+---
+Entrer un nombre de 0 à 100: 30
+Le nombre choisi est plus grand!
+---
+Entrer un nombre de 0 à 100: 35
+Bravo! Tu as trouvé le nombre en 7 essais!
 
-![ex7d](assets/ex7d.png)
-
+PS C:\EspaceLabo>
+```
+</ConsoleWindow>

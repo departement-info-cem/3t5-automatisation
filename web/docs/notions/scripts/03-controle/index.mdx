@@ -23,42 +23,35 @@ Il existe quatre grands types de structures de contrôle:
 
 La structure `If` permet une sélection de code conditionnelle. Dans sa variante à une branche, on pose une condition booléenne; si la condition est vraie, le code spécifié entre accolades sera exécuté, autrement il sera ignoré.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
-[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+<Row><Column>
+```powershell title="script_if.ps1"
+[int]$nombre = Read-Host "Entrez un nombre de 1 à 3"
 
 if ($nombre -eq 1) {
     Write-Host "Un!"
 }
 
 Write-Host "Fini!"
-
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\If.ps1" result="
-Entrez un nombre de 1 à 3...: 1
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_if.ps1
+Entrez un nombre de 1 à 3: 1
 Un!
-Fini!" />
-
-</TabItem>
-</Tabs>
-
+Fini!
+```
+</ConsoleWindow>
+</Column></Row>
 
 ### Sélection à deux branches (*If...Else*)
 
 Dans sa variable à deux branche, on déclare un deuxième bloc de code à l'aide de l'instruction `else`. C'est le code qui sera exécuté uniquement si la condition est évaluée `false`.
 
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
-[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+<Row><Column>
+```powershell title="script_if-else.ps1"
+[int]$nombre = Read-Host "Entrez un nombre de 1 à 3"
 
 if ($nombre -eq 1) {
     Write-Host "Un!"
@@ -69,29 +62,26 @@ else {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\IfElse.ps1" result="
-Entrez un nombre de 1 à 3...: 2
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_if-else.ps1
+Entrez un nombre de 1 à 3: 2
 Autre!
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 
 
 ### Sélection imbriquée (*If...ElseIf...Else*)
 
 On peut imbriquer autant de blocs `ElseIf` que l'on veut entre le `If` et le `Else`. Chaque bloc `ElseIf` pose une condition. Si la condition spécifiée dans le bloc `If` ou dans le bloc `ElseIf` précédent est fausse, alors le bloc suivant tente son exécution. En dernier recours, le bloc `Else` est exécuté uniquement lorsque toutes les conditions des blocs `If` et `ElseIf` n'ont pas été respectées. Il est important de noter que dès qu'une condition est vraie, les blocs `ElseIf` suivants ne seront pas exécutés, même si leur condition est vraie; seulement le premier à évaluer vrai sera exécuté.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
-[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+<Row><Column>
+```powershell title="script_if-elseif-else.ps1"
+[int]$nombre = Read-Host "Entrez un nombre de 1 à 3"
 
 if ($nombre -eq 1) {
     Write-Host "Un!"
@@ -105,18 +95,17 @@ else {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\IfElseifElse.ps1" result="
-Entrez un nombre de 1 à 3...: 2
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_if-elseif-else.ps1
+Entrez un nombre de 1 à 3: 2
 Deux!
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 
 ### Sélection à *n* branches (*switch*)
 
@@ -124,11 +113,9 @@ L'instruction `Switch` est une alternative à `If`. Elle est pratique lorsqu'on 
 
 Optionnellement, on peut spécifier un cas Default, qui est sélectionné si aucun autre cas n'est évalué vrai.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
-[int] $nombre = Read-Host "Entrez un nombre de 1 à 3..."
+<Row><Column>
+```powershell title="script_switch.ps1"
+[int]$nombre = Read-Host "Entrez un nombre de 1 à 3"
 
 switch ($nombre) {
     1   { Write-Host "Un!"      }
@@ -141,18 +128,17 @@ switch ($nombre) {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\Switch.ps1" result="
-Entrez un nombre de 1 à 3...: 2
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_switch.ps1
+Entrez un nombre de 1 à 3: 2
 Deux!
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 
 ### Exemples de sélection
 
@@ -203,10 +189,8 @@ else {
 
 Dans une boucle *While*, le code entre accolade est exécuté si la condition est vraie. Le code est réexécuté encore et encore tant que l’évaluation de la condition soit toujours vraie. Lorsque la condition devient fausse, la boucle est interrompue et le code continue son exécution normale.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="while.ps1"
 $i = 0
 
 while ($i -le 3) {
@@ -216,20 +200,19 @@ while ($i -le 3) {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\While.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_while.ps1
 0
 1
 2
 3
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 
 ### Boucle *jusqu'à ce que* (*Do ... While*)
 
@@ -237,10 +220,8 @@ Dans une boucle *Do ... While*, le code entre accolades après l’instruction d
 À la fin du bloc de code, si la condition est respectée, ce code est réexécuté.
 Lorsque la condition devient fausse, la boucle est interrompue et le code continue son exécution normale.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="script_do-while.ps1"
 $i = 0
 
 do {
@@ -251,20 +232,19 @@ while ($i -le 3)
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\DoWhile.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_do-while.ps1
 0
 1
 2
 3
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 :::caution
 
 La différence entre les boucles *While* et *Do...While* est subtile mais importante. Dans le cas de la boucle *While*, la condition est évaluée **avant** le premier tour de boucle. Donc il est possible que le code de la boucle ne soit exécuté aucune fois. À l'inverse, la condition de la boucle *Do...While* est évaluée après le premier tour; on a donc la certitude que le code de la boucle sera exécuté au moins une fois, même si la condition initiale ne le permettrait pas. Choisissez donc le type de boucle qui répond le mieux à votre besoin.
@@ -278,10 +258,8 @@ Une boucle infinie survient lorsque la condition de bouclage est toujours vraie.
 
 Il faut toujours prévoir une façon de sortir de la boucle. On peut sortir de la boucle avec l’instruction `break`.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="script_while-true.ps1"
 $i = 0
 while ($true) {
     Write-Host $i
@@ -294,20 +272,19 @@ while ($true) {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\WhileTrue.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_while-true.ps1
 0
 1
 2
 3
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 
 ### Boucle compteur (*For*)
 
@@ -321,10 +298,8 @@ La syntaxe comprend trois parties:
 La boucle *for* utilise typiquement une variable contenant un nombre entier comme compteur, bien que ce type de boucle puisse être utilisé de manière différente. 
 
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="script_for.ps1"
 for ($i = 0; $i -le 3; $i++) {
     for ($j = 0; $j -le 2; $j++) {
         Write-Host "$i.$j"
@@ -332,11 +307,10 @@ for ($i = 0; $i -le 3; $i++) {
 }
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\For.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_for.ps1
 0.0
 0.1
 0.2
@@ -349,11 +323,11 @@ Write-Host "Fini!"
 3.0
 3.1
 3.2
-Fini!" />
+Fini!
+```
+</ConsoleWindow>
 
-</TabItem>
-</Tabs>
-
+</Column></Row>
 :::tip
 
 Les variables compteur sont typiquement nommées `$i`. Normalement, les variables devraient avoir un nom plus significatif, mais par convention il est acceptable de nommer les compteurs avec une simple lettre.
@@ -371,10 +345,8 @@ La syntaxe comprend deux parties:
 - L’objet courant, **une variable** qui représente un élément. Il sera différent à chaque tour de boucle.
 - La **collection**, qui sera traitée un élément à la fois, à chaque tour de boucle.
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="script_foreach.ps1"
 $collection = 0..3
 
 foreach ($element in $collection) {
@@ -383,19 +355,18 @@ foreach ($element in $collection) {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\ForEach.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> .\script_foreach.ps1
 0
 1
 2
 3
-Fini!" />
-</TabItem>
-</Tabs>
-
+Fini!
+```
+</ConsoleWindow>
+</Column></Row>
 
 ### Boucle de pipeline (*ForEach-Object*)
 
@@ -403,10 +374,8 @@ Au lieu de la boucle ForEach, on peut utiliser le cmdlet `ForEach-Object`. L’e
 
 L’objet courant est représenté par la variable pipeline `$_` (ou alternativement, `$PSItem`).
 
-<Tabs>
-<TabItem value="code" label="Code">
-
-```powershell
+<Row><Column>
+```powershell title="script_foreach-object.ps1"
 $collection = 0..3
 
 $collection | ForEach-Object {
@@ -415,19 +384,17 @@ $collection | ForEach-Object {
 
 Write-Host "Fini!"
 ```
-
-</TabItem>
-<TabItem value="resultat" label="Résultat">
-
-<PowerShellWindow workdir="C:\Scripts" command=".\ForEach-Object.ps1" result="
+</Column><Column>
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
 0
 1
 2
 3
-Fini!" />
-</TabItem>
-</Tabs>
-
+Fini!
+```
+</ConsoleWindow>
+</Column></Row>
 
 ## Échappement (*break*)
 
@@ -445,7 +412,6 @@ While ($true) {
 
     Write-Host "Attendons un peu..."
     Start-Sleep -Seconds 2
-
 }
 ```
 

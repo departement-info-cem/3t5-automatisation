@@ -1,7 +1,7 @@
 {
   "name": "Vincent Carrier",
   "startHour": "08:00",
-  "endHour": "18:00",
+  "endHour": "23:00",
   "slotMinutes": 60,
   "days": ["lundi", "mardi", "mercredi", "jeudi", "vendredi"],
   "events": [
@@ -28,6 +28,10 @@
     { "id": "3s4-1030-l", "category": "yellow", "courseCode": "420-3S4-EM",
       "title": "Introduction à la cybersécurité", "courseGroup": "1030",
       "day": "mardi", "start": "16:10", "end": "18:00", "room": "D0622"
+    },
+    { "id": "b74-6151-l", "category": "red", "courseCode": "420-B74-RO",
+      "title": "Automatisation de systèmes (FC)", "courseGroup": "6151",
+      "day": "mardi", "start": "18:30", "end": "23:00", "room": "D0622"
     },
     { "id": "dispo-cai-1", "category": "green",
       "title": "Centre d'aide en informatique",

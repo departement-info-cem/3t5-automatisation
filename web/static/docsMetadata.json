@@ -41,9 +41,9 @@
   },
   {
     "id": "r06",
-    "title": "06 - CSV et JSON",
-    "sidebar_label": "06 - Fichiers CSV et JSON",
-    "description": "Importation et exportation de données (texte, CSV, json)",
+    "title": "06 - Fichiers CSV",
+    "sidebar_label": "06 - Fichiers CSV",
+    "description": "Importation et exportation de données (texte, CSV)",
     "draft": false,
     "hide_table_of_contents": true
   },
@@ -52,7 +52,7 @@
     "title": "07 - (Intégration / TP1)",
     "sidebar_label": "07 - (Intégration / TP1)",
     "description": "Travail sur les exercices et le TP1",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -61,7 +61,7 @@
     "sidebar_label": "08 - (Intégration / TP1)",
     "description": "Travail sur les exercices et le TP1",
     "sidebar_class_name": "remise-tp1",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -70,7 +70,7 @@
     "sidebar_label": "09 - Formatif 1",
     "description": "Pratique d'examen en vue de la préparation à l'examen 1",
     "sidebar_class_name": "formatif1",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -79,7 +79,7 @@
     "sidebar_label": "10 - Examen 1",
     "description": "Examen sommatif portant sur PowerShell en ligne de commande",
     "sidebar_class_name": "examen1",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -87,7 +87,7 @@
     "title": "11 - Scripts",
     "sidebar_label": "11 - Fichiers de scripts",
     "description": "Fichiers de scripts, exécution de scripts, préparation des outils",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
