@@ -103,7 +103,7 @@
     "title": "13 - Fonctions",
     "sidebar_label": "13 - Fonctions et pile d'appel",
     "description": "Fonctions, pile d’appel (stack), splatting",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {

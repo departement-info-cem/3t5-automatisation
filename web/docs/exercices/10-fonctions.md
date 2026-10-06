@@ -2,15 +2,14 @@
 title: Fonctions, pile d'appel, portée
 sidebar_label: Fonctions, pile d'appel, portée
 toc_max_heading_level: 2
-draft: true
+draft: false
 ---
-
 
 ## 1. Fonctions
 
 **A)** Dans le fichier `Invoke-Addition.PS1`, définissez **une fonction** `Invoke-Addition` qui prend en paramètre un nombre illimité de termes.
 
-```powershell showLineNumbers
+```powershell title="Invoke-Addition.ps1" showLineNumbers
 function Invoke-Addition {
     param(
         [double[]] $termes
@@ -28,10 +27,9 @@ function Invoke-Addition {
 
 Testez ce script avec `F5`. Celui-ci ne donne aucun résultat. **Pourquoi selon vous?**
 
-
 Pour tester votre fonction, appelez-la dans le code principal de votre script, comme ceci:
 
-```powershell showLineNumbers
+```powershell title="Invoke-Addition.ps1" showLineNumbers
 function Invoke-Addition {
     # le code de la fonction...
 }
@@ -46,12 +44,14 @@ Cependant, même si la fonction prend des paramètres, le script n'en prend pas.
 
 **B)** Tentez de lancer votre script à l'aide de la méthode du **dot-sourcing**. Puis, dans le même terminal, tentez de lancer la fonction.
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
 PS C:\EspaceLabo> . .\Invoke-Addition.ps1
 
 PS C:\EspaceLabo> Invoke-Addition 2, 4, 6
 ```
 
+</ConsoleWindow>
 
 ## 2. Paramètres de fonctions
 
@@ -64,6 +64,7 @@ Pour tester une fonction, vous devez la déclarer en premier. Pour tester la fon
     
 **A)** Écrivez une fonction `Start-Notepad` qui démarre Notepad.exe à l'aide de `Start-Process` et **retourne un objet** décrivant le processus dans le pipeline (en utilisant le paramètre `-PassThru`).
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
 PS C:\> Start-Notepad
 
@@ -72,13 +73,13 @@ PS C:\> Start-Notepad
      13     2,93      15,01       0,08   42308   1 Notepad
 ```
 
+</ConsoleWindow>
 
 **B)** Réécrivez la fonction précédente et faites en sorte qu'il soit possible de **spécifier un fichier texte**. 
 
 :::info
 Pour ouvrir Notepad avec un fichier existant, il suffit de fournir le chemin complet du fichier texte à en argument (par exemple, `notepad.exe "C:\dossier\fichier.txt"`). Vous pouvez passer l'argument à la commande `Start-Process` à l'aide du paramètre `-ArgumentList`
 :::
-
 
 **C)** Réécrivez la fonction précédente et faites en sorte qu'elle **plante si le fichier n'existe pas**. Utilisez les **validations de paramètres**.
 
@@ -109,15 +110,15 @@ Write-Host "La réponse est $c"
 
 On aura la trace suivante :
 
-| Ligne exécutée                 | Effet                                                  | Pile d'appel              |
-|:-------------------------------|:-------------------------------------------------------|:--------------------------|
-| $a = 3                         | $a: 3                                                  | **Script**                |
-| $b = 5                         | $a: 3 ; $b: 5                                          | **Script**                |
-| $c = MaFonction $a $b          | $a: 3 ; $b: 5<br/>Appelle MaFonction avec $x=3 et $y=5 | **Script**                |
-| $z = $x + $y                   | $x: 3 ; $y: 5 ; $z: 8                                  | **MaFonction**<br/>Script |
-| return $z                      | $x: 3 ; $y: 5 ; $z: 8<br/>Sortie: 8                    | **MaFonction**<br/>Script |
-| $c = MaFonction $a $b          | $a: 3 ; $b: 5 ; $c: 8                                  | **Script**                |
-| Write-Host "La réponse est $c" | Écrit "La réponse est 8"                               | **Script**                |
+| Ligne exécutée                  | Effet                                                    | Pile d'appel              |
+|:--------------------------------|:---------------------------------------------------------|:--------------------------|
+| \$a = 3                         | \$a: 3                                                   | **Script**                |
+| \$b = 5                         | \$a: 3 ; \$b: 5                                          | **Script**                |
+| \$c = MaFonction \$a \$b        | \$a: 3 ; \$b: 5<br/>Appelle MaFonction avec $x=3 et $y=5 | **Script**                |
+| \$z = \$x + \$y                 | \$x: 3 ; \$y: 5 ; \$z: 8                                 | **MaFonction**<br/>Script |
+| return \$z                      | \$x: 3 ; \$y: 5 ; \$z: 8<br/>Sortie: 8                   | **MaFonction**<br/>Script |
+| \$c = MaFonction \$a \$b        | \$a: 3 ; \$b: 5 ; \$c: 8                                 | **Script**                |
+| Write-Host "La réponse est \$c" | Écrit "La réponse est 8"                                 | **Script**                |
 
 
 ### Deuxième trace
@@ -149,9 +150,9 @@ Tentez de deviner le texte qui sera écrit par les scripts suivants, puis compar
 
 #### A)
 
-<Row>
-<Column>
+<Row><Column>
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
 PS C:\EspaceLabo> $v = 8
 
@@ -162,12 +163,10 @@ PS C:\EspaceLabo> $v
 (???)
 
 ```
+</ConsoleWindow>
+</Column><Column>
 
-</Column>
-<Column>
-
-```powershell showLineNumbers
-# Script: script_a.ps1
+```powershell title="script_a.ps1" showLineNumbers
 function F {
     $v = 3
     Write-Host $v
@@ -176,13 +175,13 @@ $v = 5
 F
 Write-Host $v
 ```
-</Column>
-</Row>
+</Column></Row>
 
 #### B)
 
 <Row><Column>
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
 PS C:\EspaceLabo> $v = 8
 
@@ -191,12 +190,12 @@ PS C:\EspaceLabo> .\script_b.ps1
 
 PS C:\EspaceLabo> $v
 (???)
-
 ```
+
+</ConsoleWindow>
 </Column><Column>
 
-```powershell showLineNumbers
-# Script: script_b.ps1
+```powershell  title="script_b.ps1" showLineNumbers
 function F {
     $script:v = 3
     Write-Host $v
@@ -211,6 +210,7 @@ Write-Host $v
 
 <Row><Column>
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
 PS C:\EspaceLabo> $v = 8
 
@@ -219,12 +219,12 @@ PS C:\EspaceLabo> .\script_c.ps1
 
 PS C:\EspaceLabo> $v
 (???)
-
 ```
+
+</ConsoleWindow>
 </Column><Column>
 
-```powershell showLineNumbers
-# Script: script_c.ps1
+```powershell title="script_c.ps1" showLineNumbers
 $v = -4
 function F {
     Write-Host $v
@@ -234,8 +234,8 @@ $v = 5
 F
 Write-Host $v
 ```
-</Column></Row>
 
+</Column></Row>
 
 
 ## 5. Configuration du débogueur dans VSCode
@@ -246,7 +246,7 @@ Pour ouvrir ce répertoire dans votre espace de travail, vous pouvez soit faire 
 
 Dans le panneau de gauche, dans la section Explorateur, créez un nouveau fichier `addition.ps1` et mettez-y le code suivant:
 
-```powershell showLineNumbers
+```powershell  title="addition.ps1" showLineNumbers
     param(
         [double[]] $termes
     )
@@ -266,7 +266,7 @@ Dans le panneau "Exécuter et déboguer", à gauche, cliquez sur "Créer un fich
 
 Pour ajouter une configuration, vous pouvez cliquer sur le bouton "ajouter une configuration", ou simplement copier la configuration qui est déjà présente. Notez qu'il vous faut respecter la syntaxe json. Donnez-lui un nom et spécifiez vos arguments dans l'attribut `"args"`
 
-```json
+```json title="launch.json"
 {
     "name": "Ma configuration",
     "type": "PowerShell",
@@ -279,9 +279,3 @@ Pour ajouter une configuration, vous pouvez cliquer sur le bouton "ajouter une c
 Enregistrez le fichier, puis retournez dans votre script. Dans le panneau "Exécuter et déboguer", vous devriez voir une liste déroulante tout en haut, écrit "PowerShell: Launch Current File". Sélectionnez votre configuration. Puis appuyez sur F5 pour injecter automatiquement vos arguments dans la session de débogage.
 
 Vous savez maintenant comment déboguer des scripts avec arguments!
-
-
-
-
-
-
