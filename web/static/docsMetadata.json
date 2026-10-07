@@ -108,8 +108,8 @@
   },
   {
     "id": "r14",
-    "title": "13 - Erreurs",
-    "sidebar_label": "13 - Gestion des erreurs",
+    "title": "14 - Erreurs",
+    "sidebar_label": "14 - Gestion des erreurs",
     "description": "Prévention et gestion des erreurs, journalisation (logging)",
     "draft": true,
     "hide_table_of_contents": true

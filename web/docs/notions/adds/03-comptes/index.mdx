@@ -26,7 +26,7 @@ Get-ADUser -Filter {sAMAccountName -like "z*"}
 
 Pour tester l'existence d'un utilisateur dans le domaine, voici un exemple:
 
-```powershell
+```powershell showLineNumbers
 $NomUtilisateur = "pmeilleur"
 if (Get-ADUser -Filter {sAMAccountName -eq $NomUtilisateur}) {
     Write-Host "L'utilisateur existe."
@@ -41,7 +41,7 @@ else {
 
 Pour créer un nouvel utilisateur, on peut utiliser la commande `New-ADUser`. Étant donné la quantité d'attributs disponibles dans les objets utilisateurs, cette commande admet un très grand nombre d'arguments. Voici un exemple de création d'un compte utilisateur (la plupart de ces attributs sont facultatifs; en fait, seul le paramètre `Name` est obligatoire).
 
-```powershell
+```powershell showLineNumbers
 $ADUserSplat = @{
     Path = "OU=Utilisateurs,DC=ad,DC=mondomaine,DC=com"
     Name = "Zoe Zappa"
@@ -74,7 +74,7 @@ Vous pouvez consulter la liste des paramètres de cette commande sur [sa page de
 
 On peut utiliser la commande `Set-ADUser` pour modifier un attribut d'un compte utilisateur existant. L'exemple suivant modifie l'adresse courriel de l'utilisateur Bob.
 
-```powershell
+```powershell showLineNumbers
 $ADSetUserSplat = @{
     Identity = "Bob"
     EmailAddress = "bob@mondomaine.com"
@@ -100,7 +100,6 @@ Remove-ADUser -Identity "zzappa" -Confirm:$false
 ```
 :::
 
-
 ### Groupes
 
 #### Recherche d'un groupe
@@ -121,19 +120,20 @@ Get-ADGroup -Identity "CN=Comptables,OU=Groupes,DC=ad,DC=mondomaine,DC=com"
 
 Pour vérifier si un groupe existe, on peut employer la même logique que pour les utilisateurs.
 
-```powershell
+```powershell showLineNumbers
 if (Get-ADGroup -Filter {sAMAccountName -eq "Comptables"}) {
     Write-Host "L'utilisateur existe."
 }
 else {
     Write-Host "L'utilisateur n'existe pas."
-}```
+}
+```
 
 #### Création d'un nouveau groupe
 
 Pour créer un nouveau groupe, voici un exemple. Il faut minimalement spécifier son nom, sa portée (global, domaine local ou universel) ainsi que le nom distinctif complet du conteneur dans lequel le créer.
 
-```powershell
+```powershell showLineNumbers
 $ADGroupSplat = @{
     Name = "Gestionnaires"
     GroupScope = "Global"
@@ -142,7 +142,6 @@ $ADGroupSplat = @{
 
 New-ADGroup @ADGroupSplat
 ```
-
 
 ### Membres de groupes
 
@@ -186,14 +185,12 @@ Pour éviter de dépendre de la langue du système et de la traduction de ses no
 
 Le SID du groupe des admins du domaine est constitué du SID du domaine suivi du RID 512. Ainsi, voici comment on peut le trouver dynamiquement.
 
-```powershell
+```powershell showLineNumbers
 $DomainSID = (Get-ADDomain).DomainSID.Value
 $DomainAdminSID = "$DomainSID-512"
 Add-ADGroupMember -Identity $DomainAdminSID -Members "zzappa"
 ```
 :::
-
-
 
 ### Attributs
 

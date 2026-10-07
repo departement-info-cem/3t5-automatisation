@@ -14,7 +14,6 @@ Lorsqu'on tente d'accéder à un objet (comme la lecture d'une variable ou l'app
 
 ![Portées PowerShell](./scope09.png)
 
-
 ## Portée locale
 
 Lorsqu'une variable est déclarée dans un script ou une fonction, elle possède par défaut une portée **locale**, c'est à dire qu'elle cessera d'exister lorsque son exécution sera terminée.
@@ -24,7 +23,6 @@ Lorsqu'une variable est déclarée dans un script ou une fonction, elle possède
 Si on tente d'accéder à une variable qui n'est pas définie, alors PowerShell recherchera cette variable dans la portée du parent. Si plusieurs variables du même nom existent dans différentes portées, c'est la plus proche qui est obtenue.
 
 ![Héritage des portées](./scope02.png)
-
 
 ## Portée script
 
@@ -42,13 +40,11 @@ Une variable globale existe partout dans la session PowerShell, y compris dans l
 
 ![image](./scope05.png)
 
-
 ## Visibilité privée
 
 Quand on définit une variable de portée locale, celle-ci sera quand même accessible à une portée enfant. Pour bloquer ce mécanisme, on peut forcer une variable à ce qu'elle soit inaccessible à une portée enfant.
 
 ![image](./scope10.png)
-
 
 ## Dotsourcing
 
@@ -75,7 +71,7 @@ Si une fonction ou un script doit sortir plusieurs informations de nature diffé
 
 Au lieu de faire ceci:
 
-```powershell
+```powershell showLineNumbers
 function Get-Bob {
     $global:Nom = "Bob"
     $global:Age = 42
@@ -88,7 +84,7 @@ Write-Host ($global:Nom + " a " + $global:Age + " ans.")
 
 Faites plutôt ceci:
 
-```powershell
+```powershell showLineNumbers
 function Get-Bob {
     [PSCustomObject]@{
         Nom = "Bob"
@@ -104,17 +100,15 @@ Write-Host ($Bob.Nom + " a " + $Bob.Age + " ans.")
 
 Aussi, **affectez toujours vos variables** avant de les appeler. Si votre script assume qu'au début de son exécution, les variables n'existent pas, il pourrait arriver une situation problématique lorsque celle-ci a été affectée dans la session en cours.
 
-
 :::tip
 Si vous voulez savoir si une variable existe à la portée locale, vous pouvez tester son égalité à `$null`. Dans ce cas, par précaution, utilisez le préfixe `$local:` pour forcer l'utilisation de la variable locale.
 
-```powershell
+```powershell showLineNumbers
 if ($null -ne $local:MaVariable) {
     # La variable $MaVariable existe dans la portée locale.
 }
 ```
 :::
-
 
 :::danger
 Définir des objets PowerShell, comme des variables, des fonctions et des alias, à l'extérieur de la portée locale peut conduire à des problèmes. En voici une illustration:
@@ -123,7 +117,7 @@ Définir des objets PowerShell, comme des variables, des fonctions et des alias,
 
 En l'apparence anodin, ce script définit une fonction Get-ChildItem dans la portée global, ce qui a pour effet de surcharger la commande Get-ChildItem. Voici le code du script:
 
-```powershell
+```powershell showLineNumbers
 Function global:Get-ChildItem {
     Write-Host "Mouahahaha j'ai hacké PowerShell!!!" -ForegroundColor Red
 }

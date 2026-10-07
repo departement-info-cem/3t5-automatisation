@@ -55,7 +55,9 @@ Pour gérer ces composants optionnels, on peut utiliser les commande PowerShell 
 Pour installer toutes les consoles de gestion pour Active Directory DS, y compris la console de gestion des stratégies de groupe (GPMC) et le module PowerShell, lancez la commande suivante:
 
 ```powershell
-Get-WindowsCapability -Online | Where-Object { $_.Name -Match "^rsat\.activedirectory|grouppolicy.*$" } | Add-WindowsCapability -Online
+Get-WindowsCapability -Online | 
+    Where-Object { $_.Name -Match "^rsat\.activedirectory|grouppolicy.*$" } | 
+        Add-WindowsCapability -Online
 ```
 
 ### Module PowerShell pour ADDS

@@ -43,18 +43,26 @@ On peut utiliser PowerShell pour contrôler les utilisateurs locaux, les groupes
 
 La commande Get-LocalUser permet d'obtenir la liste des utilisateurs locaux. Elle retourne un ou plusieurs objets de types `[Microsoft.PowerShell.Commands.LocalUser]` qui décrivent un compte utilisateur local.
 
-<PowerShellWindow workdir="C:\" command="Get-LocalUser" result="
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> Get-LocalUser
+
 Name               Enabled Description 
 ----               ------- -----------
 Administrateur     True    Compte d’utilisateur d’administration
 DefaultAccount     False   Compte utilisateur géré par le système.
 Invité             False   Compte d’utilisateur invité
 paul               True    Boss de la compagnie
-WDAGUtilityAccount False   Compte d’utilisateur géré et utilisé par le syst..."/>
+WDAGUtilityAccount False   Compte d’utilisateur géré et utilisé par le syst...
+```
+</ConsoleWindow>
 
 Ces objets possèdent plusieurs informations sur le compte utilisateur. On peut les voir en explorant la structure de l'objet, par exemple avec `Select-Object *`.
 
-<PowerShellWindow workdir="C:\" command="Get-LocalUser -Name 'paul' | Select-Object *" result="
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\Scripts> Get-LocalUser -Name 'paul' | Select-Object *
+
 AccountExpires         : 2023-05-12 20:06:27
 Description            : Boss de la compagnie
 Enabled                : True
@@ -68,7 +76,9 @@ LastLogon              :
 Name                   : paul
 SID                    : S-1-5-21-3297567932-2200011671-69726474-1001
 PrincipalSource        : Local
-ObjectClass            : Utilisateur"/>
+ObjectClass            : Utilisateur
+```
+</ConsoleWindow>
 
 
 ## Création d'un nouvel utilisateur
@@ -128,8 +138,10 @@ On ne devrait jamais mettre des mots de passe en clair dans un script, ni stocke
 Pour créer un groupe local, on utilise la commande `New-LocalGroup`. Là encore, cette commande ne fonctionne que dans une session PowerShell élevée.
 
 Pour obtenir les membres d'un groupe, on peut utiliser la commande `Get-LocalGroupMember`.
+<ConsoleWindow title="PowerShell" noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\> Get-LocalGroupMember -Group 'Administrateurs'
 
-<PowerShellWindow workdir="C:\" command="Get-LocalGroupMember -Group 'Administrateurs'" result="
 ObjectClass Name                    PrincipalSource
 ----------- ----                    ---------------
 Utilisateur PC0001\Administrateur   Local
@@ -137,24 +149,34 @@ Utilisateur PC0001\bob              Local
 Utilisateur PC0001\paul             Local
 Utilisateur PC0001\pierre           Local
 Groupe      MINOU\Admins du domaine ActiveDirectory
-Utilisateur MINOU\paul.meilleur     ActiveDirectory"/>
+Utilisateur MINOU\paul.meilleur     ActiveDirectory
+```
+</ConsoleWindow>
 
 Pour ajouter un utilisateur dans un groupe, on utilise la commande `Add-LocalGroupMember`. Cette commande prend en paramètre `-Member` qui désigne le membre à ajouter, ainsi que `-Group` qui désigne le groupe dans lequel l'ajouter.
 
+```powershell
 Add-LocalGroupMember –Member "Paul" -Group "Administrateurs"
+```
 
-Cette commande admet qu'on passe le membre à ajouter par le pipeline en entrée.
+Cette commande admet qu'on passe le membre à ajouter par le pipeline en entrée:
 
-Get-LocalUser -Name "Paul" | Add-LocalGroupMember -Group "Administrateurs"
+```powershell
+Get-LocalUser -Name "Paul" | Add-LocalGroupMember -Group "Administrateurs"`
+```
 
 Cela permet, entre autres, de créer un compte et l'ajouter immédiatement à un groupe, puisque la création génère un objet représentant l'utilisateur.
 
+```powershell
 New-LocalUser -Name "Zoe" -NoPassword | Add-LocalGroupMember -Group "Utilisateurs"
+```
 
 :::info
 On peut aussi ajouter des utilisateurs ou des groupes du domaine comme membre d'un groupe local. Pour ce faire, on n'a qu'à spécifier le sAMAccountName du principal de sécurité du domaine. Si la machine dispose d'une relation d'approbation avec le domaine du compte, celui-ci sera ajouté comme membre au groupe.
 
+```powershell
 Add-LocalGroupMember –Member "DOMAINE\paul.meilleur" -Group "Administrateurs"
+```
 :::
 
 

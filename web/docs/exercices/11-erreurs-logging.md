@@ -9,20 +9,22 @@ draft: true
 ## 1. Gestion des erreurs
 
 **a)** Écrivez un script qui prend en paramètre un ou plusieurs noms d'utilisateurs locaux et affiche les informations de chaque utilisateur qui existe.
-        
+
 - Utilisez la commande `Get-LocalUser` pour obtenir l'information sur les utilisateurs locaux.
 - Les utilisateurs qui n'existent pas ne sont simplement pas dans la liste.
 - Aucune erreur ne doit être affichée à la console.
 - Vous pouvez spécifier l'action ***SilentlyContinue***.
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
-PS C:\EspaceLabo> .\MonScript.ps1 -Name "Administrateur", "PereNoel", "Invité"
+PS C:\EspaceLabo> .\Erreurs_A.ps1 -Name "Administrateur", "PereNoel", "Invité"
 
 Name           Enabled Description
 ----           ------- -----------
 Administrateur True    Compte d'utilisateur d'administration
 Invité         False   Compte d'utilisateur invité
 ```
+</ConsoleWindow>
 
 ---
 
@@ -33,33 +35,46 @@ Invité         False   Compte d'utilisateur invité
 - Vous devez utiliser une structure `Try/Catch.`
 - N'oubliez pas la commande `Out-Null` pour se débarrasser d'un objet
 
-```
-PS C:\EspaceLabo> .\MonScript.ps1 -Name "Administrateur", "PereNoel", "Invité"
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\EspaceLabo> .\Erreurs-B.ps1 -Name "Administrateur", "PereNoel", "Invité"
 L'utilisateur "Administrateur" existe.
 L'utilisateur "PereNoel" n'existe pas.
 L'utilisateur "Invité" existe.
 ```
+</ConsoleWindow>
 
 ---
 
 **c)** Écrivez un script qui retourne une erreur lorsque les minutes sont impaires. Vous devriez utiliser l'instruction `throw`.
 
-![Image-11.1c](assets/image-11.1c.png)
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
+```powershell
+PS C:\EspaceLabo> .\Erreurs-C.ps1
+Il est 14 heures et 28 minutes.
+Les minutes sont paires!
+
+PS C:\EspaceLabo> .\Erreurs-C.ps1
+Il est 14 heures et 29 minutes.
+❌ ERREUR: "Les minutes sont impaires!"
+```
+</ConsoleWindow>
 
 ---
 
-**d)** Écrivez un autre script qui **appelle le script précédent** et qui intercepte cette erreur en écrivant du texte personnalisé.
+**d)** Écrivez un autre script qui **appelle le script précédent** et qui **intercepte cette erreur** en écrivant du texte personnalisé.
 
+<ConsoleWindow noCopy="true" backgroundColor="#000046">
 ```
-PS C:\Demo> .\Script2.ps1
+PS C:\EspaceLabo> .\Erreurs-D.ps1
 Il est 14 heures et 30 minutes.
 Les minutes sont paires!
 
-PS C:\Demo> .\Script2.ps1
+PS C:\EspaceLabo> .\Erreurs-D.ps1
 Il est 14 heures et 31 minutes.
-# error-next-line
-Erreur attrapée!
+Les minutes sont impaires!
 ```
+</ConsoleWindow>
 
 ---
 
@@ -73,7 +88,7 @@ En faisant cet exercice, vous prenez de l'avance sur votre TP2, puisque vous pou
 
 Faites un script dans lequel votre fonction est définie au début. Appelez la fonction à quelques endroits dans le script après la fonction pour tester.
 
-```powershell showLineNumbers
+```powershell title="C:\EspaceLabo\Journaux_A.ps1" showLineNumbers
 function Write-Log {
     # Écrivez votre belle fonction ici...
 }
@@ -87,7 +102,7 @@ Write-Log -Message "Un deuxième message"
 
 Le fichier devrait ressembler à ceci (notez le format du *timestamp*).
 
-```
+```text title="%TEMP%\MonJournal\monjournal.log"
 2025-09-30 08:11:46.180       Un premier message
 2025-09-30 08:11:46.185       Un deuxième message
 2025-09-30 08:11:46.208       Un message passé par le pipeline
@@ -100,7 +115,8 @@ C:\Users\NomDeLutilisateur\AppData\Local\Temp\MonJournal\
 ```
 
 :::tip Quelques conseils
-- Le répertoire temporaire de l'utilisateur est défini dans la variable d'environnement `TEMP`.
+
+- Le répertoire temporaire de l'utilisateur est défini dans la **variable d'environnement** `TEMP`.
 - Utilisez la fonction `Get-Date` pour générer le timestamp.
 :::
 
@@ -110,7 +126,7 @@ C:\Users\NomDeLutilisateur\AppData\Local\Temp\MonJournal\
 
 Par exemple, si votre fonction est appelée par ce script:
 
-```powershell showLineNumbers
+```powershell title="C:\EspaceLabo\Journaux_A.ps1" showLineNumbers
 function Write-Log {
     # Écrivez votre belle fonction ici...
 }
@@ -129,19 +145,19 @@ catch {
 
 Le fichier log devrait ressembler à ceci:
 
-```
+```text title="%TEMP%\MonJournal\monjournal.log"
 2025-09-30 08:17:01.552       Info     Vérification du service Abracadabra
 2025-09-30 08:17:01.578       Error    Impossible d'accéder au service Abracadabra!
 ```
 
 :::tip Quelques conseils
+
 - Le paramètre `-Level` est un bon cas d'utilisation pour un critère de validation `[ValidateSet()]`.
 - Pour que les messages soient parfaitement alignés malgré la différence dans le nombre de caractères du niveau de journalisation, la méthode `.PadRight()` peut vous être utile.
 :::
 
-
 ---
 
-**c)** 🏆 **Défi+++ (attention, difficile!)**
+**c)** 🏆 **Défi+++**
 
-Pour un défi supplémentaire, implémentez un mécanisme de rotation automatique. Si le log dépasse une certaine taille (par exemple, un kilooctet), renommez le fichier `MonJournal.lo_` (si ce fichier existe déjà, il faut le remplacer) puis recommencez à écrire les entrées journal dans le nouveau fichier.
+Pour un défi supplémentaire, implémentez un mécanisme de **rotation automatique**. Si le log dépasse une certaine taille (par exemple, un kilooctet), renommez le fichier `MonJournal.lo_` (si ce fichier existe déjà, il faut le remplacer) puis recommencez à écrire les entrées journal dans le nouveau fichier.
