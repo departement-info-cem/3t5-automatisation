@@ -111,7 +111,7 @@
     "title": "14 - Erreurs",
     "sidebar_label": "14 - Gestion des erreurs",
     "description": "Prévention et gestion des erreurs, journalisation (logging)",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -119,7 +119,7 @@
     "title": "15 - Comptes",
     "sidebar_label": "15 - Gestion des comptes",
     "description": "Gestion des comptes locaux et de domaine",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
