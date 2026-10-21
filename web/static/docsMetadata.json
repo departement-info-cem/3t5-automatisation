@@ -124,10 +124,10 @@
   },
   {
     "id": "r16",
-    "title": "16 - Assurance-qualité",
-    "sidebar_label": "16 - Assurance-qualité",
-    "description": "Stratégies d’assurance-qualité, tests d'intégration et bonnes pratiques",
-    "draft": true,
+    "title": "16 - (Intégration / TP2)",
+    "sidebar_label": "16 - (Intégration / TP2)",
+    "description": "Travail sur les exercices et le TP2",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -135,33 +135,33 @@
     "title": "17 - (Intégration / TP2)",
     "sidebar_label": "17 - (Intégration / TP2)",
     "description": "Travail sur les exercices et le TP2",
-    "draft": true,
+    "sidebar_class_name": "remise-tp2",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
     "id": "r18",
-    "title": "18 - (Intégration / TP2)",
-    "sidebar_label": "18 - (Intégration / TP2)",
-    "description": "Travail sur les exercices et le TP2",
-    "sidebar_class_name": "remise-tp2",
-    "draft": true,
+    "title": "18 - Formatif 2",
+    "sidebar_label": "18 - Formatif 2",
+    "description": "Pratique d'examen en vue de la préparation à l'examen 2",
+    "sidebar_class_name": "formatif2",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
     "id": "r19",
-    "title": "19 - Formatif 2",
-    "sidebar_label": "19 - Formatif 2",
-    "description": "Pratique d'examen en vue de la préparation à l'examen 2",
-    "sidebar_class_name": "formatif2",
+    "title": "19 - Examen 2",
+    "sidebar_label": "19 - Examen 2",
+    "description": "Examen sommatif portant sur les scripts PowerShell",
+    "sidebar_class_name": "examen2",
     "draft": true,
     "hide_table_of_contents": true
   },
   {
     "id": "r20",
-    "title": "20 - Examen 2",
-    "sidebar_label": "20 - Examen 2",
-    "description": "Examen sommatif portant sur les scripts PowerShell",
-    "sidebar_class_name": "examen2",
+    "title": "20 - Assurance-qualité",
+    "sidebar_label": "20 - Assurance-qualité",
+    "description": "Stratégies d’assurance-qualité, tests d'intégration et bonnes pratiques",
     "draft": true,
     "hide_table_of_contents": true
   },

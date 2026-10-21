@@ -68,52 +68,52 @@ const sidebars = {
                       {"1020": "2026-10-26"}],
         }, avancementLabel: "TP2", avancement: 0.30 }},
     { type: "doc", id: "cours/r17", customProps: { calendrier: {
-          "Vincent": [{"1010": "2026-10-29"},
-                      {"1020": "2026-10-29"}],
-        }, avancementLabel: "TP2", avancement: 0.70 }},
-    { type: "doc", id: "cours/r18", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-02"},
                       {"1020": "2026-11-02"}],
-        }, avancementLabel: "TP2", avancement: 1.00 }},
-    { type: "doc", id: "cours/r19", customProps: { calendrier: {
+        }, avancementLabel: "TP2", avancement: 0.70 }},
+    { type: "doc", id: "cours/r18", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-05"},
                       {"1020": "2026-11-05"}],
-        }  }},
-    { type: "doc", id: "cours/r20", customProps: { calendrier: {
+        }, avancementLabel: "TP2", avancement: 1.00 }},
+    { type: "doc", id: "cours/r19", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-09"},
                       {"1020": "2026-11-09"}],
-        }, }},
-    { type: "doc", id: "cours/r21", customProps: { calendrier: {
+        }  }},
+    { type: "doc", id: "cours/r20", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-12"},
                       {"1020": "2026-11-12"}],
-        }, avancementLabel: "TP3", avancement: 0.20 }},
-    { type: "doc", id: "cours/r22", customProps: { calendrier: {
+        }, }},
+    { type: "doc", id: "cours/r21", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-16"},
                       {"1020": "2026-11-16"}],
-        }, avancementLabel: "TP3", avancement: 0.60 }},
-    { type: "doc", id: "cours/r23", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 0.20 }},
+    { type: "doc", id: "cours/r22", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-19"},
                       {"1020": "2026-11-19"}],
-        }, avancementLabel: "TP3", avancement: 1.00 }},
-    { type: "doc", id: "cours/r24", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 0.60 }},
+    { type: "doc", id: "cours/r23", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-23"},
                       {"1020": "2026-11-23"}],
-        }, avancementLabel: "TP4", avancement: 0.10 }},
-    { type: "doc", id: "cours/r25", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 1.00 }},
+    { type: "doc", id: "cours/r24", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-26"},
                       {"1020": "2026-11-26"}],
-        }, avancementLabel: "TP4", avancement: 0.20 }},
-    { type: "doc", id: "cours/r26", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.10 }},
+    { type: "doc", id: "cours/r25", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-30"},
                       {"1020": "2026-11-30"}],
-        }, avancementLabel: "TP4", avancement: 0.30 }},
-    { type: "doc", id: "cours/r27", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.20 }},
+    { type: "doc", id: "cours/r26", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-03"},
                       {"1020": "2026-12-03"}],
-        }, avancementLabel: "TP4", avancement: 0.70 }},
-    { type: "doc", id: "cours/r28", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.30 }},
+    { type: "doc", id: "cours/r27", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-07"},
                       {"1020": "2026-12-07"}],
+        }, avancementLabel: "TP4", avancement: 0.70 }},
+    { type: "doc", id: "cours/r28", customProps: { calendrier: {
+          "Vincent": [{"1010": "2026-12-10"},
+                      {"1020": "2026-12-10"}],
         }, avancementLabel: "TP4", avancement: 1.00 }},
     { type: "doc", id: "cours/r29", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-14"},
