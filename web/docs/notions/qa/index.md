@@ -115,22 +115,22 @@ foreach ($fichier in $fichiers) {
 
 ### Données et préconditions
 
-Le script d'exemple reçoit `-Dossier` et `-DateReference`. Pour reproduire les âges, fixer la date de référence au **15 octobre 2026 à 12 h**, en heure locale. Dans un dossier de travail neuf, préparer les données suivantes. Le dossier `absent` ne doit pas exister.
+Dans un dossier, préparer les données suivantes. Ce petit script produit des fichiers avec différentes dates de dernière modification.
 
 ```powershell
-$reference = [datetime]'2026-10-15T12:00:00'
-New-Item -ItemType Directory -Path './usuel', './limites', './vide', './racine' |
+$reference = Get-Date
+New-Item -ItemType Directory -Path '.\usuel', '.\limites', '.\vide', '.\racine' |
     Out-Null
-New-Item -ItemType Directory -Path './racine/sous-dossier' | Out-Null
+New-Item -ItemType Directory -Path '.\racine\sous-dossier' | Out-Null
 
 $fichiers = @{
-    './usuel/ancien.log'                = 45
-    './usuel/recent.log'                = 10
-    './limites/j29.log'                 = 29
-    './limites/j30.log'                 = 30
-    './limites/j31.log'                 = 31
-    './racine/visible.log'              = 40
-    './racine/sous-dossier/interne.log' = 40
+    '.\usuel\ancien.log'                = 45
+    '.\usuel\recent.log'                = 10
+    '.\limites\j29.log'                 = 29
+    '.\limites\j30.log'                 = 30
+    '.\limites\j31.log'                 = 31
+    '.\racine\visible.log'              = 40
+    '.\racine\sous-dossier\interne.log' = 40
 }
 
 foreach ($chemin in $fichiers.Keys) {
@@ -141,10 +141,10 @@ foreach ($chemin in $fichiers.Keys) {
 
 ### Cas de test
 
-**Procédure commune.** Pour T01 à T04, remplacer `./usuel` par le dossier indiqué dans la fiche, exécuter la commande et relever le nombre et les valeurs des objets. Pour T05, appeler le script avec `-Dossier './absent'` sans affectation et relever le diagnostic. Consigner tout avertissement ou toute erreur inattendue.
+**Procédure commune.** Pour T01 à T04, remplacer `.\usuel` par le dossier indiqué dans la fiche, exécuter la commande et relever le nombre et les valeurs des objets. Pour T05, appeler le script avec `-Dossier '.\absent'` sans affectation et relever le diagnostic. Consigner tout avertissement ou toute erreur inattendue.
 
 ```powershell
-$resultats = @(./Trouver-FichiersAArchiver.ps1 -Dossier './usuel' -DateReference $reference)
+$resultats = @(.\Trouver-FichiersAArchiver.ps1 -Dossier '.\usuel')
 $resultats.Count
 $resultats | Format-Table Nom, AgeJours
 ```

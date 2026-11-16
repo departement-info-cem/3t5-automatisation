@@ -154,15 +154,15 @@
     "sidebar_label": "19 - Examen 2",
     "description": "Examen sommatif portant sur les scripts PowerShell",
     "sidebar_class_name": "examen2",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
     "id": "r20",
     "title": "20 - Assurance-qualité",
     "sidebar_label": "20 - Assurance-qualité",
-    "description": "Stratégies d’assurance-qualité, tests d'intégration et bonnes pratiques",
-    "draft": true,
+    "description": "Stratégies d'assurance-qualité et plans de tests",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
