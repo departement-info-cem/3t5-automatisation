@@ -11,7 +11,7 @@ Une entreprise veut vérifier une liste d'employés avant de créer leurs compte
 
 Téléchargez le fichier zip pour cette activité puis extrayez-le dans un répertoire (par exemple, `C:\EspaceLabo\`).
 
-:link: ![exercice20.zip](https://github.com/departement-info-cem/3t5-automatisation/raw/refs/heads/main/stock/exercice20.zip)
+:link: [exercice_tests.zip](https://github.com/departement-info-cem/3t5-automatisation/raw/refs/heads/main/stock/exercice_tests.zip)
 
 Ouvrez une console PowerShell dans le dossier qui contient `Valider-Comptes.ps1` (vous pouvez aussi ouvrir Visual Studio Code et utiliser le terminal intégré). Le script prend un seul paramètre, `-Entree`. Chaque compte accepté est renvoyé sous forme d'objet PowerShell. Les rejets s'affichent comme avertissements (avec la commande `Write-Warning`).
 
