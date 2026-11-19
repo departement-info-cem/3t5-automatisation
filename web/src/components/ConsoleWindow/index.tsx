@@ -13,6 +13,7 @@ interface ConsoleWindowProps {
   titleBackgroundColor?: string;
   titleForegroundColor?: string;
   language?: string;
+  wrap?: "word" | "character" | "none";
 }
 
 function toPlainText(node: ReactNode): string {
@@ -50,7 +51,7 @@ function toPlainText(node: ReactNode): string {
 }
 
 function normalizeConsoleText(input: string): string {
-  const trimmed = input.replace(/^\n+|\n+$/g, "");
+  const trimmed = input.replace(/\r\n?/g, "\n").replace(/^\n+|\n+$/g, "");
   const lines = trimmed.split("\n");
 
   const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
@@ -66,6 +67,52 @@ function normalizeConsoleText(input: string): string {
   return lines.map((line) => line.slice(minIndent)).join("\n");
 }
 
+interface ColorRange {
+  start: number;
+  end: number;
+  color: string;
+}
+
+function parseConsoleColors(input: string): { content: string; colors: ColorRange[] } {
+  // A pair of markers may surround part of a line or several complete lines.
+  const marker = /¶\((#[\da-f]{3,4}|#[\da-f]{6}(?:[\da-f]{2})?|[a-z]+|(?:rgba?|hsla?)\([^()\r\n]*\))\)([^¶]*)¶/gi;
+  const colors: ColorRange[] = [];
+  let content = "";
+  let cursor = 0;
+
+  for (const match of input.matchAll(marker)) {
+    content += input.slice(cursor, match.index);
+    const start = content.length;
+    content += match[2];
+    colors.push({ start, end: content.length, color: match[1] });
+    cursor = match.index! + match[0].length;
+  }
+
+  return { content: content + input.slice(cursor), colors };
+}
+
+function renderColoredText(text: string, colors: ColorRange[], offset = 0): React.ReactNode {
+  const parts: React.ReactNode[] = [];
+  let cursor = 0;
+
+  for (const range of colors) {
+    const start = Math.max(0, range.start - offset);
+    const end = Math.min(text.length, range.end - offset);
+    if (start >= end) continue;
+
+    parts.push(text.slice(cursor, start));
+    parts.push(
+      <span key={range.start} style={{ color: range.color }}>
+        {text.slice(start, end)}
+      </span>,
+    );
+    cursor = end;
+  }
+
+  parts.push(text.slice(cursor));
+  return parts;
+}
+
 export default function ConsoleWindow({
   children,
   text,
@@ -76,9 +123,16 @@ export default function ConsoleWindow({
   titleBackgroundColor = "#121212",
   titleForegroundColor = "#f0f0f0",
   language,
+  wrap = "word",
 }: ConsoleWindowProps): React.ReactElement {
   const rawContent = text ?? toPlainText(children);
-  const content = normalizeConsoleText(rawContent);
+  const { content, colors } = parseConsoleColors(normalizeConsoleText(rawContent));
+  let nextLineOffset = 0;
+  const lineOffsets = content.split("\n").map((line) => {
+    const offset = nextLineOffset;
+    nextLineOffset += line.length + 1;
+    return offset;
+  });
 
   const prismTheme = prismThemes.vsDark;
 
@@ -105,20 +159,29 @@ export default function ConsoleWindow({
           theme={prismTheme}
         >
           {({ tokens, getLineProps, getTokenProps }) => (
-            <pre className={styles.console}>
-              {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line })}>
-                  {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token })} />
-                  ))}
-                </div>
-              ))}
+            <pre className={styles.console} data-wrap={wrap}>
+              {tokens.map((line, i) => {
+                let tokenOffset = lineOffsets[i];
+                return (
+                  <div key={i} {...getLineProps({ line })}>
+                    {line.map((token, key) => {
+                      const offset = tokenOffset;
+                      tokenOffset += token.empty ? 0 : token.content.length;
+                      return (
+                        <span key={key} {...getTokenProps({ token })}>
+                          {renderColoredText(token.content, colors, offset)}
+                        </span>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </pre>
           )}
         </Highlight>
       ) : (
-        <pre className={styles.console}>
-          <code>{content}</code>
+        <pre className={styles.console} data-wrap={wrap}>
+          <code>{renderColoredText(content, colors)}</code>
         </pre>
       )}
     </section>
