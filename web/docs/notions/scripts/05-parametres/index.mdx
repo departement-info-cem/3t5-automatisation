@@ -394,3 +394,104 @@ Bonjour, M. Paul Meilleur!
 ```
 </ConsoleWindow>
 
+## Jeux de paramètres (Parameter Sets)
+
+Parfois, des paramètres devraient être mutuellement exclusifs. Par exemple, le script suivant vise à rechercher un utilisateur dans un système. Vous pouvez soit rechercher un matricule avec `-Matricule`, soit passer une recherche basée sur le nom avec `-Nom`, soit obtenir la liste complète avec aucun paramètre.
+
+```powershell title="RechercherUtilisateurs.ps1" showLineNumbers
+[CmdletBinding()]
+Param(
+    [String] $Matricule,
+    [String] $Nom
+)
+
+$data = Import-Csv -Path "$PSScriptRoot\Utilisateurs.csv"
+
+if ($Matricule) {
+    $data | Where-Object { $_.Matricule -eq $Matricule }
+}
+elseif ($Nom) {
+    $data | Where-Object { $_.Nom -eq $Nom}
+}
+else {
+    $data
+}
+```
+
+<ConsoleWindow title="PowerShell" backgroundColor="#012456">
+```
+PS C:\Scripts> .\RechercherUtilisateurs.ps1
+
+¶(#1ece2a)Matricule Nom¶
+¶(#1ece2a)--------- ---¶
+001       Alice
+002       Bob
+003       Charlie
+
+PS C:\Scripts> .\RechercherUtilisateurs.ps1 -Matricule "001"
+
+¶(#1ece2a)Matricule Nom¶
+¶(#1ece2a)--------- ---¶
+001       Alice
+
+PS C:\Scripts> .\RechercherUtilisateurs.ps1 -Nom "Bob"
+
+¶(#1ece2a)Matricule Nom¶
+¶(#1ece2a)--------- ---¶
+002       Bob
+```
+</ConsoleWindow>
+
+Il y a un problème avec ce script: qu'arrive-t-il si on le lance avec `-Nom` et `-Matricule` à la fois? Ça ne fait pas de sens. On devrait faire en sorte que le script ne peut s'exécuter avec une ou l'un ou l'autre des paramètres, pas les deux. Pour ce faire, on va dresser des **jeux de paramètres**, ou Parameter Sets.
+
+On va dresser trois jeux:
+
+- Le jeu `Matricule` pour obtenir l'utilisateur correspondant au matricule. On l'utilise avec le paramètre `-Matricule` seulement.
+- Le jeu `Nom` pour obtenir l'utilisateur correspondant au nom. On l'utilise avec le paramètre `-Nom` seulement.
+- Le jeu `Liste` pour lister tous les utilisateurs. On l'utilise sans paramètre.
+
+Lorsque le script est lancé avec un paramètre correspondant à un jeu, il sera impossible de spécifier d'autres paramètres provenant de jeux différents. Ainsi, avec la modification suivante, le script ne pourra pas accepter à la fois le paramètre `-Matricule` et `-Nom`.
+
+Pour connaître le jeu de paramètres choisi, on peut interroger la propriété `$PSCmdlet.ParameterSetName`.
+
+```powershell title="RechercherUtilisateurs.ps1" showLineNumbers
+#highlight-next-line
+[CmdletBinding(DefaultParameterSetName = "Liste")]
+Param(
+    #highlight-next-line
+    [Parameter(ParameterSetName = "Matricule")]
+    [String] $Matricule,
+
+    #highlight-next-line
+    [Parameter(ParameterSetName = "Nom")]
+    [String] $Nom
+)
+
+$data = Import-Csv -Path "$PSScriptRoot\Utilisateurs.csv"
+
+#highlight-next-line
+switch ($PSCmdlet.ParameterSetName) {
+    #highlight-next-line
+    "Matricule" {
+        $data | Where-Object { $_.Matricule -eq $Matricule }
+    }
+    #highlight-next-line
+    "Nom" {
+        $data | Where-Object { $_.Nom -eq $Nom}
+    }
+    #highlight-next-line
+    "Liste" {
+        $data
+    }
+}
+```
+
+Si on spécifie des paramètres à l'extérieur du jeu de paramètre sélectionné, ça donne une erreur terminale et le script n'est pas exécuté.
+
+<ConsoleWindow title="PowerShell" backgroundColor="#012456" wrap="character">
+```
+PS C:\Scripts> .\RechercherUtilisateurs.ps1 -Matricule "001" -Nom "Bob"
+¶(#E74856)RechercherUtilisateurs.ps1: Impossible de résoudre le jeu de paramètres à l'aide des paramètres nommés indiqués. Un ou plusieurs paramètresfournis ne peuvent pas être utilisés ensemble ou un nombre insuffisant de paramètres a été fourni.¶
+```
+</ConsoleWindow>
+

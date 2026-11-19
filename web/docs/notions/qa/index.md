@@ -2,7 +2,7 @@
 title: Assurance-qualité et plans de test
 sidebar_label: Assurance-qualité
 description: Assurance-qualité
-sidebar-position: 6
+sidebar-position: 7
 ---
 
 Dans un script d'administration, un **test** consiste à comparer un résultat observé à un résultat attendu dans des conditions définies. 
