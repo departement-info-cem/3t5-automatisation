@@ -170,7 +170,7 @@
     "title": "21 - API Web",
     "sidebar_label": "21 - Les API Web",
     "description": "Utilisation de PowerShell pour interfacer avec une API Web",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -178,16 +178,16 @@
     "title": "22 - (Intégration / TP3)",
     "sidebar_label": "22 - (Intégration / TP3)",
     "description": "Travail sur les exercices et le TP3",
-    "draft": true,
+    "sidebar_class_name": "remise-tp3",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
     "id": "r23",
-    "title": "23 - (Intégration / TP3)",
-    "sidebar_label": "23 - (Intégration / TP3)",
-    "description": "Travail sur les exercices et le TP3",
-    "sidebar_class_name": "remise-tp3",
-    "draft": true,
+    "title": "23 - Registre",
+    "sidebar_label": "23 - Registre",
+    "description": "La base de registre",
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -195,7 +195,7 @@
     "title": "24 - WMI / CIM",
     "sidebar_label": "24 - La base WMI / CIM",
     "description": "Utilisation de WMI pour la gestion programmatique de la configuration de Windows",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -203,7 +203,7 @@
     "title": "25 - PSRemoting",
     "sidebar_label": "25 - Administration à distance",
     "description": "Administration de systèmes distants avec PSRemoting, CIM et MS-RPC/DCOM",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -211,7 +211,7 @@
     "title": "26 - Planification",
     "sidebar_label": "26 - Planification de tâches",
     "description": "Planification de tâches et déploiement automatisé",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -228,7 +228,7 @@
     "sidebar_label": "28 - (Intégration / TP4)",
     "description": "Travail sur les exercices et le TP4",
     "sidebar_class_name": "remise-tp4",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -237,7 +237,7 @@
     "sidebar_label": "29 - Formatif 3",
     "description": "Pratique d'examen en vue de la préparation à l'examen 3",
     "sidebar_class_name": "formatif3",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   },
   {
@@ -246,7 +246,7 @@
     "sidebar_label": "30 - Examen 3 (terminal)",
     "description": "Examen sommatif terminal portant sur l'ensemble de la matière du cours",
     "sidebar_class_name": "examen3",
-    "draft": true,
+    "draft": false,
     "hide_table_of_contents": true
   }
 ]
