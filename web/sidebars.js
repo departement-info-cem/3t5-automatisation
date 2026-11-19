@@ -80,45 +80,45 @@ const sidebars = {
                       {"1020": "2026-11-09"}],
         }  }},
     { type: "doc", id: "cours/r20", customProps: { calendrier: {
-          "Vincent": [{"1010": "2026-11-12"},
-                      {"1020": "2026-11-12"}],
-        }, }},
-    { type: "doc", id: "cours/r21", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-16"},
                       {"1020": "2026-11-16"}],
-        }, avancementLabel: "TP3", avancement: 0.20 }},
-    { type: "doc", id: "cours/r22", customProps: { calendrier: {
+        }, }},
+    { type: "doc", id: "cours/r21", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-19"},
                       {"1020": "2026-11-19"}],
-        }, avancementLabel: "TP3", avancement: 0.60 }},
-    { type: "doc", id: "cours/r23", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 0.40 }},
+    { type: "doc", id: "cours/r22", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-23"},
                       {"1020": "2026-11-23"}],
-        }, avancementLabel: "TP3", avancement: 1.00 }},
-    { type: "doc", id: "cours/r24", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 0.80 }},
+    { type: "doc", id: "cours/r23", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-26"},
                       {"1020": "2026-11-26"}],
-        }, avancementLabel: "TP4", avancement: 0.10 }},
-    { type: "doc", id: "cours/r25", customProps: { calendrier: {
+        }, avancementLabel: "TP3", avancement: 1.00 }},
+    { type: "doc", id: "cours/r24", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-11-30"},
                       {"1020": "2026-11-30"}],
-        }, avancementLabel: "TP4", avancement: 0.20 }},
-    { type: "doc", id: "cours/r26", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.10 }},
+    { type: "doc", id: "cours/r25", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-03"},
                       {"1020": "2026-12-03"}],
-        }, avancementLabel: "TP4", avancement: 0.30 }},
-    { type: "doc", id: "cours/r27", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.20 }},
+    { type: "doc", id: "cours/r26", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-07"},
                       {"1020": "2026-12-07"}],
-        }, avancementLabel: "TP4", avancement: 0.70 }},
-    { type: "doc", id: "cours/r28", customProps: { calendrier: {
+        }, avancementLabel: "TP4", avancement: 0.30 }},
+    { type: "doc", id: "cours/r27", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-10"},
                       {"1020": "2026-12-10"}],
-        }, avancementLabel: "TP4", avancement: 1.00 }},
+        }, avancementLabel: "TP4", avancement: 0.70 }},
+//    { type: "doc", id: "cours/r28", customProps: { calendrier: {
+//          "Vincent": [{"1010": "2026-12-14"},
+//                      {"1020": "2026-12-14"}],
+//        }, avancementLabel: "TP4", avancement: 1.00 }},
     { type: "doc", id: "cours/r29", customProps: { calendrier: {
-          "Vincent": [{"1010": "2026-12-14"},
-                      {"1020": "2026-12-14"}],
-        }  }},
+          "Vincent": [{"1010": "2026-12-17"},
+                      {"1020": "2026-12-17"}],
+        }, avancementLabel: "TP4", avancement: 1.00 }},
     { type: "doc", id: "cours/r30", customProps: { calendrier: {
           "Vincent": [{"1010": "2026-12-17"},
                       {"1020": "2026-12-17"}],
