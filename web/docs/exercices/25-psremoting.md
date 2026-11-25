@@ -2,7 +2,7 @@
 title: PSRemoting et WinRM
 sidebar_label: PSRemoting et WinRM
 toc_max_heading_level: 2
-draft: true
+draft: false
 ---
 
 ## Préparation
@@ -35,58 +35,61 @@ Pour tester, loggez-vous sur la machine, démarrez une console de commande et ta
 
 L'exécution du script devrait donner ceci dans la console:
 
-```
+<ConsoleWindow title="PowerShell" backgroundColor="#012456" noCopy="true">
+```text
 PS C:\Scripts> .\Exercice.ps1 -Ordinateur "PC0001"
 Session démarrée.
 Répertoire créé.
 Outil WmiExplorer copié.
 Session fermée.
 ```
+</ConsoleWindow>
 
 Voici la base du script:
 
-```powershell
-    param(
-        [Parameter(Mandatory)] [String] $Ordinateur
-    )
-    
-    # Démarrer une session PowerShell vers l'ordinateur distant
-    
-    # TODO votre code ici...
-    
-    Write-Host "Session démarrée."
-    
-    # ---
-    # Créer le répertoire C:\Outils\ sur l'ordinateur distant
-    
-    # TODO votre code ici...
-    
-    Write-Host "Répertoire créé."
-    
-    # ---
-    # Copier l'outil WmiExplorer dans C:\Outils\ sur l'ordinateur distant
-    
-    # TODO votre code ici...
-    
-    Write-Host "Outil WmiExplorer copié."
-    
-    # ---
-    # Fermer la session
-    
-    # TODO votre code ici...
-    
-    Write-Host "Session fermée."
+```powershell title="exercice.ps1" showLineNumbers
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)] [String] $Ordinateur
+)
+
+# Démarrer une session PowerShell vers l'ordinateur distant
+
+# TODO votre code ici...
+
+Write-Host "Session démarrée."
+
+# ---
+# Créer le répertoire C:\Outils\ sur l'ordinateur distant
+
+# TODO votre code ici...
+
+Write-Host "Répertoire créé."
+
+# ---
+# Copier l'outil WmiExplorer dans C:\Outils\ sur l'ordinateur distant
+
+# TODO votre code ici...
+
+Write-Host "Outil WmiExplorer copié."
+
+# ---
+# Fermer la session
+
+# TODO votre code ici...
+
+Write-Host "Session fermée."
 ```
 
 ## Partie 3
 
 Si vous avez le temps, essayez de bonifier votre script afin de lui donner ces fonctionnalités supplémentaires:
 
-
 ### Prise en charge de plusieurs machines
 
 Faites en sorte qu'on puisse spécifier plusieurs noms de machine dans le paramètre. Créez toutes les sessions au début, puis effectuez les changements sur chacune des sessions distantes. Finalement, fermez toutes les sessions.
 
+<ConsoleWindow title="PowerShell" backgroundColor="#012456" noCopy="true">
 ```
 PS C:\Scripts> .\Exercice.ps1 -Ordinateurs "PC0001", "SRV01"
 Sessions démarrées.
@@ -96,11 +99,13 @@ Répertoire créé sur SRV01.
 Outil WmiExplorer copié sur SRV01.
 Session fermée.
 ```
+</ConsoleWindow>
 
 ### Spécifier le chemin du répertoire en paramètre
 
 Faites en sorte qu'au lieu de `C:\Outils`, on puisse spécifier le chemin du répertoire à créer dans les paramètres.
 
+<ConsoleWindow title="PowerShell" backgroundColor="#012456" noCopy="true">
 ```
 PS C:\Scripts> .\Exercice.ps1 -Ordinateurs "PC0001", "SRV01" -Path "C:\Tools"
 Sessions démarrées.
@@ -110,11 +115,13 @@ Répertoire C:\Tools créé sur SRV01.
 Outil WmiExplorer copié dans C:\Tools sur SRV01.
 Session fermée.
 ```
+</ConsoleWindow>
 
 ### Contrôle de la variable d'environnement Path
 
 Ajoutez le répertoire à la variable d'environnement PATH de la machine sur les ordinateurs distants si elle n'y figure pas déjà. 
 
+<ConsoleWindow title="PowerShell" backgroundColor="#012456" noCopy="true">
 ```
 PS C:\Scripts> .\Exercice.ps1 -Ordinateurs "PC0001", "SRV01" -Path "C:\Minou"
 Sessions démarrées.
@@ -126,6 +133,7 @@ Outil WmiExplorer copié dans C:\Minou sur SRV01.
 Ajout de C:\Minou dans la variable d'environnement PATH de SRV01.
 Session fermée.
 ```
+</ConsoleWindow>
 
 Pour ajouter `C:\Outils` dans la variable, voici un exemple de comment procéder dans la console. Il sera effectif seulement pour les prochains processus à être démarrés; testez en démarrant une nouvelle console PowerShell et faites `$env:Path.Split(';')`.
 
@@ -134,9 +142,9 @@ Pour ajouter `C:\Outils` dans la variable, voici un exemple de comment procéder
 Le code à exécuter est:
 
 ```powershell
-    $EnvPathMachine = [Environment]::GetEnvironmentVariable("Path","Machine")
-    $EnvPathMachine += ";C:\Outils"
-    [Environment]::SetEnvironmentVariable("Path", $envPathMachine, "Machine")
+$EnvPathMachine = [Environment]::GetEnvironmentVariable("Path","Machine")
+$EnvPathMachine += ";C:\Outils"
+[Environment]::SetEnvironmentVariable("Path", $envPathMachine, "Machine")
 ```
 
 :::tip

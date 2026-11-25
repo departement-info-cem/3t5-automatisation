@@ -2,7 +2,7 @@
 title: Registre
 sidebar_label: Registre
 toc_max_heading_level: 2
-draft: true
+draft: false
 ---
 
 ## Partie 1 - Exploration
@@ -125,27 +125,24 @@ Lorsque le paramètre `-Reset` est appelé, le script **remet le compteur à zé
 
 Voici un exemple d'exécution:
 
+<ConsoleWindow title="Windows PowerShell" backgroundColor="#012456" noCopy="true">
 ```
-# highlight-next-line
 PS C:\EspaceLabo> .\compteur.ps1
 J'ai été exécuté 1 fois!
 
-# highlight-next-line
 PS C:\EspaceLabo> .\compteur.ps1
 J'ai été exécuté 2 fois!
 
-# highlight-next-line
 PS C:\EspaceLabo> .\compteur.ps1
 J'ai été exécuté 3 fois!
 
-# highlight-next-line
 PS C:\EspaceLabo> .\compteur.ps1 -Reset
 Compteur réinitialisé!
 
-# highlight-next-line
 PS C:\EspaceLabo> .\compteur.ps1
 J'ai été exécuté 1 fois!
 ```
+</ConsoleWindow>
 
 Voici ce que ça devrait donner dans Regedit:
 

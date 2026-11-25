@@ -2,12 +2,12 @@
 title: Planification de tâches
 sidebar_label: Planification de tâches
 toc_max_heading_level: 2
-draft: true
+draft: false
 ---
 
 Sur une machine virtuelle (**PAS** le contrôleur de domaine), créez un petit script, `C:\Test\test.ps1` qui écrit une ligne dans un fichier texte avec la date du jour, par exemple:
 
-```powershell
+```powershell title="C:\Test\test.ps1" showLineNumbers
 New-Item -Path "C:\Test\" -ItemType Directory -Force | Out-Null
 $Message = "$(Get-Date)  -  $env:USERDOMAIN\$env:USERNAME" 
 $Message | Add-Content -Path "C:\Test\Test.log"
@@ -16,7 +16,6 @@ $Message | Add-Content -Path "C:\Test\Test.log"
 Testez ce script et regardez le fichier contenu du fichier C:\Test\Test.log (avec un éditeur de texte ou, encore mieux, Get-Content).
 
 Avec ce script, tentez plusieurs méthodes pour rendre son exécution automatique au démarrage de session. Planifiez l'exécution du script en utilisant seulement des commandes PowerShell. Testez ensuite le résultat en vous loguant avec un utilisateur et vérifiez dans le fichier C:\Test\Test.log que la méthode a bien fonctionné.
-
 
 ## Partie 1: Démarrage de session utilisateur
 
